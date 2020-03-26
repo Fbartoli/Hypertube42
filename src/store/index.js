@@ -28,7 +28,7 @@ export default new Vuex.Store({
         await axios
           .get("https://test-hypertube.herokuapp.com/test")
           .then(data => {
-            context.commit("updateMessageServer", data.json());
+            context.commit("updateMessageServer", data);
           });
       } catch (error) {
         context.commit("updateMessageServer", error);

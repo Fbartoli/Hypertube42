@@ -24,7 +24,6 @@ export default new Vuex.Store({
       context.commit("switchLanguage", language);
     },
     async updateMessageServer(context) {
-      console.log("allo");
       try {
         await axios
           .get("https://test-hypertube.herokuapp.com/test")
@@ -32,7 +31,7 @@ export default new Vuex.Store({
             context.commit("updateMessageServer", data.json());
           });
       } catch (error) {
-        console.log(error);
+        context.commit("updateMessageServer", error);
       }
     }
   },

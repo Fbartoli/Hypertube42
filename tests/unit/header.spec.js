@@ -1,48 +1,42 @@
 import Vue from "vue";
 import Vuetify from "vuetify";
-import VueRouter from "vue-router";
-import router from "@/router/index.js";
-import { mount, createLocalVue } from "@vue/test-utils";
+import Vuex from "vuex";
+import globalstore from "@/store/index";
+import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Header from "@/components/Header.vue";
 
-const localVue = createLocalVue();
+// avoid the multiple vue instance error
 Vue.use(Vuetify);
-Vue.use(VueRouter);
+
+let localVue = createLocalVue();
+localVue.use(Vuex);
+localVue.use(Vuetify);
 
 describe("Header.vue", () => {
   let vuetify;
+  let store;
 
   beforeEach(() => {
-    vuetify = new Vuetify({
+    (vuetify = new Vuetify({
       theme: {
         dark: true
       }
-    });
+    })),
+      (store = globalstore);
   });
 
-  it("loads Header", () => {
-    const wrapper = mount(Header, {
-      localVue,
+  it("renders the Header components", () => {
+    const wrapper = shallowMount(Header, {
       vuetify,
-      router
+      store
     });
-    expect(wrapper).toBeDefined();
+    expect(wrapper.isVueInstance()).toBe(true);
   });
-  it("expects to contain a navbar", () => {
-    const wrapper = mount(Header, {
-      localVue,
+  it("it renders a language class with a default value of the store", () => {
+    const wrapper = shallowMount(Header, {
       vuetify,
-      router
+      store
     });
-    expect(wrapper.contains(".navbar")).toBe(true);
-  });
-  it("renders a v-btn", async () => {
-    const wrapper = mount(Header, {
-      localVue,
-      vuetify,
-      router
-    });
-
-    expect(wrapper.find(".v-btn").text()).toBe("about us");
+    expect(wrapper.find(".Language").text()).toBe(store.getters.getLanguage);
   });
 });

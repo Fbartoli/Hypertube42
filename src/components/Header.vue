@@ -1,13 +1,25 @@
 <template>
   <div>
     <v-app-bar dense class="navbar">
-      <v-btn class="About" to="/about">{{ about }}</v-btn>
+      <v-btn v-on:click="switchLanguage(getLanguage)" class="Language">{{
+        getLanguage
+      }}</v-btn>
     </v-app-bar>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapActions, mapGetters } from "vuex";
+
+export default {
+  name: "Header",
+  methods: {
+    ...mapActions(["switchLanguage"])
+  },
+  computed: {
+    ...mapGetters(["getLanguage"])
+  }
+};
 </script>
 
 <style></style>

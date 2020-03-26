@@ -1,11 +1,47 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from "axios";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
-  modules: {}
+  state: {
+    language: "en",
+    serverMessage: "lol",
+    user: {}
+  },
+  mutations: {
+    switchLanguage(state, language) {
+      state.language = language;
+    },
+    updateMessageServer(state, message) {
+      state.serverMessage = message;
+    }
+  },
+  actions: {
+    switchLanguage(context, payload) {
+      let language = payload === "en" ? "fr" : "en";
+      context.commit("switchLanguage", language);
+    },
+    async updateMessageServer(context) {
+      console.log("allo");
+      try {
+        await axios
+          .get("https://test-hypertube.herokuapp.com/test")
+          .then(data => {
+            context.commit("updateMessageServer", data.json());
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  },
+  getters: {
+    getLanguage: state => {
+      return state.language;
+    },
+    getMessageServer: state => {
+      return state.serverMessage;
+    }
+  }
 });

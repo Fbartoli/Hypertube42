@@ -1,6 +1,7 @@
 const state = {
   appName: "Hypertube",
   Loading: false,
+  langs: ["fr", "en"],
   userInfo: {}
 };
 

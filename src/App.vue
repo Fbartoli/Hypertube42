@@ -2,20 +2,22 @@
   <v-app>
     <v-app-bar app>
       <!-- -->
-      <router-link to="/"> {{ appName }}</router-link>
+      <v-toolbar-title
+        ><router-link to="/">{{ appName }}</router-link>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn to="/login">{{ $t("sign in") }}</v-btn>
     </v-app-bar>
-
     <!-- Sizes your content based upon application components -->
     <v-content>
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
         <!-- If using vue-router -->
-        <HelloI18n />
+        <router-view></router-view>
       </v-container>
     </v-content>
-
     <v-footer app>
-      <select v-model="$i18n.locale">
+      <select v-model="$root.$i18n.locale">
         <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">{{
           lang
         }}</option>
@@ -26,11 +28,10 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import HelloI18n from "./components/HelloI18n";
+
 export default {
   name: "App",
-
-  components: { HelloI18n },
+  components: {},
   methods: {
     ...mapActions([])
   },
@@ -42,3 +43,14 @@ export default {
   }
 };
 </script>
+
+<i18n>
+{
+  "en": {
+    "sign in": "sign in"
+  },
+  "fr": {
+    "sign in": "s'identifier"
+  }
+}
+</i18n>

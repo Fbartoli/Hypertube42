@@ -3,11 +3,22 @@ import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
-const routes = [];
+const routes = [
+  {
+    path: "/",
+    name: "home",
+    component: () => import("../components/Home.vue")
+  },
+  {
+    // Always leave this as last one
+    path: "*",
+
+    component: () => import("../pages//404.vue")
+  }
+];
 
 const router = new VueRouter({
   mode: "history",
-  base: process.env.BASE_URL,
   routes
 });
 

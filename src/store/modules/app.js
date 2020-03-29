@@ -2,7 +2,12 @@ const state = {
   appName: "Hypertube",
   Loading: false,
   langs: ["fr", "en"],
-  userInfo: {}
+  userInfo: {
+    email: "",
+    username: "",
+    token: "",
+    auth: false
+  }
 };
 
 // getters

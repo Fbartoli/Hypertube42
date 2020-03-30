@@ -3,11 +3,15 @@
     <v-img src="../src/assets/netflix-image.jpg">
       <v-app-bar app>
         <!-- -->
-        <v-toolbar-title
-          ><router-link to="/">{{ appName }}</router-link>
+        <v-toolbar-title>
+          <router-link :to="{ name: 'home' }">{{ appName }}</router-link>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn to="/login">{{ $t("sign in") }}</v-btn>
+        <v-btn :to="{ name: 'login' }">{{ $t("sign in") }}</v-btn>
+        <v-btn :to="{ name: 'user', params: { username: 'flo' } }">{{
+          $t("user")
+        }}</v-btn>
+        <v-btn :to="{ name: 'movies' }">{{ $t("movies") }}</v-btn>
       </v-app-bar>
       <!-- Sizes your content based upon application components -->
       <v-content>
@@ -49,10 +53,14 @@ export default {
 <i18n>
 {
   "en": {
-    "sign in": "sign in"
+    "sign in": "sign in",
+    "user": "user",
+    "movies": "movies"
   },
   "fr": {
-    "sign in": "s'identifier"
+    "sign in": "s'identifier",
+    "user": "Utilisateur",
+    "movies": "films"
   }
 }
 </i18n>

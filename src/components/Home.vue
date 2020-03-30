@@ -3,7 +3,13 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <v-text-field outlined clearable label="Email" type="text">
+          <v-text-field
+            outlined
+            clearable
+            color="red"
+            label="Email"
+            type="text"
+          >
             <template v-slot:prepend>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
@@ -13,7 +19,7 @@
               </v-tooltip>
             </template>
             <template v-slot:append-outer>
-              <v-btn x-large color="primary" style="top: -18px">{{
+              <v-btn x-large color="red" style="top: -18px">{{
                 $t("register")
               }}</v-btn>
             </template>

@@ -15,9 +15,9 @@ export default {
       movies: state => state.Movies.movies
     })
   },
-  methods: mapActions("Movies", ["fetchMovies"]),
+  methods: { ...mapActions("Movies", ["fetchMovies"]) },
   created() {
-    this.fetchMovies;
+    this.fetchMovies();
   }
 };
 </script>

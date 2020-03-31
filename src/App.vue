@@ -7,7 +7,7 @@
           <router-link :to="{ name: 'home' }">{{ appName }}</router-link>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <NotificationContainer />
+
         <!-- <v-btn :to="{ name: 'login' }">{{ $t("sign in") }}</v-btn> -->
         <v-btn :to="{ name: 'user', params: { username: 'flo' } }">{{
           $t("user")
@@ -23,11 +23,18 @@
         </v-container>
       </v-content>
       <v-footer app>
-        <select v-model="$root.$i18n.locale">
-          <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">{{
-            lang
-          }}</option>
-        </select>
+        <div>
+          <select v-model="$root.$i18n.locale">
+            <option
+              v-for="(lang, i) in langs"
+              :key="`Lang${i}`"
+              :value="lang"
+              >{{ lang }}</option
+            >
+          </select>
+        </div>
+        <v-spacer></v-spacer>
+        <NotificationContainer />
       </v-footer>
     </v-img>
   </v-app>

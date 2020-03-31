@@ -22,5 +22,6 @@ export default {
 .notification-container {
   position: fixed;
   bottom: 0;
+  right: 5%;
 }
 </style>

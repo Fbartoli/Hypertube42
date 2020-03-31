@@ -18,13 +18,18 @@ const actions = {
       .getMovies()
       .then(response => {
         context.commit("FETCH_MOVIES", response.data.data.movies);
+        const notification = {
+          type: "success",
+          message: "Movies fetched successfully"
+        };
+        context.dispatch("Notifications/add", notification, { root: true });
       })
       .catch(error => {
         const notification = {
           type: "error",
           message: "There was a problem fetching movies: " + error.message
         };
-        context.dispatch("notifications/add", notification, { root: true });
+        context.dispatch("Notifications/add", notification, { root: true });
       });
   }
 };

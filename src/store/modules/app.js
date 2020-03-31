@@ -12,12 +12,10 @@ const state = {
 
 // getters
 const getters = {};
-
-// actions
-const actions = {};
-
 // mutations
 const mutations = {};
+// actions
+const actions = {};
 
 export default {
   namespaced: true,

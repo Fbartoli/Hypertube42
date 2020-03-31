@@ -7,7 +7,7 @@
           <router-link :to="{ name: 'home' }">{{ appName }}</router-link>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn :to="{ name: 'login' }">{{ $t("sign in") }}</v-btn>
+        <!-- <v-btn :to="{ name: 'login' }">{{ $t("sign in") }}</v-btn> -->
         <v-btn :to="{ name: 'user', params: { username: 'flo' } }">{{
           $t("user")
         }}</v-btn>

@@ -1,31 +1,27 @@
 <template>
-  <div>
-    <h4 class="title">{{ event.title }}</h4>
-    <h1>{{ event.description }}</h1>
-    <v-list>
-      <v-subheader>Cast</v-subheader>
-      <v-list-item-group v-model="cast" color="primary">
-        <v-list-item v-for="(actor, i) in event.cast" :key="i">
-          <v-list-item-content>
-            <v-list-item-title v-text="actor.name"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
-  </div>
+  <v-card class="mx-auto" max-width="344" outlined>
+    <v-list-item three-line>
+      <v-list-item-content>
+        <div class="overline mb-4"></div>
+        <v-list-item-title class="headline mb-1">{{
+          movie.title
+        }}</v-list-item-title>
+        <v-list-item-subtitle>{{
+          movie.description_full
+        }}</v-list-item-subtitle>
+      </v-list-item-content>
+
+      <v-list-item-avatar tile size="80" color="grey"
+        ><v-img :src="movie.medium_cover_image"></v-img
+      ></v-list-item-avatar>
+    </v-list-item>
+  </v-card>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      event: {
-        id: 1,
-        title: "Tomorrow never dies",
-        description: "James Bond kicking some asses",
-        cast: [{ id: 1, name: "Pierce Brosnan" }]
-      }
-    };
+  props: {
+    movie: Object
   }
 };
 </script>

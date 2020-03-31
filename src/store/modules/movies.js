@@ -16,10 +16,16 @@ const actions = {
   fetchMovies(context) {
     movieService
       .getMovies()
-      .then(response =>
-        context.commit("FETCH_MOVIES", response.data.data.movies)
-      )
-      .catch(error => console.log(error));
+      .then(response => {
+        context.commit("FETCH_MOVIES", response.data.data.movies);
+      })
+      .catch(error => {
+        const notification = {
+          type: "error",
+          message: "There was a problem fetching movies: " + error.message
+        };
+        context.dispatch("notifications/add", notification, { root: true });
+      });
   }
 };
 

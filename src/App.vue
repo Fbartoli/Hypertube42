@@ -7,6 +7,7 @@
           <router-link :to="{ name: 'home' }">{{ appName }}</router-link>
         </v-toolbar-title>
         <v-spacer></v-spacer>
+        <NotificationContainer />
         <!-- <v-btn :to="{ name: 'login' }">{{ $t("sign in") }}</v-btn> -->
         <v-btn :to="{ name: 'user', params: { username: 'flo' } }">{{
           $t("user")
@@ -34,10 +35,10 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-
+import NotificationContainer from "./components/NotificationContainer";
 export default {
   name: "App",
-  components: {},
+  components: { NotificationContainer },
   methods: {
     ...mapActions([])
   },

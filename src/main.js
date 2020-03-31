@@ -8,6 +8,7 @@ import "@mdi/font/css/materialdesignicons.css";
 import i18n from "./i18n";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
+import "nprogress/nprogress.css";
 
 const requireComponent = require.context(
   "./components",

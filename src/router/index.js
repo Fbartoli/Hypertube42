@@ -18,7 +18,7 @@ const routes = [
   {
     path: "/movies",
     name: "movies",
-    component: () => import("../pages/Movie.vue")
+    component: () => import("../pages/Movies.vue")
   },
   {
     // Always leave this as last one

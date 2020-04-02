@@ -1,6 +1,8 @@
 import movieService from "../../services/MovieService.js";
 const state = {
-  movies: {}
+  movies: {},
+  perPage: 20,
+  page: 1
 };
 
 // getters
@@ -13,23 +15,24 @@ const mutations = {
 };
 // actions
 const actions = {
-  fetchMovies(context) {
-    movieService
-      .getMovies()
+  fetchMovies({ commit, dispatch, state }) {
+    return movieService
+      .getMovies(state.perPage, state.page)
       .then(response => {
-        context.commit("FETCH_MOVIES", response.data.data.movies);
+        commit("FETCH_MOVIES", response.data.data.movies);
         const notification = {
           type: "success",
           message: "Movies fetched successfully"
         };
-        context.dispatch("Notifications/add", notification, { root: true });
+        dispatch("Notifications/add", notification, { root: true });
+        return response.data.data.movies;
       })
       .catch(error => {
         const notification = {
           type: "error",
           message: "There was a problem fetching movies: " + error.message
         };
-        context.dispatch("Notifications/add", notification, { root: true });
+        dispatch("Notifications/add", notification, { root: true });
       });
   }
 };

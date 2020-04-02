@@ -18,9 +18,8 @@ apiCLient.interceptors.response.use(response => {
   nProgress.done();
   return response;
 });
-
 export default {
-  getMovies() {
-    return apiCLient.get("/list_movies.json");
+  getMovies(perPage, page) {
+    return apiCLient.get(`/list_movies.json?limit=${perPage}&page=${page}`);
   }
 };

@@ -7,17 +7,13 @@
 
 <script>
 import MovieCard from "../components/MovieCard";
-import { mapState, mapActions } from "vuex";
 export default {
   components: { MovieCard },
-  computed: {
-    ...mapState({
-      movies: state => state.Movies.movies
-    })
-  },
-  methods: { ...mapActions("Movies", ["fetchMovies"]) },
-  created() {
-    this.fetchMovies();
+  props: {
+    movies: {
+      type: Array,
+      required: true
+    }
   }
 };
 </script>

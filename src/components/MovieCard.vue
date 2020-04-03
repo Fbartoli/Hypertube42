@@ -1,21 +1,26 @@
 <template>
-  <v-card class="mx-auto" max-width="344" outlined>
-    <v-list-item three-line>
-      <v-list-item-content>
-        <div class="overline mb-4"></div>
-        <v-list-item-title class="headline mb-1">{{
-          movie.title
-        }}</v-list-item-title>
-        <v-list-item-subtitle>{{
-          movie.description_full
-        }}</v-list-item-subtitle>
-      </v-list-item-content>
+  <router-link
+    class="movie-link"
+    :to="{ name: 'movie', params: { id: movie.id } }"
+  >
+    <v-card class="mx-auto" height="200px" outlined>
+      <v-list-item three-line>
+        <v-list-item-content>
+          <div class="overline mb-4"></div>
+          <v-list-item-title class="headline mb-1">{{
+            movie.title
+          }}</v-list-item-title>
+          <v-list-item-subtitle>{{
+            movie.description_full
+          }}</v-list-item-subtitle>
+        </v-list-item-content>
 
-      <v-list-item-avatar tile size="80" color="grey"
-        ><v-img :src="movie.medium_cover_image"></v-img
-      ></v-list-item-avatar>
-    </v-list-item>
-  </v-card>
+        <v-list-item-avatar tile size="80" color="grey"
+          ><v-img :src="movie.medium_cover_image"></v-img
+        ></v-list-item-avatar>
+      </v-list-item>
+    </v-card>
+  </router-link>
 </template>
 
 <script>
@@ -25,5 +30,23 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped></style>
+<style scoped>
+.event-card {
+  padding: 20px;
+  margin-bottom: 24px;
+  transition: all 0.2s linear;
+  cursor: pointer;
+}
+.event-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2), 0 1px 15px 0 rgba(0, 0, 0, 0.19);
+}
+.event-card > .title {
+  margin: 0;
+}
+.movie-link {
+  color: black;
+  text-decoration: none;
+  font-weight: 100;
+}
+</style>

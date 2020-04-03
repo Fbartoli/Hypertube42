@@ -21,19 +21,48 @@ const routes = [
     path: "/movies",
     name: "movies",
     component: () => import("../pages/Movies.vue"),
+    props: true
+  },
+  {
+    path: "/movie/:id",
+    name: "movie",
+    component: () => import("../pages/Movie.vue"),
     props: true,
     beforeEnter(routeTo, routeFrom, next) {
-      store.dispatch("Movies/fetchMovies").then(movies => {
-        routeTo.params.movies = movies;
-        next();
-      });
+      store
+        .dispatch("Movies/fetchMovie", routeTo.params.id)
+        .then(movie => {
+          if (parseInt(movie.id) === 0) {
+            next({ name: "404", params: { resource: "movie" } });
+          }
+          routeTo.params.movie = movie;
+          next();
+        })
+        .catch(error => {
+          if (error.response && error.response.status == 404) {
+            next({ name: "404", params: { resource: "movie" } });
+          }
+          next({ name: "network-issue" });
+        });
     }
   },
   {
     // Always leave this as last one
+    path: "/404",
+    name: "404",
+    component: () => import("../pages/404.vue"),
+    props: true
+  },
+  {
+    // Always leave this as last one
+    path: "/network-issue",
+    name: "network-issue",
+    component: () => import("../pages/NetworkIssue.vue"),
+    props: true
+  },
+  {
     path: "*",
-
-    component: () => import("../pages/404.vue")
+    redirect: { name: "404", params: { resource: "page" } }
   }
 ];
 

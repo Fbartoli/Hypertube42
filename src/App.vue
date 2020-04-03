@@ -12,7 +12,9 @@
         <v-btn :to="{ name: 'user', params: { username: 'flo' } }">{{
           $t("user")
         }}</v-btn>
-        <v-btn :to="{ name: 'movies' }">{{ $t("movies") }}</v-btn>
+        <v-btn :to="{ name: 'movies', params: { page: 1 } }">{{
+          $t("movies")
+        }}</v-btn>
       </v-app-bar>
       <!-- Sizes your content based upon application components -->
       <v-content>

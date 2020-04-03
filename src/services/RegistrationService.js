@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiCLient = axios.create({
-  baseURL: "https://yts.mx/api/v2",
+  baseURL: "http://localhost:3000",
   withCredentials: false, //default value
   timeout: 10000,
   headers: {
@@ -10,10 +10,7 @@ const apiCLient = axios.create({
   }
 });
 export default {
-  getMovies(perPage, page) {
-    return apiCLient.get(`/list_movies.json?limit=${perPage}&page=${page}`);
-  },
-  getMovie(id) {
-    return apiCLient.get(`/movie_details.json?movie_id=${id}`);
+  register(userInfo) {
+    return apiCLient.post(`/register`, userInfo);
   }
 };

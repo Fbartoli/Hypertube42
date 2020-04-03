@@ -8,7 +8,7 @@
       <v-col>
         <h1 class="display-2 primary--text">Whoops, 404</h1>
 
-        <p>The page you were looking for does not exist</p>
+        <p>The {{ resource }} you were looking for does not exist</p>
 
         <v-btn :to="`/`" color="primary" outlined>
           Get me out of here!
@@ -25,6 +25,10 @@ export default {
     lang: {
       type: String,
       default: "en"
+    },
+    resource: {
+      type: String,
+      required: true
     }
   },
   created() {

@@ -2,7 +2,7 @@ import movieService from "../../services/MovieService.js";
 const state = {
   movies: [],
   movie: {},
-  perPage: 5,
+  perPage: 20,
   page: 1,
   movieTotal: 0
 };

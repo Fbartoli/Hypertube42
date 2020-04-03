@@ -3,7 +3,7 @@
     class="movie-link"
     :to="{ name: 'movie', params: { id: movie.id } }"
   >
-    <v-card class="mx-auto" height="200px" outlined>
+    <v-card class="mx-auto" height="200px" width="500px" outlined>
       <v-list-item three-line>
         <v-list-item-content>
           <div class="overline mb-4"></div>

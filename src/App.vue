@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-img src="../src/assets/netflix-image.jpg">
-      <v-app-bar app>
+      <v-app-bar hide-on-scroll flat color="transparent" app>
         <!-- -->
         <v-toolbar-title>
           <router-link :to="{ name: 'home' }">{{ appName }}</router-link>
@@ -24,16 +24,9 @@
           <router-view :key="$route.fullPath"></router-view>
         </v-container>
       </v-content>
-      <v-footer app>
+      <v-footer absolute app>
         <div>
-          <v-select v-model="$root.$i18n.locale">
-            <option
-              v-for="(lang, i) in langs"
-              :key="`Lang${i}`"
-              :value="lang"
-              >{{ lang }}</option
-            >
-          </v-select>
+          <v-select v-model="$root.$i18n.locale" :items="langs" />
         </div>
         <v-spacer></v-spacer>
         <NotificationContainer />

@@ -4,21 +4,16 @@
     :to="{ name: 'movie', params: { id: movie.id } }"
   >
     <v-card class="mx-auto" height="200px" width="500px" outlined>
-      <v-list-item three-line>
-        <v-list-item-content>
-          <div class="overline mb-4"></div>
-          <v-list-item-title class="headline mb-1">{{
-            movie.title
-          }}</v-list-item-title>
-          <v-list-item-subtitle>{{
-            movie.description_full
-          }}</v-list-item-subtitle>
-        </v-list-item-content>
-
-        <v-list-item-avatar tile size="80" color="grey"
-          ><v-img :src="movie.medium_cover_image"></v-img
-        ></v-list-item-avatar>
-      </v-list-item>
+      <v-img :src="movie.large_cover_image" height="200px" width="500px">
+        <v-list-item three-line>
+          <v-list-item-content>
+            <div class="overline mb-4"></div>
+            <v-list-item-title class="headline mb-1">{{
+              movie.title
+            }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-img>
     </v-card>
   </router-link>
 </template>

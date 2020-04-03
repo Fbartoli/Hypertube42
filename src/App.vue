@@ -1,37 +1,35 @@
 <template>
   <v-app>
-    <v-img src="../src/assets/netflix-image.jpg">
-      <v-app-bar hide-on-scroll flat color="transparent" app>
-        <!-- -->
-        <v-toolbar-title>
-          <router-link :to="{ name: 'home' }">{{ appName }}</router-link>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
+    <v-app-bar hide-on-scroll flat color="transparent" app>
+      <!-- -->
+      <v-toolbar-title>
+        <router-link :to="{ name: 'home' }">{{ appName }}</router-link>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
 
-        <!-- <v-btn :to="{ name: 'login' }">{{ $t("sign in") }}</v-btn> -->
-        <v-btn :to="{ name: 'user', params: { username: 'flo' } }">{{
-          $t("user")
-        }}</v-btn>
-        <v-btn :to="{ name: 'movies', params: { page: 1 } }">{{
-          $t("movies")
-        }}</v-btn>
-      </v-app-bar>
-      <!-- Sizes your content based upon application components -->
-      <v-content>
-        <!-- Provides the application the proper gutter -->
-        <v-container fluid>
-          <!-- If using vue-router -->
-          <router-view :key="$route.fullPath"></router-view>
-        </v-container>
-      </v-content>
-      <v-footer absolute app>
-        <div>
-          <v-select v-model="$root.$i18n.locale" :items="langs" />
-        </div>
-        <v-spacer></v-spacer>
-        <NotificationContainer />
-      </v-footer>
-    </v-img>
+      <!-- <v-btn :to="{ name: 'login' }">{{ $t("sign in") }}</v-btn> -->
+      <v-btn :to="{ name: 'user', params: { username: 'flo' } }">{{
+        $t("user")
+      }}</v-btn>
+      <v-btn :to="{ name: 'movies', params: { page: 1 } }">{{
+        $t("movies")
+      }}</v-btn>
+    </v-app-bar>
+    <!-- Sizes your content based upon application components -->
+    <v-content>
+      <!-- Provides the application the proper gutter -->
+      <v-container fluid>
+        <!-- If using vue-router -->
+        <router-view :key="$route.fullPath"></router-view>
+      </v-container>
+    </v-content>
+    <v-footer absolute app>
+      <div>
+        <v-select v-model="$root.$i18n.locale" :items="langs" />
+      </div>
+      <v-spacer></v-spacer>
+      <NotificationContainer />
+    </v-footer>
   </v-app>
 </template>
 

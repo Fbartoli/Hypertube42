@@ -26,14 +26,14 @@
       </v-content>
       <v-footer app>
         <div>
-          <select v-model="$root.$i18n.locale">
+          <v-select v-model="$root.$i18n.locale">
             <option
               v-for="(lang, i) in langs"
               :key="`Lang${i}`"
               :value="lang"
               >{{ lang }}</option
             >
-          </select>
+          </v-select>
         </div>
         <v-spacer></v-spacer>
         <NotificationContainer />

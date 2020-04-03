@@ -9,9 +9,7 @@ const mutations = {};
 // actions
 const actions = {
   register(userInfo) {
-    registrationService
-      .register(userInfo)
-      .then(data => console.log(`user data is ${data}`));
+    registrationService.register(userInfo).then(data => data);
   }
 };
 

@@ -3,12 +3,12 @@
     class="movie-link"
     :to="{ name: 'movie', params: { id: movie.id } }"
   >
-    <v-card class="mx-auto" height="200px" width="500px" outlined>
-      <v-img :src="movie.large_cover_image" height="200px" width="500px">
+    <v-card class="mx-auto" height="400px" width="300px">
+      <v-img :src="movie.large_cover_image" height="400" contain>
         <v-list-item three-line>
           <v-list-item-content>
             <div class="overline mb-4"></div>
-            <v-list-item-title class="headline mb-1">{{
+            <v-list-item-title class="headline red--text mb-1">{{
               movie.title
             }}</v-list-item-title>
           </v-list-item-content>

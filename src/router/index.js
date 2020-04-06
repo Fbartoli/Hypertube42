@@ -12,10 +12,34 @@ const routes = [
     component: () => import("../pages/Home.vue")
   },
   {
+    path: "/login",
+    name: "login",
+    component: () => import("../pages/Login.vue")
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("../pages/Registration.vue"),
+    props: true
+  },
+  {
     path: "/user/:username",
     name: "user",
-    props: true,
-    component: () => import("../pages/User.vue")
+    component: () => import("../pages/User.vue"),
+    beforeEnter(routeTo, routeFrom, next) {
+      store
+        .dispatch("App/getUser", routeTo.params.username)
+        .then(data => {
+          routeTo.params.userInfo = data;
+          next();
+        })
+        .catch(error => {
+          if (error.response && error.response.status == 404) {
+            next({ name: "404", params: { resource: "user" } });
+          }
+          next({ name: "network-issue" });
+        });
+    }
   },
   {
     path: "/movies",

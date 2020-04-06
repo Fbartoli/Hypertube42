@@ -8,18 +8,19 @@
       <v-spacer></v-spacer>
 
       <!-- <v-btn :to="{ name: 'login' }">{{ $t("sign in") }}</v-btn> -->
-      <v-btn :to="{ name: 'user', params: { username: 'flo' } }">{{
-        $t("user")
-      }}</v-btn>
-      <v-btn :to="{ name: 'movies', params: { page: 1 } }">{{
-        $t("movies")
-      }}</v-btn>
+      <v-btn
+        v-for="link in links"
+        :key="`${link.linkname}-header`"
+        text
+        :to="{ name: link.linkname, params: link.params }"
+        >{{ $t(link.label) }}</v-btn
+      >
     </v-app-bar>
     <!-- Sizes your content based upon application components -->
     <v-content>
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
-        <!-- If using vue-router -->
+        <!-- If using vue -router -->
         <router-view :key="$route.fullPath"></router-view>
       </v-container>
     </v-content>
@@ -45,7 +46,9 @@ export default {
   computed: {
     ...mapState({
       langs: state => state.App.langs,
-      appName: state => state.App.appName
+      appName: state => state.App.appName,
+      username: state => state.App.username,
+      links: state => state.App.links
     })
   }
 };
@@ -272,6 +275,12 @@ select:focus::ms-value {
 }
 select::ms-expand {
   opacity: 0;
+}
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 </style>
 <i18n>

@@ -1,4 +1,4 @@
-import registrationService from "../../services/RegistrationService.js";
+import userService from "../../services/UserService.js";
 
 const state = {};
 
@@ -9,7 +9,7 @@ const mutations = {};
 // actions
 const actions = {
   register(userInfo) {
-    registrationService.register(userInfo).then(data => data);
+    userService.register(userInfo).then(data => console.log(data));
   }
 };
 

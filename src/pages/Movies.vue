@@ -47,7 +47,7 @@ export default {
   props: {
     page: {
       type: Number,
-      required: true
+      default: 1
     }
   },
   beforeRouteEnter(routeTo, routeFrom, next) {

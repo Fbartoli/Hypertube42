@@ -4,9 +4,10 @@
       <v-row>
         <v-col cols="12">
           <v-text-field
+            v-model="email"
             outlined
             clearable
-            color="red"
+            color="primary"
             label="Email"
             type="text"
           >
@@ -19,9 +20,13 @@
               </v-tooltip>
             </template>
             <template v-slot:append-outer>
-              <v-btn x-large color="red" style="top: -18px">{{
-                $t("register")
-              }}</v-btn>
+              <v-btn
+                :to="{ name: 'register', params: { email } }"
+                x-large
+                color="red"
+                style="top: -18px"
+                >{{ $t("register") }}</v-btn
+              >
             </template>
           </v-text-field>
         </v-col>
@@ -31,25 +36,16 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
   name: "Home",
-  computed: {
-    ...mapState({
-      langs: state => state.App.langs,
-      email: state => state.App.userInfo.email
-    })
+  data() {
+    return {
+      email: ""
+    };
   }
 };
 </script>
-<style scoped>
-.center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-</style>
+<style scoped></style>
 <i18n>
 {
   "en": {

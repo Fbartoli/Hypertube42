@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title primary-title>
       <div>
-        <div class="headline">This is {{ username }}</div>
+        <div class="headline">This is {{ userInfo.username }}</div>
         <span class="red--text">desription</span>
       </div>
     </v-card-title>
@@ -22,7 +22,12 @@
 
 <script>
 export default {
-  props: ["username"]
+  props: {
+    userInfo: {
+      type: Object,
+      required: true
+    }
+  }
 };
 </script>
 

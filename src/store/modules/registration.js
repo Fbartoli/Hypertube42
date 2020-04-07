@@ -10,7 +10,6 @@ const mutations = {};
 // actions
 const actions = {
   register({ dispatch }, { username, email, firstName, lastName, password }) {
-    console.log(firstName);
     userService
       .register({ username, email, firstName, lastName, password })
       .then(response => {

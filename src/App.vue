@@ -15,6 +15,9 @@
         :to="{ name: link.linkname, params: link.params }"
         >{{ $t(link.label) }}</v-btn
       >
+      <v-btn v-show="!userInfo.auth" text :to="{ name: 'login' }"
+        >{{ $t("sign in") }}
+      </v-btn>
     </v-app-bar>
     <!-- Sizes your content based upon application components -->
     <v-content>
@@ -47,7 +50,7 @@ export default {
     ...mapState({
       langs: state => state.App.langs,
       appName: state => state.App.appName,
-      username: state => state.App.username,
+      userInfo: state => state.App.userInfo,
       links: state => state.App.links
     })
   }

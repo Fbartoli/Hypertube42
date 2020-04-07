@@ -1,4 +1,5 @@
 import UserService from "../../services/UserService";
+import router from "../../router/index";
 
 const state = {
   appName: "Hypertube",
@@ -7,6 +8,7 @@ const state = {
   userInfo: {
     username: "",
     token: "",
+    exp: "",
     auth: false
   },
   links: [
@@ -19,35 +21,56 @@ const state = {
       label: "movies",
       linkname: "movies",
       params: { page: 1 }
-    },
-    {
-      label: "sign in",
-      linkname: "login",
-      params: { page: 1 }
     }
   ]
 };
 
 // getters
-const getters = {};
+const getters = {
+  isAuth: () => state.userInfo.auth
+};
 // mutations
 const mutations = {
-  SET_EMAIL: (state, email) => {
-    state.userInfo.email = email;
+  SET_TOKEN: (state, token) => {
+    state.userInfo.token = token;
+  },
+  SET_AUTH: (state, bool) => {
+    state.userInfo.auth = bool;
   }
 };
 // actions
 const actions = {
-  setEmail: ({ commit }, email) => {
-    commit("SET_EMAIL", email);
-  },
-  getUser: (context, username) => {
-    UserService.getUser(username)
-      .then(data => {
-        return data;
+  login: ({ commit, dispatch }, { username, password }) => {
+    UserService.login(username, password)
+      .then(response => {
+        localStorage.setItem("token", JSON.stringify(response.data.token));
+        commit("SET_TOKEN", response.data.token);
+        commit("SET_AUTH", true);
+        const notification = {
+          type: response.data.status,
+          message: "Login successfull"
+        };
+        dispatch("Notifications/add", notification, { root: true });
+        router.push({ name: "movies" });
       })
       .catch(error => {
-        throw error;
+        const notification = {
+          type: "error",
+          message: "There was a problem login"
+        };
+        if (error.response && error.response.status == 404) {
+          dispatch("Notifications/add", notification, {
+            root: true
+          });
+        } else if (error.response && error.response.status == 403) {
+          dispatch("Notifications/add", notification, {
+            root: true
+          });
+        } else {
+          dispatch("Notifications/add", notification, {
+            root: true
+          });
+        }
       });
   }
 };

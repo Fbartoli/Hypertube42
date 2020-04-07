@@ -2,12 +2,13 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-form ref="signUpForm" v-model="fromValid">
+        <v-form ref="signUpForm" v-model="formValid">
           <v-text-field
             v-model="email"
             :rules="emailRules"
             outlined
             clearable
+            readonly
             color="primary"
             @blur="$v.email.$touch()"
             :label="$t('email')"
@@ -46,7 +47,6 @@
             :label="$t('password')"
             type="Password"
           ></v-text-field>
-          <v-file-input :label="$t('attachPicture')"></v-file-input>
           <v-checkbox
             :label="$t('agree')"
             :rules="agreeToTermsRules"
@@ -55,7 +55,9 @@
           </v-checkbox>
           <v-btn
             class="mr-4"
-            @click="register"
+            @click="
+              register({ email, username, lastName, firstName, password })
+            "
             :disabled="!formValid"
             x-large
             color="primary"

@@ -33,5 +33,16 @@ new Vue({
   store,
   vuetify,
   i18n,
+  created() {
+    let token = localStorage.getItem("token");
+    if (token) {
+      token = JSON.parse(token);
+      if (Math.floor(token.exp) - Math.floor(Date.now() / 1000) > 60 * 10) {
+        this.$store.commit("App/SET_TOKEN", token);
+        this.$store.commit("App/SET_AUTH", true);
+        router.push({ name: "movies" });
+      }
+    }
+  },
   render: h => h(App)
 }).$mount("#app");

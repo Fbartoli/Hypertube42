@@ -37,7 +37,7 @@
                 <template v-slot:activator="{ on }">
                   <v-icon v-on="on">mdi-help-circle-outline</v-icon>
                 </template>
-                {{ $t("Password") }}
+                {{ $t("password") }}
               </v-tooltip>
             </template>
           </v-text-field>
@@ -45,12 +45,11 @@
       </v-row>
       <template>
         <v-btn
-          @click="setEmail('email')"
-          :to="{ name: 'register', params: { email } }"
+          @click="login({ username, password })"
           x-large
           color="red"
           style="top: -18px"
-          >{{ $t("register") }}</v-btn
+          >{{ $t("login") }}</v-btn
         >
       </template>
     </v-container>
@@ -58,14 +57,31 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      token: ""
     };
-  }
+  },
+  methods: { ...mapActions("App", ["login"]) }
 };
 </script>
 
 <style scoped></style>
+<i18n>
+{
+  "en": {
+    "username": "Username",
+    "password": "Password",
+    "login":"Log in"
+  },
+  "fr": {
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "login":"Connexion"
+  }
+}
+</i18n>

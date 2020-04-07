@@ -26,7 +26,7 @@ import MovieCard from "../components/MovieCard";
 import store from "../store";
 import { mapState } from "vuex";
 
-function getPageEvents(routeTo, next) {
+function getPageMovies(routeTo, next) {
   const currentPage = parseInt(routeTo.query.page) || 1;
   store
     .dispatch("Movies/fetchMovies", currentPage)
@@ -51,10 +51,10 @@ export default {
     }
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    getPageEvents(routeTo, next);
+    getPageMovies(routeTo, next);
   },
   beforeRouteUpdate(routeTo, routeFrom, next) {
-    getPageEvents(routeTo, next);
+    getPageMovies(routeTo, next);
   },
   computed: {
     hasNextPage() {

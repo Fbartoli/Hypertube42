@@ -17,6 +17,11 @@ const routes = [
     component: () => import("../pages/Login.vue")
   },
   {
+    path: "/activated",
+    name: "activated",
+    component: () => import("../pages/Activated.vue")
+  },
+  {
     path: "/register",
     name: "register",
     component: () => import("../pages/Registration.vue"),

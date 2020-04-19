@@ -1,12 +1,12 @@
-import userService from "../../services/UserService.js";
-import router from "../../router/index";
+import userService from '../../services/UserService.js'
+import router from '../../router/index'
 
-const state = {};
+const state = {}
 
 // getters
-const getters = {};
+const getters = {}
 // mutations
-const mutations = {};
+const mutations = {}
 // actions
 const actions = {
   register({ dispatch }, { username, email, firstName, lastName, password }) {
@@ -15,37 +15,37 @@ const actions = {
       .then(response => {
         const notification = {
           type: response.data.status,
-          message: "User registered check your email"
-        };
-        dispatch("Notifications/add", notification, { root: true });
-        router.push({ name: "home" });
+          message: 'User registered check your email',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        router.push({ name: 'home' })
       })
       .catch(error => {
         const notification = {
-          type: "error",
-          message: "There was a problem login"
-        };
-        if (error.response && error.response.status == 404) {
-          dispatch("Notifications/add", notification, {
-            root: true
-          });
-        } else if (error.response && error.response.status == 403) {
-          dispatch("Notifications/add", notification, {
-            root: true
-          });
-        } else {
-          dispatch("Notifications/add", notification, {
-            root: true
-          });
+          type: 'error',
+          message: 'There was a problem login',
         }
-      });
-  }
-};
+        if (error.response && error.response.status == 404) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else if (error.response && error.response.status == 403) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+}
 
 export default {
   namespaced: true,
   state,
   getters,
   actions,
-  mutations
-};
+  mutations,
+}

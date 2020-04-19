@@ -37,10 +37,10 @@ export default {
   props: {
     movie: {
       type: Object,
-      required: true
-    }
-  }
-};
+      required: true,
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped></style>

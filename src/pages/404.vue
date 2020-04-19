@@ -20,19 +20,19 @@
 
 <script>
 export default {
-  name: "FourOhFour",
+  name: 'FourOhFour',
   props: {
     lang: {
       type: String,
-      default: "en"
+      default: 'en',
     },
     resource: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   created() {
-    this.$ssrContext && this.$ssrContext.res.status(404);
-  }
-};
+    this.$ssrContext && this.$ssrContext.res.status(404)
+  },
+}
 </script>

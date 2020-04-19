@@ -16,7 +16,7 @@
                 <template v-slot:activator="{ on }">
                   <v-icon v-on="on">mdi-help-circle-outline</v-icon>
                 </template>
-                {{ $t("email") }}
+                {{ $t('email') }}
               </v-tooltip>
             </template>
             <template v-slot:append-outer>
@@ -25,7 +25,7 @@
                 x-large
                 color="red"
                 style="top: -18px"
-                >{{ $t("register") }}</v-btn
+                >{{ $t('register') }}</v-btn
               >
             </template>
           </v-text-field>
@@ -37,13 +37,13 @@
 
 <script>
 export default {
-  name: "Home",
+  name: 'Home',
   data() {
     return {
-      email: ""
-    };
-  }
-};
+      email: '',
+    }
+  },
+}
 </script>
 <style scoped></style>
 <i18n>

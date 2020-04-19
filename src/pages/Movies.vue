@@ -22,24 +22,24 @@
 </template>
 
 <script>
-import MovieCard from "../components/MovieCard";
-import store from "../store";
-import { mapState } from "vuex";
+import MovieCard from '../components/MovieCard'
+import store from '../store'
+import { mapState } from 'vuex'
 
 function getPageMovies(routeTo, next) {
-  const currentPage = parseInt(routeTo.query.page) || 1;
+  const currentPage = parseInt(routeTo.query.page) || 1
   store
-    .dispatch("Movies/fetchMovies", currentPage)
+    .dispatch('Movies/fetchMovies', currentPage)
     .then(() => {
-      routeTo.params.page = currentPage;
-      next();
+      routeTo.params.page = currentPage
+      next()
     })
     .catch(error => {
       if (error.response && error.response.status == 404) {
-        next({ name: "404", params: { resource: "movie" } });
+        next({ name: '404', params: { resource: 'movie' } })
       }
-      next({ name: "network-issue" });
-    });
+      next({ name: 'network-issue' })
+    })
 }
 
 export default {
@@ -47,22 +47,22 @@ export default {
   props: {
     page: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    getPageMovies(routeTo, next);
+    getPageMovies(routeTo, next)
   },
   beforeRouteUpdate(routeTo, routeFrom, next) {
-    getPageMovies(routeTo, next);
+    getPageMovies(routeTo, next)
   },
   computed: {
     hasNextPage() {
-      return this.Movies.movieTotal > this.page * this.Movies.perPage;
+      return this.Movies.movieTotal > this.page * this.Movies.perPage
     },
-    ...mapState(["Movies"])
-  }
-};
+    ...mapState(['Movies']),
+  },
+}
 </script>
 
 <style></style>

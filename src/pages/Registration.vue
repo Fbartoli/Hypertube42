@@ -22,6 +22,8 @@
             color="primary"
             :label="$t('username')"
             type="text"
+            @input="$v.username.$touch()"
+            @blur="$v.username.$touch()"
           ></v-text-field>
           <v-text-field
             v-model="firstName"
@@ -41,11 +43,15 @@
           ></v-text-field>
           <v-text-field
             v-model="password"
+            :error-messages="passwordErrors"
+            :counter="15"
             outlined
             clearable
             color="primary"
             :label="$t('password')"
             type="Password"
+            @input="$v.password.$touch()"
+            @blur="$v.password.$touch()"
           ></v-text-field>
           <v-checkbox
             :label="$t('agree')"
@@ -56,12 +62,18 @@
           <v-btn
             class="mr-4"
             @click="
-              register({ email, username, lastName, firstName, password })
+              register({
+                email,
+                username,
+                lastName,
+                firstName,
+                password,
+              })
             "
-            :disabled="!formValid"
+            :disabled="$v.$invalid"
             x-large
             color="primary"
-            >{{ $t("register") }}</v-btn
+            >{{ $t('register') }}</v-btn
           >
           <v-btn class="mr-4" color="warning" x-large @click="resetValidation"
             >Reset validation</v-btn
@@ -74,36 +86,73 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
-      formValid: false,
       agreeToTerms: false,
-      agreeToTermsRules: [value => !!value || this.$t("agreeRule")],
-      emailRules: [value => !!value || this.$t("emailRule")],
-      username: "",
-      password: "",
-      lastName: "",
-      firstName: ""
-    };
+      username: '',
+      password: '',
+      lastName: '',
+      firstName: '',
+    }
   },
   props: {
     email: {
       type: String,
-      default: ""
-    }
+      default: '',
+    },
   },
   methods: {
-    ...mapActions("Registration", ["register"]),
+    ...mapActions('Registration', ['register']),
     resetForm() {
-      this.$refs.signUpForm.reset();
+      this.$refs.signUpForm.reset()
     },
     resetValidation() {
-      this.$refs.signUpForm.resetValidation();
-    }
-  }
-};
+      this.$refs.signUpForm.resetValidation()
+    },
+  },
+  computed: {
+    usernameErrors() {
+      const errors = []
+      if (!this.$v.username.$dirty) return errors
+      !this.$v.username.minLength &&
+        errors.push('Name must be at least 3 characters long')
+      !this.$v.username.maxLength &&
+        errors.push('Name must be at most 15 characters long')
+      !this.$v.username.required && errors.push('Name is required.')
+      return errors
+    },
+    passwordErrors() {
+      const errors = []
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password.minLength &&
+        errors.push('Password must be at least 3 characters long')
+      !this.$v.password.maxLength &&
+        errors.push('Password must be at most 15 characters long')
+      !this.$v.password.required && errors.push('Password is required.')
+      return errors
+    },
+    emailErrors() {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.required && errors.push(this.$t('emailRule'))
+      return errors
+    },
+  },
+  validations: {
+    username: {
+      required,
+      minLength: minLength(3),
+      maxLength: maxLength(15),
+    },
+    password: {
+      minLength: minLength(6),
+      maxLength: maxLength(15),
+    },
+  },
+}
 </script>
 
 <style scoped></style>

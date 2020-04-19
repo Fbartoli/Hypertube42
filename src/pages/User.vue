@@ -25,10 +25,10 @@ export default {
   props: {
     userInfo: {
       type: Object,
-      required: true
-    }
-  }
-};
+      required: true,
+    },
+  },
+}
 </script>
 
 <style></style>

@@ -23,7 +23,7 @@
               <v-btn
                 :to="{ name: 'register', params: { email } }"
                 x-large
-                color="red"
+                color="green"
                 style="top: -18px"
                 >{{ $t('register') }}</v-btn
               >

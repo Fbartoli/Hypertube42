@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto my-12">
-    <v-img height="auto" :src="movie.large_cover_image"></v-img>
+  <v-card class="mx-auto my-12" width="80%">
+    <v-img max-height="auto" :src="movie.large_cover_image"></v-img>
 
     <v-card-title>{{ movie.title }} </v-card-title>
 

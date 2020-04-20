@@ -62,6 +62,9 @@ const routes = [
     name: 'movies',
     component: () => import('../pages/Movies.vue'),
     props: true,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/movie/:id',
@@ -113,7 +116,10 @@ const router = new VueRouter({
 
 router.beforeEach((routeTo, routeFrom, next) => {
   nprogress.start()
-  next()
+  if (routeTo.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters['App/isAuth']) next()
+    else next({ name: 'login' })
+  } else next()
 })
 
 router.afterEach(() => {

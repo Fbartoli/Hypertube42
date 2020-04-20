@@ -8,9 +8,6 @@
         <v-list-item three-line>
           <v-list-item-content>
             <div class="overline mb-4"></div>
-            <v-list-item-title class="headline red--text mb-1">{{
-              movie.title
-            }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-img>
@@ -21,9 +18,9 @@
 <script>
 export default {
   props: {
-    movie: Object
-  }
-};
+    movie: Object,
+  },
+}
 </script>
 <style scoped>
 .event-card {

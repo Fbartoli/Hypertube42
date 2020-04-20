@@ -1,92 +1,86 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-form ref="signUpForm" v-model="formValid">
-          <v-text-field
-            v-model="email"
-            :rules="emailRules"
-            outlined
-            clearable
-            readonly
-            color="primary"
-            @blur="$v.email.$touch()"
-            :label="$t('email')"
-            type="text"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="username"
-            outlined
-            clearable
-            color="primary"
-            :label="$t('username')"
-            type="text"
-            @input="$v.username.$touch()"
-            @blur="$v.username.$touch()"
-          ></v-text-field>
-          <v-text-field
-            v-model="firstName"
-            outlined
-            clearable
-            color="primary"
-            :label="$t('firstName')"
-            type="text"
-          ></v-text-field>
-          <v-text-field
-            v-model="lastName"
-            outlined
-            clearable
-            color="primary"
-            :label="$t('lastName')"
-            type="text"
-          ></v-text-field>
-          <v-text-field
-            v-model="password"
-            :error-messages="passwordErrors"
-            :counter="15"
-            outlined
-            clearable
-            color="primary"
-            :label="$t('password')"
-            type="Password"
-            @input="$v.password.$touch()"
-            @blur="$v.password.$touch()"
-          ></v-text-field>
-          <v-checkbox
-            :label="$t('agree')"
-            :rules="agreeToTermsRules"
-            v-model="agreeToTerms"
-          >
-          </v-checkbox>
-          <v-btn
-            class="mr-4"
-            @click="
-              register({
-                email,
-                username,
-                lastName,
-                firstName,
-                password,
-              })
-            "
-            :disabled="$v.$invalid"
-            x-large
-            color="primary"
-            >{{ $t('register') }}</v-btn
-          >
-          <v-btn class="mr-4" color="warning" x-large @click="resetValidation"
-            >Reset validation</v-btn
-          >
-          <v-btn color="red" x-large @click="resetForm">Reset</v-btn>
-        </v-form>
-      </v-col>
-    </v-row>
+    <v-card width="1000">
+      <v-form ref="signUpForm">
+        <v-text-field
+          class="pa-5"
+          v-model="email"
+          outlined
+          clearable
+          readonly
+          color="primary"
+          @blur="$v.email.$touch()"
+          :label="$t('email')"
+          type="text"
+          required
+        ></v-text-field>
+        <v-text-field
+          class="pa-5"
+          v-model="username"
+          outlined
+          clearable
+          color="primary"
+          :label="$t('username')"
+          type="text"
+          @input="$v.username.$touch()"
+          @blur="$v.username.$touch()"
+        ></v-text-field>
+        <v-text-field
+          class="ma-5"
+          v-model="firstName"
+          outlined
+          clearable
+          color="primary"
+          :label="$t('firstName')"
+          type="text"
+        ></v-text-field>
+        <v-text-field
+          class="ma-5"
+          v-model="lastName"
+          outlined
+          clearable
+          color="primary"
+          :label="$t('lastName')"
+          type="text"
+        ></v-text-field>
+        <v-text-field
+          class="ma-5"
+          v-model="password"
+          :error-messages="passwordErrors"
+          :counter="15"
+          outlined
+          clearable
+          color="primary"
+          :label="$t('password')"
+          type="Password"
+          @input="$v.password.$touch()"
+          @blur="$v.password.$touch()"
+        ></v-text-field>
+        <v-checkbox class="ma-5" :label="$t('agree')" v-model="agreeToTerms">
+        </v-checkbox>
+        <v-btn
+          class="ma-5"
+          @click="
+            register({
+              email,
+              username,
+              lastName,
+              firstName,
+              password,
+            })
+          "
+          :disabled="$v.$invalid && agreeToTerms"
+          x-large
+          color="primary"
+          >{{ $t('register') }}</v-btn
+        >
+      </v-form>
+    </v-card>
   </v-container>
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
 export default {
   data() {
@@ -106,12 +100,6 @@ export default {
   },
   methods: {
     ...mapActions('Registration', ['register']),
-    resetForm() {
-      this.$refs.signUpForm.reset()
-    },
-    resetValidation() {
-      this.$refs.signUpForm.resetValidation()
-    },
   },
   computed: {
     usernameErrors() {
@@ -138,6 +126,7 @@ export default {
       const errors = []
       if (!this.$v.email.$dirty) return errors
       !this.$v.email.required && errors.push(this.$t('emailRule'))
+      !this.$v.email.email && errors.push(this.$t('emailRule'))
       return errors
     },
   },
@@ -148,8 +137,13 @@ export default {
       maxLength: maxLength(15),
     },
     password: {
+      required,
       minLength: minLength(6),
       maxLength: maxLength(15),
+    },
+    email: {
+      email,
+      required,
     },
   },
 }

@@ -10,19 +10,8 @@ const state = {
     token: '',
     exp: '',
     auth: false,
+    avatar: '',
   },
-  links: [
-    // {
-    //   label: "user",
-    //   linkname: "user",
-    //   param: {}
-    // },
-    {
-      label: 'movies',
-      linkname: 'movies',
-      params: { page: 1 },
-    },
-  ],
 }
 
 // getters

@@ -47,11 +47,9 @@
     <v-content>
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
-        <v-row>
+        <v-row align="center" justify="center">
           <v-col cols="12">
-            <v-row align="center" justify="center">
-              <router-view :key="$route.fullPath"></router-view>
-            </v-row>
+            <router-view :key="$route.fullPath"></router-view>
           </v-col>
         </v-row>
       </v-container>

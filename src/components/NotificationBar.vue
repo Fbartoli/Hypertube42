@@ -5,29 +5,29 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
-      timeout: null
-    };
+      timeout: null,
+    }
   },
   mounted() {
-    this.timeout = setTimeout(() => this.remove(this.notification), 5000);
+    this.timeout = setTimeout(() => this.remove(this.notification), 5000)
   },
   beforeDestroy() {
-    clearTimeout(this.timeout);
+    clearTimeout(this.timeout)
   },
   props: {
     notification: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
-    ...mapActions("Notifications", ["remove"])
-  }
-};
+    ...mapActions('Notifications', ['remove']),
+  },
+}
 </script>
 
 <style scoped>

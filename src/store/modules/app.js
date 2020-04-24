@@ -26,6 +26,9 @@ const mutations = {
   SET_AUTH: (state, bool) => {
     state.userInfo.auth = bool
   },
+  SET_AVATAR: (state, avatar) => {
+    state.userInfo.avatar = avatar
+  },
 }
 // actions
 const actions = {

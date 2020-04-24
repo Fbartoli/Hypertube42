@@ -11,13 +11,18 @@ const routes = [
     name: 'home',
     component: () => import('../pages/Home.vue'),
     beforeEnter(routeTo, routeFrom, next) {
-      if (routeTo.query.code) {
-        console.log(routeTo.query.code)
-        // demander l'access token au back
-        // https://api.intra.42.fr/apidoc/guides/web_application_flow
-        // demander aux back si profil complet
-        // si oui go to movie
-        // sinon go to complete profile
+      try {
+        if (routeTo.query.code) {
+          let jwt = routeTo.query.code.split('.')
+          console.log(jwt)
+          let data = window.atob(jwt[1])
+          console.log(data)
+          data = JSON.parse(data)
+          console.log(data)
+          store.commit('App/SET_AVATAR', data.data.photo)
+        }
+      } catch (e) {
+        console.log(e)
       }
       next()
     },

@@ -7,7 +7,6 @@
           v-model="email"
           outlined
           clearable
-          readonly
           color="primary"
           @blur="$v.email.$touch()"
           :label="$t('email')"

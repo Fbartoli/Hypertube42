@@ -22,6 +22,9 @@ const getters = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.userInfo.token = token
+    state.userInfo.username = JSON.parse(
+      atob(token.code.split('.')[1])
+    ).data.username
   },
   SET_AUTH: (state, bool) => {
     state.userInfo.auth = bool

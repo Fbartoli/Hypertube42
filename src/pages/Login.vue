@@ -64,19 +64,29 @@
         >
           {{ $t('login') }}
         </v-btn>
-        <v-btn :href="links.qd" x-large color="blue"> </v-btn>
+        <v-btn :href="links.qd" x-large color="blue">
+          <v-icon x-large>mdi-numeric-4-box</v-icon
+          ><v-icon x-large>mdi-numeric-2-box</v-icon>
+        </v-btn>
         <v-btn :href="links.github" x-large color="blue">
           <i class="fab fa-github fa-2x" />
         </v-btn>
+        <v-btn :href="links.facebook" x-large color="blue">
+          <i class="fab fa-facebook fa-2x" />
+        </v-btn>
+        <v-btn :href="links.qd" x-large color="blue">
+          <v-icon x-large>mdi-reddit</v-icon>
+        </v-btn>
       </v-card-actions>
     </v-card>
+    <duoquadra />
   </div>
 </template>
 
 <script>
 import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
-// import FortyTwoIcon from './components/FortyTwoIcon.vue'
+import duoquadra from '../components/duoquadra.vue'
 
 export default {
   data() {
@@ -89,12 +99,15 @@ export default {
           'https://github.com/login/oauth/authorize?client_id=d2c25f95cfaddbb9f2a7&redirect_uri=https://hypertube42.herokuapp.com/oauth/gh',
         qd:
           'https://api.intra.42.fr/oauth/authorize?client_id=a403255ef57b13e9a31155d4aa015ced40fab62d5617749dbf9f36f518fbee06&redirect_uri=https%3A%2F%2Fhypertube42.herokuapp.com%2Foauth%2F42&response_type=code',
+        facebook:
+          'https://www.facebook.com/v6.0/dialog/oauth?client_id=1245062255689643&redirect_uri=https://hypertube42.herokuapp.com/oauth/fb&response_type=code',
+        reddit: '',
       },
     }
   },
-  // components: {
-  //   FortyTwoIcon,
-  // },
+  components: {
+    duoquadra,
+  },
   methods: {
     ...mapActions('App', ['login']),
     submit(username, password) {

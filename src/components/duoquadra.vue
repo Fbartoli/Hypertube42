@@ -1,15 +1,5 @@
-<template functional>
-  <svg
-    aria-hidden="true"
-    focusable="false"
-    data-prefix="fab"
-    data-icon="github"
-    role="img"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 137.6 96.599998"
-    class=""
-    :class="[data.staticClass, data.class]"
-  >
+<template>
+  <svg>
     <g id="g3" transform="translate(-229.2,-372.70002)">
       <polygon
         points="229.2,443.9 279.9,443.9 279.9,469.3 305.2,469.3 305.2,423.4 254.6,423.4 305.2,372.7 279.9,372.7 229.2,423.4 "
@@ -27,6 +17,6 @@
 
 <script>
 export default {
-  name: 'FortyTwoIcon',
+  name: 'duoquadra',
 }
 </script>

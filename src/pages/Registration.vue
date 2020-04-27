@@ -54,7 +54,16 @@
           type="Password"
           @input="$v.password.$touch()"
           @blur="$v.password.$touch()"
-        ></v-text-field>
+        >
+          <template v-slot:prepend>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon v-on="on">mdi-help-circle-outline</v-icon>
+              </template>
+              {{ $t('password') }}
+            </v-tooltip>
+          </template>
+        </v-text-field>
         <v-checkbox class="ma-5" :label="$t('agree')" v-model="agreeToTerms">
         </v-checkbox>
         <v-btn
@@ -89,7 +98,7 @@ export default {
   data() {
     return {
       agreeToTerms: false,
-      username: '',
+      // username: '',
       password: '',
       lastName: '',
       firstName: '',
@@ -97,6 +106,10 @@ export default {
   },
   props: {
     email: {
+      type: String,
+      default: '',
+    },
+    username: {
       type: String,
       default: '',
     },

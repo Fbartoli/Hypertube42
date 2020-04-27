@@ -39,7 +39,13 @@ const routes = [
     props: true,
   },
   {
-    path: '/user',
+    path: '/reset',
+    name: 'reset',
+    component: () => import('../pages/Reset.vue'),
+    props: true,
+  },
+  {
+    path: '/user/',
     name: 'user2',
     component: () => import('../pages/User.vue'),
     props: true,

@@ -1,85 +1,83 @@
 <template>
-  <v-card width="80%" class="mx-auto mt-5">
-    <v-card-title class="pb-0">
-      <h1>Login</h1>
-    </v-card-title>
-    <v-card-text class="mt-5">
-      <v-form>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="username"
-                :error-messages="usernameErrors"
-                :counter="15"
-                outlined
-                clearable
-                color="red"
-                label="Username"
-                type="text"
-                @input="$v.username.$touch()"
-                @blur="$v.username.$touch()"
-              >
-                <template v-slot:prepend>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-icon v-on="on">mdi-help-circle-outline</v-icon>
-                    </template>
-                    {{ $t('username') }}
-                  </v-tooltip>
-                </template>
-              </v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="password"
-                :error-messages="passwordErrors"
-                :counter="15"
-                outlined
-                clearable
-                color="red"
-                label="Password"
-                type="Password"
-                @input="$v.password.$touch()"
-                @blur="$v.password.$touch()"
-              >
-                <template v-slot:prepend>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-icon v-on="on">mdi-help-circle-outline</v-icon>
-                    </template>
-                    {{ $t('password') }}
-                  </v-tooltip>
-                </template>
-              </v-text-field>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-form>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-btn
-        @click="submit(username, password)"
-        x-large
-        color="red"
-        :disabled="$v.$invalid"
-      >
-        {{ $t('login') }}
-      </v-btn>
-      <v-btn :href="links.qd" x-large color="red">{{ $t('42') }}</v-btn>
-      <v-btn :href="links.github" x-large color="red">
-        {{ $t('git') }}
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+  <div>
+    <v-card width="80%" class="mx-auto mt-5">
+      <v-card-title class="pb-0">
+        <h1>Login</h1>
+      </v-card-title>
+      <v-card-text class="mt-5">
+        <v-form>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="username"
+                  :error-messages="usernameErrors"
+                  :counter="15"
+                  outlined
+                  clearable
+                  color="blue"
+                  :label="$t('username')"
+                  type="text"
+                  @input="$v.username.$touch()"
+                  @blur="$v.username.$touch()"
+                >
+                  <template v-slot:prepend> </template>
+                </v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="password"
+                  :error-messages="passwordErrors"
+                  :counter="15"
+                  outlined
+                  clearable
+                  color="blue"
+                  :label="$t('password')"
+                  type="Password"
+                  @input="$v.password.$touch()"
+                  @blur="$v.password.$touch()"
+                />
+              </v-col>
+            </v-row>
+            <router-link
+              :to="{ name: 'reset', params: { username: username } }"
+            >
+              {{ $t('Reset password') }}<br /><br />
+            </router-link>
+            <router-link
+              :to="{ name: 'register', params: { username: username } }"
+            >
+              {{ $t('New account') }}<br /><br />
+            </router-link>
+          </v-container>
+        </v-form>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-btn
+          @click="submit(username, password)"
+          x-large
+          color="blue"
+          :disabled="$v.$invalid"
+        >
+          {{ $t('login') }}
+        </v-btn>
+        <v-btn :href="links.qd" x-large color="blue"> </v-btn>
+        <v-btn :href="links.github" x-large color="blue">
+          <i class="fab fa-github fa-2x" />
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </div>
 </template>
 
 <script>
 import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
+// import FortyTwoIcon from './components/FortyTwoIcon.vue'
+
 export default {
   data() {
     return {
@@ -94,6 +92,9 @@ export default {
       },
     }
   },
+  // components: {
+  //   FortyTwoIcon,
+  // },
   methods: {
     ...mapActions('App', ['login']),
     submit(username, password) {
@@ -144,9 +145,9 @@ export default {
   "en": {
     "username": "Username",
     "password": "Password",
+    "Reset password": "Reset password",
+    "New account": "New account",
     "login":"Log in",
-    "42": "Log in with 42",
-    "git": "Log in with Github",
     "usernameRuleMin": "Username must be at least 3 characters long",
     "usernameRuleMax": "Username must be at most 15 characters long",
     "usernameRuleRequired": "Username is required"
@@ -154,9 +155,9 @@ export default {
   "fr": {
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",
+    "Reset password": "J'ai oublié mon mot de passe",
+    "New account": "Créer un nouveau compte",
     "login":"Connexion",
-    "42": "Connexion avec 42",
-    "git": "Connexion avec Github",
     "usernameRuleMin": "Le nom d'utilisateur doit avoir 3 caractères minimum",
     "usernameRuleMax": "Le nom d'utilisateur doit avoir 15 caractères maximum",
     "usernameRuleRequired": "Le nom d'utilisateur est requis"

@@ -11,14 +11,6 @@
             label="Email"
             type="text"
           >
-            <template v-slot:prepend>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-icon v-on="on">mdi-help-circle-outline</v-icon>
-                </template>
-                {{ $t('email') }}
-              </v-tooltip>
-            </template>
             <template v-slot:append-outer>
               <v-btn
                 :to="{ name: 'register', params: { email } }"
@@ -54,7 +46,7 @@ export default {
   },
   "fr": {
     "email": "Adresse email",
-    "register": "Inscris toi !"
+    "register": "Je m'inscris !"
   }
 }
 </i18n>

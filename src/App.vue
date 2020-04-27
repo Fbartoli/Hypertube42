@@ -25,10 +25,12 @@
         >{{ $t('user') }}</v-btn
       >
       <v-btn
+        @click="logout"
         class="mx-5"
         color="primary"
         v-show="userInfo.auth === true"
         :label="$t('sign out')"
+        :to="{ name: 'home' }"
         >{{ $t('sign out') }}</v-btn
       >
       <v-btn
@@ -73,6 +75,9 @@ export default {
   components: { NotificationContainer },
   methods: {
     ...mapActions([]),
+    logout() {
+      localStorage.removeItem('hypertube')
+    },
   },
   computed: {
     ...mapState({

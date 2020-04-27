@@ -71,8 +71,12 @@
           :disabled="$v.$invalid && agreeToTerms"
           x-large
           color="primary"
-          >{{ $t('register') }}</v-btn
         >
+          {{ $t('register') }}
+        </v-btn>
+        <v-btn class="ma-5" @click="autofill" x-large color="primary">
+          {{ $t('autofill') }}
+        </v-btn>
       </v-form>
     </v-card>
   </v-container>
@@ -99,6 +103,14 @@ export default {
   },
   methods: {
     ...mapActions('Registration', ['register']),
+    autofill() {
+      ;(this.agreeToTerms = true),
+        (this.email = 'chroniclesofselene@gmail.com'),
+        (this.username = 'test'),
+        (this.password = 'qwerty'),
+        (this.lastName = 'Duoquadra'),
+        (this.firstName = 'SeriousStudent')
+    },
   },
   computed: {
     usernameErrors() {
@@ -161,7 +173,8 @@ export default {
     "attachPicture": "Attach a profile picture",
     "agree": "Agree to terms and conditions",
     "agreeRule": "You must agree to create an account",
-    "emailRule": "Email is required"
+    "emailRule": "Email is required",
+    "autofill": "Test_42_AUTOFILL"
   },
   "fr": {
     "email": "Adresse email",
@@ -173,7 +186,8 @@ export default {
     "attachPicture": "Joindre une photo de profil",
     "agree": "Accepter les termes et conditions",
     "agreeRule": "Vous devez accepter les termes et conditions pour créer un compte",
-    "emailRule": "Un email est requis"
+    "emailRule": "Un email est requis",
+    "autofill": "Test_42_AUTOFILL"
   }
 }
 </i18n>

@@ -35,7 +35,7 @@ const actions = {
   login: ({ commit, dispatch }, { username, password }) => {
     UserService.login(username, password)
       .then(response => {
-        localStorage.setItem('token', JSON.stringify(response.data.token))
+        localStorage.setItem('hypertube', JSON.stringify(response.data.token))
         commit('SET_TOKEN', response.data.token)
         commit('SET_AUTH', true)
         const notification = {

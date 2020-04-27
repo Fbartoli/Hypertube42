@@ -88,9 +88,9 @@ export default {
       token: '',
       links: {
         github:
-          'https://github.com/login/oauth/authorize?client_id=d2c25f95cfaddbb9f2a7&redirect_uri=http://localhost:8080/',
+          'https://github.com/login/oauth/authorize?client_id=d2c25f95cfaddbb9f2a7&redirect_uri=https://hypertube42.herokuapp.com/oauth/gh',
         qd:
-          'https://api.intra.42.fr/oauth/authorize?client_id=a403255ef57b13e9a31155d4aa015ced40fab62d5617749dbf9f36f518fbee06&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&response_type=code',
+          'https://api.intra.42.fr/oauth/authorize?client_id=a403255ef57b13e9a31155d4aa015ced40fab62d5617749dbf9f36f518fbee06&redirect_uri=https%3A%2F%2Fhypertube42.herokuapp.com%2Foauth%2F42&response_type=code',
       },
     }
   },

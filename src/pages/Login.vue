@@ -79,7 +79,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <duoquadra />
+    <!-- <duoquadra /> -->
   </div>
 </template>
 

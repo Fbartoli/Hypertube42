@@ -21,7 +21,10 @@
         color="primary"
         v-show="userInfo.auth === true"
         :label="$t('user')"
-        :to="{ name: 'user', params: { username: userInfo.username } }"
+        :to="{
+          name: 'user',
+          params: { username: userInfo.username || 'none' },
+        }"
         >{{ $t('user') }}</v-btn
       >
       <v-btn

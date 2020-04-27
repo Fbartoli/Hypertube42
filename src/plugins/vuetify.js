@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import '@fortawesome/fontawesome-free/css/all.css'
-import duoquadra from '../components/duoquadra.vue'
+// import duoquadra from '../components/duoquadra.vue'
 
 Vue.use(Vuetify)
 
@@ -11,11 +11,11 @@ export default new Vuetify({
     dark: true,
   },
   icons: {
-    // iconfont: 'fa',
-    values: {
-      duoquadra: {
-        component: duoquadra,
-      },
-    },
+    iconfont: 'fa',
+    // values: {
+    //   duoquadra: {
+    //     component: duoquadra,
+    //   },
+    // },
   },
 })

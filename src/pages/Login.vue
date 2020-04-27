@@ -74,7 +74,7 @@
         <v-btn :href="links.facebook" x-large color="blue">
           <i class="fab fa-facebook fa-2x" />
         </v-btn>
-        <v-btn :href="links.qd" x-large color="blue">
+        <v-btn :href="links.reddit" x-large color="blue">
           <v-icon x-large>mdi-reddit</v-icon>
         </v-btn>
       </v-card-actions>
@@ -86,7 +86,7 @@
 <script>
 import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
-import duoquadra from '../components/duoquadra.vue'
+// import duoquadra from '../components/duoquadra.vue'
 
 export default {
   data() {
@@ -105,9 +105,9 @@ export default {
       },
     }
   },
-  components: {
-    duoquadra,
-  },
+  // components: {
+  //   duoquadra,
+  // },
   methods: {
     ...mapActions('App', ['login']),
     submit(username, password) {

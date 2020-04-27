@@ -45,12 +45,6 @@ const routes = [
     props: true,
   },
   {
-    path: '/user/',
-    name: 'user2',
-    component: () => import('../pages/User.vue'),
-    props: true,
-  },
-  {
     path: '/user/:username',
     name: 'user',
     component: () => import('../pages/User.vue'),

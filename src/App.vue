@@ -13,7 +13,10 @@
         color="primary"
         v-show="userInfo.auth === true"
         :label="$t('movies')"
-        :to="{ name: 'movies', params: { page: 1 } }"
+        :to="{
+          name: 'movies',
+          params: { page: 1 },
+        }"
         >{{ $t('movies') }}</v-btn
       >
       <v-btn

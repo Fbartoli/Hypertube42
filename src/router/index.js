@@ -48,20 +48,22 @@ const routes = [
     path: '/user/:username',
     name: 'user',
     component: () => import('../pages/User.vue'),
-    beforeEnter(routeTo, routeFrom, next) {
-      store
-        .dispatch('App/getUser', routeTo.params.username)
-        .then(data => {
-          routeTo.params.userInfo = data
-          next()
-        })
-        .catch(error => {
-          if (error.response && error.response.status == 404) {
-            next({ name: '404', params: { resource: 'user' } })
-          }
-          next({ name: 'network-issue' })
-        })
-    },
+    props: true,
+    // beforeEnter(routeTo, routeFrom, next) {
+    //   console.log('TEST_username: ', routeTo.params.username)
+    //   store
+    //     .dispatch('App/getUser', routeTo.params.username)
+    //     .then(data => {
+    //       routeTo.params.userInfo = data
+    //       next()
+    //     })
+    //     .catch(error => {
+    //       if (error.response && error.response.status == 404) {
+    //         next({ name: '404', params: { resource: 'user' } })
+    //       }
+    //       next({ name: 'network-issue' })
+    //     })
+    // },
   },
   {
     path: '/movies',

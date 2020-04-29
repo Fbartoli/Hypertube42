@@ -7,6 +7,9 @@ const state = {
   langs: ['fr', 'en'],
   userInfo: {
     username: '',
+    email: '',
+    firstname: '',
+    lastname: '',
     token: '',
     exp: '',
     auth: false,
@@ -14,10 +17,6 @@ const state = {
   },
 }
 
-// getters
-const getters = {
-  isAuth: () => state.userInfo.auth,
-}
 // mutations
 const mutations = {
   SET_TOKEN: (state, token) => {
@@ -30,6 +29,7 @@ const mutations = {
     state.userInfo.auth = bool
   },
 }
+
 // actions
 const actions = {
   login: ({ commit, dispatch }, { username, password }) => {
@@ -64,6 +64,15 @@ const actions = {
           })
         }
       })
+  },
+}
+
+// getters
+const getters = {
+  isAuth: () => state.userInfo.auth,
+  storeUser: state => {
+    const resUser = {}
+    return Object.assign(resUser, state.userInfo)
   },
 }
 

@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title primary-title>
       <div>
-        <div class="headline">{{ $t('title') }}</div>
+        <div class="headline">Update your personal information</div>
       </div>
     </v-card-title>
     <div>
@@ -66,61 +66,13 @@
             </v-row>
           </v-container>
         </v-form>
-        <v-container>
-          <v-row>
-            <v-col cols="5">
-              <v-card
-                :hover="true"
-                v-ripple="{ class: `blue--text` }"
-                color="deep-blue lighten-5"
-              >
-                <v-img
-                  :src="`data:image/*;base64,${userData.avatar}`"
-                  aspect-ratio="2"
-                  class="spacer blue lighten-2"
-                  no-gutters
-                >
-                  <v-row align="center" class="fill-height">
-                    <v-col align="center" class="pa-0" cols="12">
-                      <br />
-                      <v-avatar class="profile indigo accent-4" size="164">
-                        <v-img
-                          :src="`data:image/*;base64,${userData.avatar}`"
-                        />
-                      </v-avatar>
-                      <v-card-subtitle>
-                        <div>
-                          <div
-                            class="headline font-weight-bold blue--text text--accent-4"
-                          >
-                            {{ userData.username }}
-                          </div>
-                          <a
-                            class="title font-italic blue--text text--accent-3"
-                          >
-                            {{ userData.firstname }}
-                          </a>
-                          <a
-                            class="title font-italic blue--text text--accent-3"
-                          >
-                            {{ userData.lastname }}
-                          </a>
-                        </div>
-                      </v-card-subtitle>
-                    </v-col>
-                  </v-row>
-                </v-img>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
         <v-form id="myForm" ref="AvatarForm" v-model="valid" lazy-validation>
           <v-container>
             <br /><br />
             <v-row>
               <v-col cols="10">
                 <v-file-input
-                  @change="displayImage(uploadPic.mypic)"
+                  @change="displayImage(uploadPic.mypic, 0)"
                   :rules="mypicsRules"
                   v-model="uploadPic.mypic"
                   accept="image/*"
@@ -133,6 +85,34 @@
                 />
               </v-col>
             </v-row>
+            <v-card
+              :hover="true"
+              v-ripple="{ class: `purple--text` }"
+              class="mx-auto"
+              max-width="434"
+            >
+              <v-img
+                :src="`data:image/*;base64,${userData.avatar}`"
+                aspect-ratio="2"
+                class="spacer blue lighten-2"
+                no-gutters
+              >
+                <v-row align="end" class="fill-height">
+                  <v-col align-self="start" class="pa-0" cols="12">
+                    <v-avatar class="profile indigo accent-4" size="164">
+                      <v-img
+                        v-if="showPictures[0]"
+                        :src="`data:image/*;base64,${showPictures[0]}`"
+                      />
+                      <v-img
+                        v-else
+                        :src="`data:image/*;base64,${userData.avatar}`"
+                      />
+                    </v-avatar>
+                  </v-col>
+                </v-row>
+              </v-img>
+            </v-card>
             <v-row>
               <v-col>
                 <v-btn
@@ -147,33 +127,19 @@
             </v-row>
           </v-container>
         </v-form>
-        <v-container>
-          <div v-if="showPictures[0]">
-            <v-row v-if="showPictures[0]" align="end" class="fill-height">
-              <v-col cols="3" align="center">
-                {{ $t('preview') + ':' }}<br />
-              </v-col>
-            </v-row>
-            <v-row align="center">
-              <v-col cols="3" align="center">
-                <v-avatar class="profile blue accent-4" size="164">
-                  <v-img :src="`data:image/*;base64,${showPictures[0]}`" />
-                </v-avatar>
-              </v-col>
-            </v-row>
-          </div>
-          <v-row class="font-italic">
-            <v-col>
-              <br />
-              <router-link
-                :to="{ name: 'reset', params: { username: userData.username } }"
-              >
-                {{ $t('Reset password') }}<br /><br />
-              </router-link>
-            </v-col>
-          </v-row>
-          <br />
-        </v-container>
+        <br />
+        <v-row class="font-italic">
+          <v-col>
+            <br />
+            Do you want to change your password ?
+            <router-link
+              :to="{ name: 'reset', params: { username: userData.username } }"
+            >
+              {{ $t('Reset password') }}<br /><br />
+            </router-link>
+          </v-col>
+        </v-row>
+        <br />
       </div>
     </div>
   </v-card>
@@ -287,14 +253,13 @@ export default {
         }
         const xhr = new XMLHttpRequest()
         xhr.withCredentials = true
-        // const self = this
+        const self = this
         // Returns an unsigned short, the state of the request.
         xhr.addEventListener('readystatechange', function() {
           // 4 means the request is DONE, operation completed
           if (this.readyState === 4) {
             if (this.status === 200 || this.status === '200') {
-              // self.$store.dispatch('storeAction', 'Pictures updated !')
-              this.showPictures = null
+              self.$store.dispatch('interact/setMessage', 'Pictures updated !')
             }
           }
         })
@@ -307,7 +272,7 @@ export default {
         xhr.send(data)
       }
     },
-    displayImage(File) {
+    displayImage(File, number) {
       if (!File) {
         return
       }
@@ -316,7 +281,7 @@ export default {
       reader.readAsDataURL(File)
       reader.onload = () => {
         renamed = reader.result.split(';base64,')
-        this.showPictures[0] = renamed[1]
+        this.showPictures[number] = renamed[1]
       }
     },
   },
@@ -327,24 +292,20 @@ export default {
 <i18n>
 {
   "en": {
-    "title": "Update my profile",
     "username": "Username",
     "firstname": "First Name",
     "lastname": "Last Name",
     "email": "Email",
     "password": "Password",
-    "preview": "Preview",
     "Reset password": "Reset password",
     "usernameRuleRequired": "Username is required"
   },
   "fr": {
-    "title": "Mise à jour de mon profil",
     "username": "Nom d'utilisateur",
     "firstname": "Prénom",
     "lastname": "Nom",
     "email": "Email",
     "password": "Mot de passe",
-    "preview": "Aperçu",
     "Reset password": "J'ai oublié mon mot de passe",
     "usernameRuleRequired": "Le nom d'utilisateur est requis"
   }

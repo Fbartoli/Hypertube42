@@ -28,6 +28,13 @@ const mutations = {
   SET_AUTH: (state, bool) => {
     state.userInfo.auth = bool
   },
+  SET_USERINFO: (state, data) => {
+    console.log('app js_TEST_data', data)
+    state.userInfo.username = data.username
+    state.userInfo.email = data.email
+    state.userInfo.firstname = data.firstname
+    state.userInfo.lastname = data.lastname
+  },
 }
 
 // actions
@@ -49,6 +56,37 @@ const actions = {
         const notification = {
           type: 'error',
           message: 'There was a problem login',
+        }
+        if (error.response && error.response.status == 404) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else if (error.response && error.response.status == 403) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+  getuser: ({ commit, dispatch }, { username }) => {
+    UserService.getUser(username)
+      .then(response => {
+        commit('SET_USERINFO', response.data)
+        const notification = {
+          type: response.data.status,
+          message: 'Get user successful',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        // router.push({ name: '/' })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'There was a problem getting user info',
         }
         if (error.response && error.response.status == 404) {
           dispatch('Notifications/add', notification, {

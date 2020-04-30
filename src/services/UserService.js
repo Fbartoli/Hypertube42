@@ -3,6 +3,7 @@ import axios from 'axios'
 const apiClient = axios.create({
   baseURL: 'https://hypertube42.herokuapp.com/users',
   withCredentials: false, //default value
+  'x-access-token': `'Bearer ' + 'token'`,
   timeout: 5000,
 })
 export default {
@@ -15,7 +16,13 @@ export default {
       password,
     })
   },
-  getUser(username) {
+  getuser(username) {
+    return apiClient.get(`/user/${username}`)
+  },
+  postuser(username) {
+    return apiClient.post(`/user/${username}`)
+  },
+  putuser(username) {
     return apiClient.put(`/user/${username}`)
   },
   login(username, password) {

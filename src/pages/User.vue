@@ -173,6 +173,9 @@
             </v-col>
           </v-row>
           <br />
+          <v-btn @click="testgetinfo" color="blue lighten-4" class="mr-4">
+            GetUser_TEST
+          </v-btn>
         </v-container>
       </div>
     </div>
@@ -182,10 +185,12 @@
 <script>
 // import axios from 'axios'
 import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   data() {
     return {
+      target: this.$route.params.username,
       agreeToTerms: false,
       // username: 'test_username',
       // password: 'test_password',
@@ -237,28 +242,35 @@ export default {
     }),
   },
   // async asyncData (context) {
-  //   const usersettings = await axios
-  //     .get(process.env.serverUrl + '/users/user', {
-  //       headers: {
-  //         Authorization: 'Bearer ' + context.app.store.getters['App/isAuth']
-  //       }
-  //     })
-  //     .then((response) => {
-  //       context.store.dispatch('user/setUserData', response.data.userdata)
-  //     })
-  //     // eslint-disable-next-line
-  //     .catch((error) => {
-  //     })
-  //   return {
-  //     usersettings
-  //   }
+  // const usersettings = await axios
+  //   .get('https://hypertube42.herokuapp.com/users/user/test', {
+  //     headers: {
+  //       'x-access-token': 'Bearer ' + context.app.store.getters['App/isAuth']
+  //     }
+  //   })
+  //   .then((response) => {
+  //     // context.store.dispatch('user/setUserData', response.data.userdata)
+  //     console.log('response_GET_user: ', response)
+  //   })
+  //   // eslint-disable-next-line
+  //   .catch((error) => {
+  //   })
+  // return {
+  //   usersettings
+  // }
   // },
   methods: {
+    ...mapActions('App', ['getuser', 'putuser']),
+    testgetinfo() {
+      const testtt = this.target
+      console.log('TEST_this.target: ', this.target)
+      this.getuser({ testtt })
+    },
     validatePersonalInfo() {
       if (this.$refs.PersonalInfoForm.validate()) {
         this.$axios({
           method: 'post',
-          url: process.env.serverUrl + '/users/user',
+          url: 'https://hypertube42.herokuapp.com/users/user/test',
           data: {
             username: this.userData.username,
             email: this.userData.email,
@@ -266,13 +278,14 @@ export default {
             lastname: this.userData.lastname,
           },
           headers: {
-            Authorization: 'Bearer ' + this.userData.token,
+            'x-access-token': 'Bearer ' + this.userData.token,
           },
         })
-          // .then((response) => {
-          //   // this.$store.dispatch('interact/setMessage', 'Personal information updated !')
-          //   this.$router.push('/')
-          // })
+          .then(response => {
+            console.log('personal data updated ! well done ; ) ', response)
+            //   // this.$store.dispatch('interact/setMessage', 'Personal information updated !')
+            //   this.$router.push('/')
+          })
           // eslint-disable-next-line
           .catch((error) => {
           })
@@ -298,8 +311,8 @@ export default {
             }
           }
         })
-        xhr.open('POST', process.env.serverUrl + '/users/upload')
-        xhr.setRequestHeader('Authorization', 'Bearer ' + this.userData.token)
+        xhr.open('POST', 'https://hypertube42.herokuapp.com/users/avatar/test')
+        xhr.setRequestHeader('x-access-token', 'Bearer ' + this.userData.token)
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')

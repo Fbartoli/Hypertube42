@@ -22,7 +22,8 @@ const state = {
 // mutations
 const mutations = {
   SET_TOKEN: (state, token) => {
-    state.userInfo.token = token
+    state.userInfo.token = token.code
+    state.userInfo.exp = token.exp
     state.userInfo.username = JSON.parse(
       atob(token.code.split('.')[1])
     ).data.username
@@ -83,8 +84,7 @@ const actions = {
         }
         dispatch('Notifications/add', notification, { root: true })
         router.push({ name: 'movies' })
-        console.log('VERIF_username', username)
-        dispatch('getUser', { username })
+        dispatch('getUser')
       })
       .catch(error => {
         const notification = {
@@ -137,14 +137,17 @@ const actions = {
   //       }
   //     })
   // },
-  getUser: ({ state, dispatch, commit }, { username }) => {
+  getUser: ({ state, dispatch, commit }) => {
     axios
-      .get(`https://hypertube42.herokuapp.com/users/user/${username}`, {
-        headers: {
-          // 'Access-Control-Allow-Origin': true,
-          'x-access-token': state.userInfo.token,
-        },
-      })
+      .get(
+        `https://hypertube42.herokuapp.com/users/user/${state.userInfo.username}`,
+        {
+          headers: {
+            // 'Access-Control-Allow-Origin': true,
+            'x-access-token': state.userInfo.token,
+          },
+        }
+      )
       .then(function(response) {
         console.log('TEST_getUser: ', response)
         commit('SET_USERINFO', response.data.user)

@@ -216,7 +216,7 @@
             </v-col>
           </v-row>
           <br />
-          <v-btn @click="testgetinfo" color="blue lighten-4" class="mr-4">
+          <v-btn @click="getUser()" color="blue lighten-4" class="mr-4">
             GetUser_TEST
           </v-btn>
         </v-container>
@@ -305,10 +305,6 @@ export default {
   // },
   methods: {
     ...mapActions('App', ['getUser', 'putUserInfo', 'putToken']),
-    testgetinfo() {
-      const username = this.target
-      this.getUser({ username })
-    },
     //   // axios.get('https://hypertube42.herokuapp.com/users/user/${this.target}', {
     //     console.log('TEST_A', this)
     //     axios.get('https://hypertube42.herokuapp.com/users/user/test', {

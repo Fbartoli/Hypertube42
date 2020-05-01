@@ -21,6 +21,7 @@
               </v-col>
               <v-col cols="5"> </v-col>
             </v-row>
+
             <v-row>
               <v-col cols="5">
                 <v-text-field
@@ -41,6 +42,47 @@
                 />
               </v-col>
             </v-row>
+
+            <v-row>
+              <v-col cols="5">
+                <v-text-field
+                  v-model.trim="userData.language"
+                  :label="$t('language')"
+                  required
+                />
+              </v-col>
+              <div class="text-center">
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on }">
+                    <v-btn color="primary" dark v-on="on">
+                      Dropdown
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item v-for="(item, index) in items" :key="index">
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </div>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-btn
+                  @click="validatePersonalInfo"
+                  :disabled="!valid"
+                  color="blue lighten-4"
+                  class="mr-4"
+                >
+                  Update my Personal Information
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
+        <v-form ref="EmailForm" v-model="valid" lazy-validation>
+          <v-container>
             <v-row>
               <v-col cols="10">
                 <v-text-field
@@ -52,15 +94,16 @@
                 />
               </v-col>
             </v-row>
+
             <v-row>
               <v-col>
                 <v-btn
-                  @click="validatePersonalInfo"
+                  @click="validateEmail"
                   :disabled="!valid"
                   color="blue lighten-4"
                   class="mr-4"
                 >
-                  Update my Personal Information
+                  Update my Email
                 </v-btn>
               </v-col>
             </v-row>
@@ -183,7 +226,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 
@@ -197,6 +240,7 @@ export default {
       // lastName: 'test_lastname',
       // firstName: 'test_firstname',
       valid: true,
+      items: [{ title: 'english' }, { title: 'french' }, { title: 'spanish' }],
       uploadPic: {
         mypic: null,
       },
@@ -260,27 +304,58 @@ export default {
   // }
   // },
   methods: {
-    ...mapActions('App', ['getuser', 'putuser']),
+    ...mapActions('App', ['getUser', 'putUserInfo', 'putToken']),
     testgetinfo() {
-      const testtt = this.target
-      console.log('TEST_this.target: ', this.target)
-      this.getuser({ testtt })
+      const username = this.target
+      this.getUser({ username })
     },
-    validatePersonalInfo() {
-      if (this.$refs.PersonalInfoForm.validate()) {
-        this.$axios({
-          method: 'post',
-          url: 'https://hypertube42.herokuapp.com/users/user/test',
-          data: {
-            username: this.userData.username,
-            email: this.userData.email,
-            firstname: this.userData.firstname,
-            lastname: this.userData.lastname,
-          },
-          headers: {
-            'x-access-token': 'Bearer ' + this.userData.token,
-          },
-        })
+    //   // axios.get('https://hypertube42.herokuapp.com/users/user/${this.target}', {
+    //     console.log('TEST_A', this)
+    //     axios.get('https://hypertube42.herokuapp.com/users/user/test', {
+    //       headers: {
+    //         // 'Access-Control-Allow-Origin': true,
+    //         'x-access-token': this.userData.token.code
+    //       }
+    //     })
+    //     // params: {
+    //     //   username: `${this.target}`
+    //     // }
+    //   // })
+    //   .then(function (response) {
+    //     console.log('TEST_response: ', response);
+    //     // console.log('TEST_A', this)
+    //     // console.log('TEST_B', this.$store)
+    //     // console.log('TEST_C', this.store)
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   })
+    validateEmail() {
+      const options = {
+        method: 'put',
+        url: 'https://hypertube42.herokuapp.com/users/user/test/email',
+        data: {
+          email: this.userData.email,
+        },
+        headers: {
+          'x-access-token': this.userData.token.code,
+        },
+      }
+      if (this.$refs.EmailForm.validate()) {
+        // this.$axios({
+        //   method: 'post',
+        //   url: 'https://hypertube42.herokuapp.com/users/user/test',
+        //   data: {
+        //     username: this.userData.username,
+        //     email: this.userData.email,
+        //     firstname: this.userData.firstname,
+        //     lastname: this.userData.lastname,
+        //   },
+        //   headers: {
+        //     'x-access-token': this.userData.token.code,
+        //   },
+        // })
+        axios(options)
           .then(response => {
             console.log('personal data updated ! well done ; ) ', response)
             //   // this.$store.dispatch('interact/setMessage', 'Personal information updated !')
@@ -290,6 +365,45 @@ export default {
           .catch((error) => {
           })
         // this.$router.push('/settings')
+      }
+    },
+    validatePersonalInfo() {
+      const options = {
+        method: 'put',
+        url: 'https://hypertube42.herokuapp.com/users/user/test',
+        data: {
+          username: this.userData.username,
+          firstName: this.userData.firstname,
+          lastName: this.userData.lastname,
+          language: this.userData.language,
+        },
+        headers: {
+          'x-access-token': this.userData.token.code,
+        },
+      }
+      if (this.$refs.PersonalInfoForm.validate()) {
+        axios(options)
+          .then(response => {
+            console.log('TEST_validatePersonalInfo_User.vue', response)
+            if (response.status === 200 || response.status === '200') {
+              this.$store.dispatch('App/putToken', response.data.token)
+              // WHY DOES IT STOP THERE ?
+              console.log('HELP1')
+              // this.$store.dispatch('App/putUserInfo', {
+              //   username: this.userData.username,
+              //   firstName: this.userData.firstname,
+              //   lastName: this.userData.lastname,
+              //   language: this.userData.language,
+              // })
+              console.log('HELP2')
+            }
+            // this.$store.dispatch('interact/setMessage', 'Personal information updated !')
+            // this.$router.push('/')
+          })
+          // eslint-disable-next-line
+          .catch((error) => {
+          })
+        // this.$router.push('/')
       }
     },
     validateAvatar() {
@@ -311,10 +425,12 @@ export default {
             }
           }
         })
-        xhr.open('POST', 'https://hypertube42.herokuapp.com/users/avatar/test')
-        xhr.setRequestHeader('x-access-token', 'Bearer ' + this.userData.token)
+        // xhr.open('PATCH', 'https://hypertube42.herokuapp.com/users/user/test/avatar')
+        xhr.open('PATCH', 'http://localhost:5555/users/user/test/avatar')
+        // xhr.setRequestHeader('x-access-token', this.userData.token.code)
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')
+        xhr.setRequestHeader('Access-Control-Allow-Origin', true)
         // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
         // xhr.setRequestHeader('Connection', 'keep-alive')
         xhr.send(data)
@@ -344,6 +460,7 @@ export default {
     "username": "Username",
     "firstname": "First Name",
     "lastname": "Last Name",
+    "language": "Subtitles language preference",
     "email": "Email",
     "password": "Password",
     "preview": "Preview",
@@ -355,6 +472,7 @@ export default {
     "username": "Nom d'utilisateur",
     "firstname": "Prénom",
     "lastname": "Nom",
+    "language": "Langue préférée de sous-titres",
     "email": "Email",
     "password": "Mot de passe",
     "preview": "Aperçu",

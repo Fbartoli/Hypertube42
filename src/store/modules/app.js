@@ -217,6 +217,11 @@ const getters = {
     const resUser = {}
     return Object.assign(resUser, state.userInfo)
   },
+  // storeUsername: state => state.userInfo.username
+  storeUsername: state => {
+    console.log('GETTERS_state.userInfo.username', state.userInfo.username)
+    return state.userInfo.username
+  },
 }
 
 export default {

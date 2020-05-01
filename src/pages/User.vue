@@ -283,53 +283,16 @@ export default {
   computed: {
     ...mapGetters({
       userData: 'App/storeUser',
+      currentUsername: 'App/storeUsername',
     }),
   },
-  // async asyncData (context) {
-  // const usersettings = await axios
-  //   .get('https://hypertube42.herokuapp.com/users/user/test', {
-  //     headers: {
-  //       'x-access-token': 'Bearer ' + context.app.store.getters['App/isAuth']
-  //     }
-  //   })
-  //   .then((response) => {
-  //     // context.store.dispatch('user/setUserData', response.data.userdata)
-  //     console.log('response_GET_user: ', response)
-  //   })
-  //   // eslint-disable-next-line
-  //   .catch((error) => {
-  //   })
-  // return {
-  //   usersettings
-  // }
-  // },
   methods: {
     ...mapActions('App', ['getUser', 'putUserInfo', 'putToken']),
-    //   // axios.get('https://hypertube42.herokuapp.com/users/user/${this.target}', {
-    //     console.log('TEST_A', this)
-    //     axios.get('https://hypertube42.herokuapp.com/users/user/test', {
-    //       headers: {
-    //         // 'Access-Control-Allow-Origin': true,
-    //         'x-access-token': this.userData.token.code
-    //       }
-    //     })
-    //     // params: {
-    //     //   username: `${this.target}`
-    //     // }
-    //   // })
-    //   .then(function (response) {
-    //     console.log('TEST_response: ', response);
-    //     // console.log('TEST_A', this)
-    //     // console.log('TEST_B', this.$store)
-    //     // console.log('TEST_C', this.store)
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   })
     validateEmail() {
+      console.log('GETTERS_this.currentUsername', this.currentUsername)
       const options = {
         method: 'put',
-        url: 'https://hypertube42.herokuapp.com/users/user/test/email',
+        url: `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}/email`,
         data: {
           email: this.userData.email,
         },
@@ -338,19 +301,6 @@ export default {
         },
       }
       if (this.$refs.EmailForm.validate()) {
-        // this.$axios({
-        //   method: 'post',
-        //   url: 'https://hypertube42.herokuapp.com/users/user/test',
-        //   data: {
-        //     username: this.userData.username,
-        //     email: this.userData.email,
-        //     firstname: this.userData.firstname,
-        //     lastname: this.userData.lastname,
-        //   },
-        //   headers: {
-        //     'x-access-token': this.userData.token.code,
-        //   },
-        // })
         axios(options)
           .then(response => {
             console.log('personal data updated ! well done ; ) ', response)
@@ -366,7 +316,7 @@ export default {
     validatePersonalInfo() {
       const options = {
         method: 'put',
-        url: 'https://hypertube42.herokuapp.com/users/user/test',
+        url: `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}`,
         data: {
           username: this.userData.username,
           firstName: this.userData.firstname,
@@ -421,12 +371,15 @@ export default {
             }
           }
         })
-        // xhr.open('PATCH', 'https://hypertube42.herokuapp.com/users/user/test/avatar')
-        xhr.open('PATCH', 'http://localhost:5555/users/user/test/avatar')
+        xhr.open(
+          'PATCH',
+          `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}/avatar`
+        )
         // xhr.setRequestHeader('x-access-token', this.userData.token.code)
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         xhr.setRequestHeader('Access-Control-Allow-Origin', true)
+        xhr.setRequestHeader('Access-Control-Allow-Credentials', true)
         xhr.setRequestHeader('x-access-token', this.userData.token)
         // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
         // xhr.setRequestHeader('Connection', 'keep-alive')

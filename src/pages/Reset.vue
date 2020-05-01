@@ -3,7 +3,7 @@
     <v-card-title primary-title>
       <div>
         <div class="headline">This is {{ userInfo.username }}</div>
-        <span class="red--text">desription</span>
+        <span class="red--text">description</span>
       </div>
     </v-card-title>
     <v-card-actions>

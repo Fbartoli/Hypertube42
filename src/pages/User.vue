@@ -334,7 +334,7 @@ export default {
           email: this.userData.email,
         },
         headers: {
-          'x-access-token': this.userData.token.code,
+          'x-access-token': this.userData.token,
         },
       }
       if (this.$refs.EmailForm.validate()) {
@@ -374,7 +374,7 @@ export default {
           language: this.userData.language,
         },
         headers: {
-          'x-access-token': this.userData.token.code,
+          'x-access-token': this.userData.token,
         },
       }
       if (this.$refs.PersonalInfoForm.validate()) {
@@ -427,6 +427,7 @@ export default {
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         xhr.setRequestHeader('Access-Control-Allow-Origin', true)
+        xhr.setRequestHeader('x-access-token', this.userData.token)
         // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
         // xhr.setRequestHeader('Connection', 'keep-alive')
         xhr.send(data)

@@ -1,57 +1,130 @@
 <template>
   <v-app>
     <v-app-bar hide-on-scroll color="secondary" app>
-      <!-- -->
-      <v-toolbar-title>
-        <router-link :to="{ name: 'home' }">{{ appName }}</router-link>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-
-      <!-- <v-btn :to="{ name: 'login' }">{{ $t("sign in") }}</v-btn> -->
-      <v-btn
-        class="mx-5"
-        color="primary"
-        v-show="userInfo.auth === true"
-        :label="$t('movies')"
-        :to="{
-          name: 'movies',
-          params: { page: 1 },
-        }"
-        >{{ $t('movies') }}</v-btn
-      >
-      <v-btn
-        class="mx-5"
-        color="primary"
-        v-show="userInfo.auth === true"
-        :label="$t('user')"
-        :to="{
-          name: 'user',
-          params: { username: userInfo.username || 'none' },
-        }"
-        >{{ $t('user') }}</v-btn
-      >
-      <v-btn
-        @click="logout"
-        class="mx-5"
-        color="primary"
-        v-show="userInfo.auth === true"
-        :label="$t('sign out')"
-        :to="{ name: 'home' }"
-        >{{ $t('sign out') }}</v-btn
-      >
-      <v-btn
-        class="mx-5"
-        color="primary"
-        v-show="!userInfo.auth"
-        :to="{ name: 'login' }"
-        >{{ $t('sign in') }}
-      </v-btn>
-      <v-avatar>
-        <img
-          v-if="userApp.avatar"
-          :src="`data:image/*;base64,${userApp.avatar}`"
-        />
-      </v-avatar>
+      <v-row align="center" justify="space-between">
+        <v-col cols="md-auto">
+          <v-toolbar-title>
+            <v-row justify="start">
+              <v-btn
+                class="mx-5"
+                color="primary"
+                :label="$t('home')"
+                :to="{
+                  name: 'home',
+                }"
+              >
+                <v-icon class="blue--text text--lighten-5">
+                  mdi-home
+                </v-icon>
+              </v-btn>
+            </v-row>
+          </v-toolbar-title>
+        </v-col>
+        <v-col
+          v-if="userApp.auth === true"
+          class="hidden-xs-only"
+          cols="md-auto"
+        >
+          <v-row justify="center">
+            <v-form @submit.prevent="keySearchUser">
+              <v-text-field
+                v-model.lazy.trim="this.searchUsername"
+                :append-icon-cb="() => {}"
+                :label="$t('search_box_label')"
+                append-icon="mdi-account-search"
+                color="light-blue lighten-5"
+                outlined
+                hide-details
+                background-color="blue"
+                clearable
+              />
+            </v-form>
+          </v-row>
+        </v-col>
+        <v-col cols="md-auto">
+          <v-row justify="end">
+            <v-col v-if="userApp.auth === true">
+              <v-row>
+                <v-btn
+                  color="primary"
+                  :label="$t('movies')"
+                  :to="{
+                    name: 'movies',
+                    params: { page: 1 },
+                  }"
+                >
+                  <i class="fas fa-film fa-2x" />
+                </v-btn>
+              </v-row>
+            </v-col>
+            <v-col v-if="userApp.auth === true">
+              <v-row justify="end">
+                <v-btn
+                  color="primary"
+                  :label="$t('user')"
+                  :to="{
+                    name: 'user',
+                    params: { username: userApp.username || 'none' },
+                  }"
+                >
+                  <i class="fas fa-cog fa-lg" />
+                </v-btn>
+              </v-row>
+            </v-col>
+            <v-col v-else>
+              <v-row justify="center">
+                <v-btn color="primary" :to="{ name: 'register' }">
+                  <div class="hidden-xs-only">
+                    {{ $t('register') }}
+                    &nbsp;
+                  </div>
+                  <v-icon class="blue--text text--lighten-5">
+                    mdi-content-save
+                  </v-icon>
+                </v-btn>
+              </v-row>
+            </v-col>
+            <v-col v-if="userApp.auth === true">
+              <v-row justify="end">
+                <v-btn
+                  @click="logout"
+                  color="primary"
+                  v-show="userApp.auth === true"
+                  :label="$t('sign out')"
+                  :to="{ name: 'home' }"
+                >
+                  <v-icon class="blue--text text--lighten-5">
+                    mdi-power
+                  </v-icon>
+                </v-btn>
+              </v-row>
+            </v-col>
+            <v-col v-else cols="2">
+              <v-row justify="end">
+                <v-btn color="primary" :to="{ name: 'login' }">
+                  <div class="hidden-xs-only">
+                    {{ $t('sign in') }}
+                    &nbsp;
+                  </div>
+                  <v-icon class="blue--text text--lighten-5">
+                    mdi-login
+                  </v-icon>
+                </v-btn>
+              </v-row>
+            </v-col>
+            <v-col v-if="userApp.auth === true" class="hidden-xs-only">
+              <v-row justify="end">
+                <v-avatar>
+                  <img
+                    v-if="userApp.avatar"
+                    :src="`data:image/*;base64,${userApp.avatar}`"
+                  />
+                </v-avatar>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
     </v-app-bar>
 
     <!-- Sizes your content based upon application components -->
@@ -77,26 +150,34 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import NotificationContainer from './components/NotificationContainer'
+
 export default {
   name: 'App',
   components: { NotificationContainer },
+  data: () => ({
+    searchUsername: '',
+  }),
   methods: {
     ...mapActions([]),
     logout() {
       localStorage.removeItem('hypertube')
     },
+    keySearchUser() {
+      this.$router.push('/profile/' + `${this.searchUsername}`)
+    },
   },
   computed: {
-    ...mapState({
-      langs: state => state.App.langs,
-      appName: state => state.App.appName,
-      userInfo: state => state.App.userInfo,
-      links: state => state.App.links,
-    }),
+    // ...mapState({
+    //   langs: state => state.App.langs,
+    //   appName: state => state.App.appName,
+    //   links: state => state.App.links,
+    // }),
     ...mapGetters({
       userApp: 'App/storeUser',
+      langs: 'App/storeLangs',
+      appName: 'App/storeAppName',
       // currentUsername: 'App/storeUsername',
     }),
   },
@@ -113,16 +194,22 @@ export default {
 <i18n>
 {
   "en": {
-    "sign in": "Sign in",
-    "user": "User",
+    "home": "Home",
+    "sign in": "Login",
+    "user": "Settings",
+    "register": "Register",
     "movies": "Movies",
-    "sign out": "Log out"
+    "sign out": "Log out",
+    "search_box_label": "Check a profile"
   },
   "fr": {
-    "sign in": "S'identifier",
-    "user": "Utilisateur",
+    "home": "Accueil",
+    "sign in": "Connexion",
+    "user": "Paramètres",
+    "register": "S'inscrire",
     "movies": "Films",
-    "sign out": "Deconnexion"
+    "sign out": "Déconnexion",
+    "search_box_label": "Consulter un profil"
   }
 }
 </i18n>

@@ -1,25 +1,13 @@
 <template>
   <v-card>
     <v-card-title primary-title>
-      <div>
-        <div class="headline">{{ $t('title') }}</div>
+      <div class="headline">
+        {{ $t('titlea') + userProfile.username + $t('title_b') }}
       </div>
     </v-card-title>
     <div>
       <div>
         <v-container>
-          <v-row>
-            <v-col cols="5">
-              <v-text-field
-                v-model.trim="userProfile.username"
-                :rules="usernameRules"
-                :label="$t('username')"
-                counter="20"
-                required
-              />
-            </v-col>
-            <v-col cols="5"> </v-col>
-          </v-row>
           <v-row>
             <v-col cols="5">
               <v-card
@@ -70,7 +58,6 @@
     </div>
   </v-card>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
@@ -107,14 +94,16 @@ export default {
 <i18n>
 {
   "en": {
-    "title": "Update my profile",
+    "titlea": " ",
+    "title_b": "’s profile",
     "username": "Username",
     "firstname": "First Name",
     "lastname": "Last Name",
     "language": "Subtitles language preference"
   },
   "fr": {
-    "title": "Mise à jour de mon profil",
+    "titlea": "Profil de ",
+    "title_b": " ",
     "username": "Nom d'utilisateur",
     "firstname": "Prénom",
     "lastname": "Nom",

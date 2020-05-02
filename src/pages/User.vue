@@ -308,8 +308,7 @@ export default {
             //   this.$router.push('/')
           })
           // eslint-disable-next-line
-          .catch((error) => {
-          })
+          .catch(error => {})
         // this.$router.push('/settings')
       }
     },
@@ -347,8 +346,7 @@ export default {
             // this.$router.push('/')
           })
           // eslint-disable-next-line
-          .catch((error) => {
-          })
+          .catch(error => {})
         // this.$router.push('/')
       }
     },
@@ -356,10 +354,10 @@ export default {
       if (this.$refs.AvatarForm.validate()) {
         const data = new FormData()
         if (this.uploadPic.mypic) {
-          data.append('images', this.uploadPic.mypic)
+          data.append('avatar', this.uploadPic.mypic)
         }
         const xhr = new XMLHttpRequest()
-        xhr.withCredentials = true
+        // xhr.withCredentials = true
         // const self = this
         // Returns an unsigned short, the state of the request.
         xhr.addEventListener('readystatechange', function() {
@@ -379,7 +377,7 @@ export default {
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         xhr.setRequestHeader('Access-Control-Allow-Origin', true)
-        xhr.setRequestHeader('Access-Control-Allow-Credentials', true)
+        // xhr.setRequestHeader('Access-Control-Allow-Credentials', true)
         xhr.setRequestHeader('x-access-token', this.userData.token)
         // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
         // xhr.setRequestHeader('Connection', 'keep-alive')

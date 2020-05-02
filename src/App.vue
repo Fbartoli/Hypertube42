@@ -46,8 +46,11 @@
         :to="{ name: 'login' }"
         >{{ $t('sign in') }}
       </v-btn>
-      <v-avatar v-show="userInfo.avatar">
-        <img :src="userInfo.avatar" :alt="userInfo.username" />
+      <v-avatar>
+        <img
+          v-if="userData.avatar"
+          :src="`data:image/*;base64,${userData.avatar}`"
+        />
       </v-avatar>
     </v-app-bar>
 
@@ -74,7 +77,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import NotificationContainer from './components/NotificationContainer'
 export default {
   name: 'App',
@@ -91,6 +94,10 @@ export default {
       appName: state => state.App.appName,
       userInfo: state => state.App.userInfo,
       links: state => state.App.links,
+    }),
+    ...mapGetters({
+      userData: 'App/storeUser',
+      // currentUsername: 'App/storeUsername',
     }),
   },
 }

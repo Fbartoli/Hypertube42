@@ -12,7 +12,7 @@ const routes = [
     component: () => import('../pages/Home.vue'),
     beforeEnter(routeTo, routeFrom, next) {
       if (routeTo.query.code) {
-        console.log(routeTo.query.code)
+        console.log('LOG_routing', routeTo.query.code)
         // demander l'access token au back
         // https://api.intra.42.fr/apidoc/guides/web_application_flow
         // demander aux back si profil complet
@@ -64,6 +64,12 @@ const routes = [
     //       next({ name: 'network-issue' })
     //     })
     // },
+  },
+  {
+    path: '/profile/:profile',
+    name: 'profile',
+    component: () => import('../pages/Profile.vue'),
+    props: true,
   },
   {
     path: '/movies',

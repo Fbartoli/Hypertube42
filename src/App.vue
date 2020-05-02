@@ -48,8 +48,8 @@
       </v-btn>
       <v-avatar>
         <img
-          v-if="userData.avatar"
-          :src="`data:image/*;base64,${userData.avatar}`"
+          v-if="userApp.avatar"
+          :src="`data:image/*;base64,${userApp.avatar}`"
         />
       </v-avatar>
     </v-app-bar>
@@ -96,7 +96,7 @@ export default {
       links: state => state.App.links,
     }),
     ...mapGetters({
-      userData: 'App/storeUser',
+      userApp: 'App/storeUser',
       // currentUsername: 'App/storeUsername',
     }),
   },

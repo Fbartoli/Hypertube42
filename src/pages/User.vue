@@ -45,26 +45,13 @@
 
             <v-row>
               <v-col cols="5">
-                <v-text-field
-                  v-model.trim="userData.language"
+                <v-select
+                  v-model="userData.language"
+                  :items="languageList"
                   :label="$t('language')"
                   required
                 />
               </v-col>
-              <div class="text-center">
-                <v-menu offset-y>
-                  <template v-slot:activator="{ on }">
-                    <v-btn color="primary" dark v-on="on">
-                      Dropdown
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item v-for="(item, index) in items" :key="index">
-                      <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </div>
             </v-row>
 
             <v-row>
@@ -239,7 +226,7 @@ export default {
       // lastName: 'test_lastname',
       // firstName: 'test_firstname',
       valid: true,
-      items: [{ title: 'english' }, { title: 'french' }, { title: 'spanish' }],
+      languageList: ['english', 'french', 'spanish'],
       uploadPic: {
         mypic: null,
       },

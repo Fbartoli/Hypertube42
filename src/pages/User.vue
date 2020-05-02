@@ -118,7 +118,6 @@
                 color="deep-blue lighten-5"
               >
                 <v-img
-                  :src="`data:image/*;base64,${userData.avatar}`"
                   aspect-ratio="2"
                   class="spacer blue lighten-2"
                   no-gutters
@@ -373,7 +372,6 @@ export default {
           'PATCH',
           `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}/avatar`
         )
-        // xhr.setRequestHeader('x-access-token', this.userData.token.code)
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         xhr.setRequestHeader('Access-Control-Allow-Origin', true)

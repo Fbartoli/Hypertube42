@@ -38,7 +38,7 @@ const mutations = {
     state.userInfo.firstname = data.firstName
     state.userInfo.lastname = data.lastName
     state.userInfo.language = data.language
-    state.userInfo.avatar = data.avatar
+    state.userInfo.avatar = data.photo
   },
   PUT_USERINFO: (state, newUserInfo) => {
     console.log('TEST_app_js_PUT_USERINFO', newUserInfo)

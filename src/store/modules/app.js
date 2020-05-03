@@ -114,6 +114,7 @@ const actions = {
         localStorage.setItem('hypertube', JSON.stringify(response.data.token))
         commit('SET_TOKEN', response.data.token)
         commit('SET_AUTH', true)
+        axios.defaults.headers.common['x-access-token'] = response.data.token
         const notification = {
           type: response.data.status,
           message: 'Login successful',
@@ -142,56 +143,16 @@ const actions = {
         }
       })
   },
-  // DEPRECATED_getUser: ({ commit, dispatch }, { username }) => {
-  //   UserService.getuser(username)
-  //     .then(response => {
-  //       commit('SET_USERINFO', response.data)
-  //       const notification = {
-  //         type: response.data.status,
-  //         message: 'Get user successful',
-  //       }
-  //       dispatch('Notifications/add', notification, { root: true })
-  //       // router.push({ name: '/' })
-  //     })
-  //     .catch(error => {
-  //       const notification = {
-  //         type: 'error',
-  //         message: 'There was a problem getting user info',
-  //       }
-  //       if (error.response && error.response.status == 404) {
-  //         dispatch('Notifications/add', notification, {
-  //           root: true,
-  //         })
-  //       } else if (error.response && error.response.status == 403) {
-  //         dispatch('Notifications/add', notification, {
-  //           root: true,
-  //         })
-  //       } else {
-  //         dispatch('Notifications/add', notification, {
-  //           root: true,
-  //         })
-  //       }
-  //     })
-  // },
-  getUser: ({ state, dispatch, commit }) => {
-    axios
-      .get(
-        `https://hypertube42.herokuapp.com/users/user/${state.userInfo.username}`,
-        {
-          headers: {
-            // 'Access-Control-Allow-Origin': true,
-            'x-access-token': state.userInfo.token,
-          },
-        }
-      )
-      .then(function(response) {
-        console.log('TEST_getUser: ', response)
+  getUser: ({ commit, dispatch }, username) => {
+    UserService.getuser(username)
+      .then(response => {
         commit('SET_USERINFO', response.data.user)
         const notification = {
           type: response.data.status,
           message: 'Get user successful',
         }
         dispatch('Notifications/add', notification, { root: true })
+        // router.push({ name: '/' })
       })
       .catch(error => {
         const notification = {
@@ -213,6 +174,46 @@ const actions = {
         }
       })
   },
+  // getUser: ({ state, dispatch, commit }) => {
+  //   axios
+  //     .get(
+  //       `https://hypertube42.herokuapp.com/users/user/${state.userInfo.username}`,
+  //       {
+  //         headers: {
+  //           // 'Access-Control-Allow-Origin': true,
+  //           'x-access-token': state.userInfo.token,
+  //         },
+  //       }
+  //     )
+  //     .then(function(response) {
+  //       console.log('TEST_getUser: ', response)
+  //       commit('SET_USERINFO', response.data.user)
+  //       const notification = {
+  //         type: response.data.status,
+  //         message: 'Get user successful',
+  //       }
+  //       dispatch('Notifications/add', notification, { root: true })
+  //     })
+  //     .catch(error => {
+  //       const notification = {
+  //         type: 'error',
+  //         message: 'There was a problem getting user info',
+  //       }
+  //       if (error.response && error.response.status == 404) {
+  //         dispatch('Notifications/add', notification, {
+  //           root: true,
+  //         })
+  //       } else if (error.response && error.response.status == 403) {
+  //         dispatch('Notifications/add', notification, {
+  //           root: true,
+  //         })
+  //       } else {
+  //         dispatch('Notifications/add', notification, {
+  //           root: true,
+  //         })
+  //       }
+  //     })
+  // },
   getOtherUser: ({ commit, dispatch }, { username }) => {
     UserService.getOtherUser(username)
       .then(response => {

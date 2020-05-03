@@ -12,12 +12,18 @@ const routes = [
     component: () => import('../pages/Home.vue'),
     beforeEnter(routeTo, routeFrom, next) {
       if (routeTo.query.code) {
-        console.log('LOG_routing', routeTo.query.code)
-        // demander l'access token au back
-        // https://api.intra.42.fr/apidoc/guides/web_application_flow
-        // demander aux back si profil complet
-        // si oui go to movie
-        // sinon go to complete profile
+        let code = routeTo.query.code
+        store.dispatch('App/token', routeTo.query.code)
+        store.commit('App/SET_AUTH', true)
+        let info = code.split('.')
+        let userInfo = JSON.parse(atob(info[1]))
+        console.log(userInfo.data)
+        store.commit(
+          'App/TEST',
+          { username: userInfo.data.username },
+          userInfo.exp
+        )
+        store.dispatch('App/getUser')
       }
       next()
     },

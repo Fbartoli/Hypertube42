@@ -31,7 +31,7 @@
         >{{ $t('user') }}</v-btn
       >
       <v-btn
-        @click="logout"
+        @click="resetState"
         class="mx-5"
         color="primary"
         v-show="userInfo.auth === true"
@@ -83,10 +83,7 @@ export default {
   name: 'App',
   components: { NotificationContainer },
   methods: {
-    ...mapActions([]),
-    logout() {
-      localStorage.removeItem('hypertube')
-    },
+    ...mapActions('App', ['resetState']),
   },
   computed: {
     ...mapState({

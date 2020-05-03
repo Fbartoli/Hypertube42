@@ -2,6 +2,25 @@ import UserService from '../../services/UserService'
 import router from '../../router/index'
 import axios from 'axios'
 
+const getDefaultState = () => {
+  return {
+    appName: 'Hypertube',
+    Loading: false,
+    langs: ['fr', 'en'],
+    userInfo: {
+      token: '',
+      exp: '',
+      auth: false,
+      username: '',
+      email: '',
+      firstame: '',
+      lastname: '',
+      language: 'english',
+      avatar: '',
+    },
+  }
+}
+
 const state = {
   appName: 'Hypertube',
   Loading: false,
@@ -56,12 +75,26 @@ const mutations = {
     state.userInfo.token = newToken.token.code
     state.userInfo.exp = newToken.token.exp
   },
+  TOKEN: (state, token) => {
+    state.userInfo.token = token
+  },
+  TEST: (state, { username }, exp) => {
+    state.userInfo.username = username
+    state.userInfo.exp = exp
+  },
+  RESET_STATE(state) {
+    Object.assign(state, getDefaultState())
+  },
 }
 
 // actions
 const actions = {
   setUserInfo: ({ commit }, { data }) => {
     commit('SET_USERINFO', data)
+  },
+  resetState: ({ commit }) => {
+    localStorage.removeItem('hypertube')
+    commit('RESET_STATE')
   },
   putUserInfo: ({ commit }, { newUserInfo }) => {
     commit('PUT_USERINFO', newUserInfo)
@@ -71,6 +104,9 @@ const actions = {
   },
   putToken: ({ commit }, newToken) => {
     commit('PUT_TOKEN', newToken)
+  },
+  token: ({ commit }, token) => {
+    commit('TOKEN', token)
   },
   login: ({ commit, dispatch }, { username, password }) => {
     UserService.login(username, password)

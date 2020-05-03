@@ -254,8 +254,13 @@ const getters = {
     return Object.assign(resUser, state.userInfo)
   },
   // storeUsername: state => state.userInfo.username
+  storeAppName: state => {
+    return state.appName
+  },
+  storeLangs: state => {
+    return state.langs
+  },
   storeUsername: state => {
-    console.log('GETTERS_state.userInfo.username', state.userInfo.username)
     return state.userInfo.username
   },
 }

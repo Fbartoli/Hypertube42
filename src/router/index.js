@@ -55,6 +55,9 @@ const routes = [
     name: 'user',
     component: () => import('../pages/User.vue'),
     props: true,
+    meta: {
+      requiresAuth: true,
+    },
     // beforeEnter(routeTo, routeFrom, next) {
     //   console.log('TEST_username: ', routeTo.params.username)
     //   store

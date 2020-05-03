@@ -77,23 +77,28 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import NotificationContainer from './components/NotificationContainer'
+
 export default {
   name: 'App',
   components: { NotificationContainer },
+  data: () => ({
+    searchUsername: '',
+  }),
   methods: {
     ...mapActions('App', ['resetState']),
   },
   computed: {
-    ...mapState({
-      langs: state => state.App.langs,
-      appName: state => state.App.appName,
-      userInfo: state => state.App.userInfo,
-      links: state => state.App.links,
-    }),
+    // ...mapState({
+    //   langs: state => state.App.langs,
+    //   appName: state => state.App.appName,
+    //   links: state => state.App.links,
+    // }),
     ...mapGetters({
       userApp: 'App/storeUser',
+      langs: 'App/storeLangs',
+      appName: 'App/storeAppName',
       // currentUsername: 'App/storeUsername',
     }),
   },
@@ -110,16 +115,22 @@ export default {
 <i18n>
 {
   "en": {
-    "sign in": "Sign in",
-    "user": "User",
+    "home": "Home",
+    "sign in": "Login",
+    "user": "Settings",
+    "register": "Register",
     "movies": "Movies",
-    "sign out": "Log out"
+    "sign out": "Log out",
+    "search_box_label": "Check a profile"
   },
   "fr": {
-    "sign in": "S'identifier",
-    "user": "Utilisateur",
+    "home": "Accueil",
+    "sign in": "Connexion",
+    "user": "Paramètres",
+    "register": "S'inscrire",
     "movies": "Films",
-    "sign out": "Deconnexion"
+    "sign out": "Déconnexion",
+    "search_box_label": "Consulter un profil"
   }
 }
 </i18n>

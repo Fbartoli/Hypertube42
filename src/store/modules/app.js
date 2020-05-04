@@ -1,6 +1,6 @@
-import UserService from '../../services/UserService'
+import userService from '../../services/UserService'
 import router from '../../router/index'
-import axios from 'axios'
+// import axios from 'axios'
 
 const getDefaultState = () => {
   return {
@@ -51,7 +51,7 @@ const mutations = {
     state.userInfo.auth = bool
   },
   SET_USERINFO: (state, data) => {
-    console.log('TEST_app_js_SET_USERINFO', data)
+    // console.log('TEST_app_js_SET_USERINFO', data)
     state.userInfo.username = data.username
     state.userInfo.email = data.email
     state.userInfo.firstname = data.firstName
@@ -75,6 +75,7 @@ const mutations = {
     state.userInfo.token = newToken.token.code
     state.userInfo.exp = newToken.token.exp
   },
+  // Code review to do
   TOKEN: (state, token) => {
     state.userInfo.token = token
   },
@@ -85,6 +86,7 @@ const mutations = {
   RESET_STATE(state) {
     Object.assign(state, getDefaultState())
   },
+  //
 }
 
 // actions
@@ -108,20 +110,24 @@ const actions = {
   token: ({ commit }, token) => {
     commit('TOKEN', token)
   },
-  login: ({ commit, dispatch }, { username, password }) => {
-    UserService.login(username, password)
+
+  login: ({ commit, dispatch }, payloadLogin) => {
+    console.log('SUMMER_ ', payloadLogin)
+    userService
+      .login(payloadLogin)
       .then(response => {
-        localStorage.setItem('hypertube', JSON.stringify(response.data.token))
-        commit('SET_TOKEN', response.data.token)
+        const token = response.data.token
+        localStorage.setItem('hypertube', JSON.stringify(token))
+        commit('SET_TOKEN', token)
         commit('SET_AUTH', true)
-        axios.defaults.headers.common['x-access-token'] = response.data.token
+        // axios.defaults.headers.common['x-access-token'] = response.data.token
+        dispatch('getUser', { token, payloadLogin })
         const notification = {
           type: response.data.status,
           message: 'Login successful',
         }
         dispatch('Notifications/add', notification, { root: true })
         router.push({ name: 'movies' })
-        dispatch('getUser')
       })
       .catch(error => {
         const notification = {
@@ -143,8 +149,11 @@ const actions = {
         }
       })
   },
-  getUser: ({ commit, dispatch }, username) => {
-    UserService.getuser(username)
+
+  getUser: ({ commit, dispatch }, payloadGetUser) => {
+    console.log('payloadGetUser', payloadGetUser)
+    userService
+      .getuser(payloadGetUser)
       .then(response => {
         commit('SET_USERINFO', response.data.user)
         const notification = {
@@ -174,6 +183,76 @@ const actions = {
         }
       })
   },
+
+  updateUserInfo: ({ commit, dispatch }, { payloadPutUser }) => {
+    console.log('payloadPutUser', payloadPutUser)
+    userService
+      .putuser({ payloadPutUser })
+      .then(response => {
+        console.log('TEST_validatePersonalInfo_User.vue', response)
+        commit('SET_USERINFO', response.data.user)
+        commit('PUT_TOKEN', response.data.token)
+        const notification = {
+          type: response.data.status,
+          message: 'Personal information updated !',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        // router.push({ name: '/' })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'Issue occured while updating your personal information',
+        }
+        if (error.response && error.response.status == 404) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else if (error.response && error.response.status == 403) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+
+  updateEmail: ({ dispatch }, { payloadPutEmail }) => {
+    userService
+      .putemail(payloadPutEmail)
+      .then(response => {
+        console.log('RESPONSE changeEmail app.js', response)
+        const notification = {
+          type: response.data.status,
+          message: 'Please, valid the message sent to your new email address',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        // router.push({ name: '/' })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'Issue occured while changing your email',
+        }
+        if (error.response && error.response.status == 404) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else if (error.response && error.response.status == 403) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+
   // getUser: ({ state, dispatch, commit }) => {
   //   axios
   //     .get(
@@ -214,8 +293,10 @@ const actions = {
   //       }
   //     })
   // },
+
   getOtherUser: ({ commit, dispatch }, { username }) => {
-    UserService.getOtherUser(username)
+    userService
+      .getOtherUser(username)
       .then(response => {
         commit('SET_USERINFO', response.data)
         const notification = {
@@ -249,7 +330,13 @@ const actions = {
 
 // getters
 const getters = {
+  token(state) {
+    return state.userInfo.token
+  },
   isAuth: () => state.userInfo.auth,
+  storeToken: state => {
+    return state.userInfo.token
+  },
   storeUser: state => {
     const resUser = {}
     return Object.assign(resUser, state.userInfo)

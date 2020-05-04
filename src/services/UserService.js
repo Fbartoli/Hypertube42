@@ -1,10 +1,9 @@
 import axios from 'axios'
-// import { mapGetters } from 'vuex'
+// console.log('window_ ', window.__VUE_DEVTOOLS_GLOBAL_HOOK__.store.getters.App/storeToken);
 
 const apiClient = axios.create({
   baseURL: 'https://hypertube42.herokuapp.com/users',
-  withCredentials: false, //default value
-  // 'x-access-token': `${token}`,
+  withCredentials: false, // default value
   timeout: 5000,
 })
 
@@ -18,16 +17,29 @@ export default {
       password,
     })
   },
-  getuser(username) {
-    return apiClient.get(`/user/${username}`)
+  getuser(payloadGetUser) {
+    // apiClient.defaults.headers.get['x-access-token'] = payloadGetUser.token.code;
+    // apiClient.defaults.headers.post['x-access-token'] = payloadGetUser.token.code;
+    apiClient.defaults.headers['x-access-token'] = payloadGetUser.token.code
+    return apiClient.get('/user/' + payloadGetUser.payloadLogin.username)
   },
-  // postuser(username) {
-  //   return apiClient.post(`/user/${username}`)
-  // },
-  // putuser(username) {
-  //   return apiClient.put(`/user/${username}`)
-  // },
-  login(username, password) {
-    return apiClient.post('/login', { username, password })
+  putemail(payloadPutEmail) {
+    console.log('putEmail_ ', payloadPutEmail)
+    return apiClient.put(`/user/${payloadPutEmail.username}/email`, {
+      email: payloadPutEmail.email,
+    })
+  },
+  putuser(payloadPutUser) {
+    console.log('putEmail_ ', payloadPutUser)
+    return apiClient.put(
+      `/user/${payloadPutUser.currentUsername}`,
+      payloadPutUser
+    )
+  },
+  login(login) {
+    return apiClient.post('/login', login)
+  },
+  searchProfile(payloadSearchProfile) {
+    return apiClient.get('/profile/' + payloadSearchProfile)
   },
 }

@@ -212,7 +212,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 
@@ -273,69 +273,98 @@ export default {
     }),
   },
   methods: {
-    ...mapActions('App', ['getUser', 'putUserInfo', 'putToken']),
+    ...mapActions('App', [
+      'getUser',
+      'updateUserInfo',
+      'updateEmail',
+      'putToken',
+    ]),
     validateEmail() {
-      console.log('GETTERS_this.currentUsername', this.currentUsername)
-      const options = {
-        method: 'put',
-        url: `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}/email`,
-        data: {
-          email: this.userData.email,
-        },
-        headers: {
-          'x-access-token': this.userData.token,
-        },
+      const payloadPutEmail = {
+        username: this.currentUsername,
+        email: this.userData.email,
       }
-      if (this.$refs.EmailForm.validate()) {
-        axios(options)
-          .then(response => {
-            console.log('personal data updated ! well done ; ) ', response)
-            //   // this.$store.dispatch('interact/setMessage', 'Personal information updated !')
-            //   this.$router.push('/')
-          })
-          // eslint-disable-next-line
-          .catch(error => {})
-        // this.$router.push('/settings')
-      }
+      // this.$v.$touch()
+      // if (!this.$v.$invalid) {
+      this.updateEmail({ payloadPutEmail })
+      // }
     },
+    // validateEmail2() {
+    //   const options = {
+    //     method: 'put',
+    //     url: `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}/email`,
+    //     data: {
+    //       email: this.userData.email,
+    //     },
+    //     headers: {
+    //       'x-access-token': this.userData.token,
+    //     },
+    //   }
+    //   if (this.$refs.EmailForm.validate()) {
+    //     axios(options)
+    //       .then(response => {
+    //         console.log('email updated! ', response)
+    //         //   // this.$store.dispatch('interact/setMessage', 'Personal information updated !')
+    //         //   this.$router.push('/')
+    //       })
+    //       // eslint-disable-next-line
+    //       .catch(error => {})
+    //     // this.$router.push('/settings')
+    //   }
+    // },
+
     validatePersonalInfo() {
-      const options = {
-        method: 'put',
-        url: `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}`,
-        data: {
-          username: this.userData.username,
-          firstName: this.userData.firstname,
-          lastName: this.userData.lastname,
-          language: this.userData.language,
-        },
-        headers: {
-          'x-access-token': this.userData.token,
-        },
+      const payloadPutUser = {
+        currentUsername: this.currentUsername,
+        username: this.userData.username,
+        firstName: this.userData.firstname,
+        lastName: this.userData.lastname,
+        language: this.userData.language,
       }
-      if (this.$refs.PersonalInfoForm.validate()) {
-        axios(options)
-          .then(response => {
-            console.log('TEST_validatePersonalInfo_User.vue', response)
-            if (response.status === 200 || response.status === '200') {
-              this.$store.dispatch('App/putToken', response.data.token)
-              // WHY DOES IT STOP THERE ?
-              console.log('HELP1')
-              // this.$store.dispatch('App/putUserInfo', {
-              //   username: this.userData.username,
-              //   firstName: this.userData.firstname,
-              //   lastName: this.userData.lastname,
-              //   language: this.userData.language,
-              // })
-              console.log('HELP2')
-            }
-            // this.$store.dispatch('interact/setMessage', 'Personal information updated !')
-            // this.$router.push('/')
-          })
-          // eslint-disable-next-line
-          .catch(error => {})
-        // this.$router.push('/')
-      }
+      // this.$v.$touch()
+      // if (!this.$v.$invalid) {
+      this.updateUserInfo({ payloadPutUser })
     },
+
+    // validatePersonalInfo2() {
+    //   const options = {
+    //     method: 'put',
+    //     url: `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}`,
+    //     data: {
+    //       username: this.userData.username,
+    //       firstName: this.userData.firstname,
+    //       lastName: this.userData.lastname,
+    //       language: this.userData.language,
+    //     },
+    //     headers: {
+    //       'x-access-token': this.userData.token,
+    //     },
+    //   }
+    //   if (this.$refs.PersonalInfoForm.validate()) {
+    //     axios(options)
+    //       .then(response => {
+    //         console.log('TEST_validatePersonalInfo_User.vue', response)
+    //         if (response.status === 200 || response.status === '200') {
+    //           this.$store.dispatch('App/putToken', response.data.token)
+    //           // WHY DOES IT STOP THERE ?
+    //           console.log('HELP1')
+    //           // this.$store.dispatch('App/putUserInfo', {
+    //           //   username: this.userData.username,
+    //           //   firstName: this.userData.firstname,
+    //           //   lastName: this.userData.lastname,
+    //           //   language: this.userData.language,
+    //           // })
+    //           console.log('HELP2')
+    //         }
+    //         // this.$store.dispatch('interact/setMessage', 'Personal information updated !')
+    //         // this.$router.push('/')
+    //       })
+    //       // eslint-disable-next-line
+    //       .catch(error => {})
+    //     // this.$router.push('/')
+    //   }
+    // },
+
     validateAvatar() {
       if (this.$refs.AvatarForm.validate()) {
         const data = new FormData()

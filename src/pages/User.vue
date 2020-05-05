@@ -194,9 +194,7 @@
           <v-row class="font-italic">
             <v-col>
               <br />
-              <router-link
-                :to="{ name: 'reset', params: { username: userData.username } }"
-              >
+              <router-link :to="{ name: 'resetpasswordonline' }">
                 {{ $t('Reset password') }}<br /><br />
               </router-link>
             </v-col>

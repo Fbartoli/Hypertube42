@@ -253,6 +253,42 @@ const actions = {
       })
   },
 
+  // called by the user in ../pages/ResetPasswordOnline.vue
+  // to change the password while online
+  putOnlineNewPassword: ({ dispatch }, { onlineNewPassword }) => {
+    console.log('onlineNewPassword', onlineNewPassword)
+    userService
+      .putonlinepass({ onlineNewPassword })
+      .then(response => {
+        console.log('RESPONSE onlineNewPassword app.js', response)
+        const notification = {
+          type: response.data.status,
+          message: 'Your new password is set !',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        // router.push({ name: '/' })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'Issue occured while changing your password',
+        }
+        if (error.response && error.response.status == 404) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else if (error.response && error.response.status == 403) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+
   // getUser: ({ state, dispatch, commit }) => {
   //   axios
   //     .get(
@@ -293,39 +329,6 @@ const actions = {
   //       }
   //     })
   // },
-
-  getOtherUser: ({ commit, dispatch }, { username }) => {
-    userService
-      .getOtherUser(username)
-      .then(response => {
-        commit('SET_USERINFO', response.data)
-        const notification = {
-          type: response.data.status,
-          message: 'Get user successful',
-        }
-        dispatch('Notifications/add', notification, { root: true })
-        // router.push({ name: '/' })
-      })
-      .catch(error => {
-        const notification = {
-          type: 'error',
-          message: 'There was a problem getting user info',
-        }
-        if (error.response && error.response.status == 404) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        } else if (error.response && error.response.status == 403) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        } else {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        }
-      })
-  },
 }
 
 // getters

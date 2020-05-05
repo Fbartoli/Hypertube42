@@ -42,4 +42,20 @@ export default {
   searchProfile(payloadSearchProfile) {
     return apiClient.get('/profile/' + payloadSearchProfile)
   },
+  getactivationtoken(activationToken) {
+    console.log('TEST_getactivationtoken ', activationToken)
+    return apiClient.get('/activation/' + activationToken)
+  },
+  getemailtoken(emailToken) {
+    return apiClient.get('/email/' + emailToken)
+  },
+  putpasswordtoken({ passToken }) {
+    return apiClient.put('/password/', { passToken }) // { token, new_password })
+  },
+  putonlinepass({ onlineNewPassword }) {
+    console.log('TEST_putonlinepass ', onlineNewPassword)
+    return apiClient.put(`/user/${onlineNewPassword.username}/password`, {
+      onlineNewPassword,
+    }) // { password, new_password })
+  },
 }

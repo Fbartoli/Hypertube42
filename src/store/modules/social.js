@@ -7,7 +7,10 @@ const state = {
 
 // mutations
 const mutations = {
-  PUT_SEARCH_PROFILE({ state }, searchBox) {
+  // PUT_SEARCH_PROFILE({ state }, searchBox) {
+  //   state.searchProfile = searchBox
+  // },
+  PUT_SEARCH_PROFILE: (state, searchBox) => {
     state.searchProfile = searchBox
   },
 }

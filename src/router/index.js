@@ -34,11 +34,6 @@ const routes = [
     component: () => import('../pages/Login.vue'),
   },
   {
-    path: '/activated',
-    name: 'activated',
-    component: () => import('../pages/Activated.vue'),
-  },
-  {
     path: '/register',
     name: 'register',
     component: () => import('../pages/Registration.vue'),
@@ -80,11 +75,101 @@ const routes = [
     component: () => import('../pages/Profile.vue'),
     props: true,
   },
+  // Valid your new account by using the link in your mailbox:
+  {
+    path: '/signup/:signup',
+    name: 'signup',
+    component: () => import('../pages/Signup.vue'),
+    props: true,
+    beforeEnter(routeTo, routeFrom, next) {
+      store.dispatch('Email/setActivationToken', routeTo.params.signup)
+      store
+        .dispatch('Email/getActivationToken')
+        .then(response => {
+          if (response === 200) {
+            console.log('OK_Activate New Account', response)
+            store.dispatch('Email/setMessageToUser', response.data)
+          }
+          next()
+        })
+        .catch(error => {
+          console.log('ERR_Activate New Account', error)
+          if (error.response && error.response.status == 404) {
+            next({
+              name: '404',
+              params: { resource: 'Account link validation' },
+            })
+          }
+          next({ name: 'network-issue' })
+        })
+    },
+  },
+  // Valid your email change by using the link in your mailbox:
   {
     path: '/resetemail/:resetemail',
     name: 'resetemail',
     component: () => import('../pages/Resetemail.vue'),
     props: true,
+    beforeEnter(routeTo, routeFrom, next) {
+      store.dispatch('Email/setEmailToken', routeTo.params.resetemail)
+      store
+        .dispatch('Email/getEmailToken')
+        .then(response => {
+          if (response === 200) {
+            console.log('OK_Reset Email', response)
+            store.dispatch('Email/setMessageToUser', response.data)
+          }
+          next()
+        })
+        .catch(error => {
+          console.log('ERR_Activate New Account', error)
+          if (error.response && error.response.status == 404) {
+            next({
+              name: '404',
+              params: { resource: 'Reset email link validation' },
+            })
+          }
+          next({ name: 'network-issue' })
+        })
+    },
+  },
+  // Valid your offline password change by using the link in your mailbox:
+  {
+    path: '/resetpasswordoffline/:resetpassword',
+    name: 'resetpasswordoffline',
+    component: () => import('../pages/ResetPasswordOffline.vue'),
+    props: true,
+    beforeEnter(routeTo, routeFrom, next) {
+      store.dispatch('Email/setPasswordToken', routeTo.params.resetpassword)
+      store
+        .dispatch('Email/getPasswordToken')
+        .then(response => {
+          if (response === 200) {
+            console.log('OK_Reset Password', response)
+            store.dispatch('Email/setMessageToUser', response.data)
+          }
+          next()
+        })
+        .catch(error => {
+          console.log('ERR_Activate New Password', error)
+          if (error.response && error.response.status == 404) {
+            next({
+              name: '404',
+              params: { resource: 'Reset password link validation' },
+            })
+          }
+          next({ name: 'network-issue' })
+        })
+    },
+  },
+  // Valid your password change online:
+  {
+    path: '/resetpasswordonline',
+    name: 'resetpasswordonline',
+    component: () => import('../pages/ResetPasswordOnline.vue'),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/movies',
@@ -107,6 +192,7 @@ const routes = [
           if (parseInt(movie.id) === 0) {
             next({ name: '404', params: { resource: 'movie' } })
           }
+          // line to delete ?
           routeTo.params.movie = movie
           next()
         })

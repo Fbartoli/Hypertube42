@@ -43,7 +43,7 @@ new Vue({
       if (Math.floor(token.exp) - Math.floor(Date.now() / 1000) > 60 * 10) {
         this.$store.commit('App/SET_TOKEN', token)
         this.$store.commit('App/SET_AUTH', true)
-        router.push({ name: 'movies' })
+        // router.push({ name: 'movies' })
       }
     }
   },

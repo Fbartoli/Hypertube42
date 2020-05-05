@@ -26,9 +26,9 @@
           cols="md-auto"
         >
           <v-row justify="center">
-            <v-form @submit.prevent="keySearchUser">
+            <v-form @submit.prevent="keySearchUser()">
               <v-text-field
-                v-model.lazy.trim="this.searchProfile"
+                :value="this.searchProfile"
                 :append-icon-cb="() => {}"
                 :label="$t('search_box_label')"
                 append-icon="mdi-account-search"

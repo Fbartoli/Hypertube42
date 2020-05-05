@@ -81,6 +81,12 @@ const routes = [
     props: true,
   },
   {
+    path: '/resetemail/:resetemail',
+    name: 'resetemail',
+    component: () => import('../pages/Resetemail.vue'),
+    props: true,
+  },
+  {
     path: '/movies',
     name: 'movies',
     component: () => import('../pages/Movies.vue'),

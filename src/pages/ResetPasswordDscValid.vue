@@ -13,7 +13,7 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="new_password"
+                v-model="password"
                 :error-messages="passwordErrors"
                 :counter="15"
                 outlined
@@ -23,6 +23,7 @@
                 type="Password"
                 @input="$v.password.$touch()"
                 @blur="$v.password.$touch()"
+                required
               />
             </v-col>
           </v-row>
@@ -32,7 +33,7 @@
     <v-divider></v-divider>
     <v-card-actions>
       <v-btn
-        @click="validDscNewPassword(new_password)"
+        @click="validDscNewPassword(password)"
         x-large
         color="blue"
         :disabled="$v.$invalid"
@@ -50,8 +51,8 @@ import { mapActions } from 'vuex'
 export default {
   data() {
     return {
-      passToken: this.$route.params.resetemail,
-      new_password: '',
+      passToken: this.$route.params.resetpassword,
+      password: '',
       // valid: true,
     }
   },
@@ -86,10 +87,10 @@ export default {
   methods: {
     // message to myself, try to refacto by using prop in the routing rather than the store
     ...mapActions('Email', ['putDscResetPassword']),
-    validDscNewPassword(new_password) {
+    validDscNewPassword(password) {
       const dscNewPassword = {
         token: this.passToken,
-        new_password: new_password,
+        new_password: password,
       }
       console.log('Page_obj_dscNewPassword ', dscNewPassword)
       this.$v.$touch()

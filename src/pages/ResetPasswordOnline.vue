@@ -63,8 +63,8 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      password: this.$route.params.resetemail,
-      new_password: true,
+      password: '',
+      new_password: '',
     }
   },
   // props: {

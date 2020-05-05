@@ -111,6 +111,7 @@ const actions = {
     commit('TOKEN', token)
   },
 
+  // Called by the user in ../pages/Login.vue to sign in
   login: ({ commit, dispatch }, payloadLogin) => {
     console.log('SUMMER_ ', payloadLogin)
     userService
@@ -120,7 +121,7 @@ const actions = {
         localStorage.setItem('hypertube', JSON.stringify(token))
         commit('SET_TOKEN', token)
         commit('SET_AUTH', true)
-        // axios.defaults.headers.common['x-access-token'] = response.data.token
+        // apiClient.defaults.headers.common['x-access-token'] = token
         dispatch('getUser', { token, payloadLogin })
         const notification = {
           type: response.data.status,
@@ -150,6 +151,7 @@ const actions = {
       })
   },
 
+  // GET userInfo
   getUser: ({ commit, dispatch }, payloadGetUser) => {
     console.log('payloadGetUser', payloadGetUser)
     userService
@@ -184,6 +186,7 @@ const actions = {
       })
   },
 
+  // Called by the user in ../pages/User.vue to modify user data
   updateUserInfo: ({ commit, dispatch }, { payloadPutUser }) => {
     console.log('payloadPutUser', payloadPutUser)
     userService
@@ -220,6 +223,8 @@ const actions = {
       })
   },
 
+  // Called by the user in ../pages/User.vue to modify email address
+  // Send a link to the new email address for the user to confirm change
   updateEmail: ({ dispatch }, { payloadPutEmail }) => {
     userService
       .putemail(payloadPutEmail)
@@ -253,8 +258,8 @@ const actions = {
       })
   },
 
-  // called by the user in ../pages/ResetPasswordOnline.vue
-  // to change the password while online
+  // Called by the user in ../pages/ResetPasswordOnline.vue
+  // in order to change the password while connected
   putOnlineNewPassword: ({ dispatch }, { onlineNewPassword }) => {
     console.log('onlineNewPassword', onlineNewPassword)
     userService

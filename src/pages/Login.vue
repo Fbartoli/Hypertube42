@@ -41,9 +41,7 @@
                 />
               </v-col>
             </v-row>
-            <router-link
-              :to="{ name: 'reset', params: { username: username } }"
-            >
+            <router-link :to="{ name: 'resetpassworddscemail' }">
               {{ $t('Reset password') }}<br /><br />
             </router-link>
             <router-link

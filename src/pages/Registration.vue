@@ -3,57 +3,60 @@
     <v-card width="1000">
       <v-form ref="signUpForm">
         <v-text-field
-          class="pa-5"
           v-model="email"
+          :error-messages="emailErrors"
+          :label="$t('email')"
+          @blur="$v.email.$touch()"
+          class="pa-5"
           outlined
           clearable
           color="primary"
-          @blur="$v.email.$touch()"
-          :label="$t('email')"
+          type="text"
+        ></v-text-field>
+        <v-text-field
+          v-model="username"
+          :error-messages="usernameErrors"
+          :label="$t('username')"
+          @input="$v.username.$touch()"
+          @blur="$v.username.$touch()"
+          class="pa-5"
+          outlined
+          clearable
+          color="primary"
+          type="text"
+        ></v-text-field>
+        <v-text-field
+          v-model="firstName"
+          :label="$t('firstName')"
+          class="ma-5"
+          outlined
+          clearable
+          color="primary"
           type="text"
           required
         ></v-text-field>
         <v-text-field
-          class="pa-5"
-          v-model="username"
-          outlined
-          clearable
-          color="primary"
-          :label="$t('username')"
-          type="text"
-          @input="$v.username.$touch()"
-          @blur="$v.username.$touch()"
-        ></v-text-field>
-        <v-text-field
-          class="ma-5"
-          v-model="firstName"
-          outlined
-          clearable
-          color="primary"
-          :label="$t('firstName')"
-          type="text"
-        ></v-text-field>
-        <v-text-field
-          class="ma-5"
           v-model="lastName"
+          :label="$t('lastName')"
+          class="ma-5"
           outlined
           clearable
           color="primary"
-          :label="$t('lastName')"
           type="text"
+          required
         ></v-text-field>
         <v-text-field
-          class="ma-5"
           v-model="password"
           :error-messages="passwordErrors"
+          :label="$t('password')"
           :counter="15"
+          @input="$v.password.$touch()"
+          @blur="$v.password.$touch()"
+          class="ma-5"
           outlined
           clearable
           color="primary"
-          :label="$t('password')"
           type="Password"
-          @input="$v.password.$touch()"
-          @blur="$v.password.$touch()"
         >
           <template v-slot:prepend>
             <v-tooltip bottom>

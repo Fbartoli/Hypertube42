@@ -1,10 +1,9 @@
 import axios from 'axios'
-// console.log('window_ ', window.__VUE_DEVTOOLS_GLOBAL_HOOK__.store.getters.App/storeToken);
 
 const apiClient = axios.create({
   baseURL: 'https://hypertube42.herokuapp.com/users',
   withCredentials: false, // default value
-  timeout: 5000,
+  timeout: 8000,
 })
 
 export default {
@@ -18,8 +17,6 @@ export default {
     })
   },
   getuser(payloadGetUser) {
-    // apiClient.defaults.headers.get['x-access-token'] = payloadGetUser.token.code;
-    // apiClient.defaults.headers.post['x-access-token'] = payloadGetUser.token.code;
     apiClient.defaults.headers['x-access-token'] = payloadGetUser.token.code
     return apiClient.get('/user/' + payloadGetUser.payloadLogin.username)
   },
@@ -41,16 +38,6 @@ export default {
   },
   searchProfile(payloadSearchProfile) {
     return apiClient.get('/profile/' + payloadSearchProfile)
-  },
-  getactivationtoken(activationToken) {
-    console.log('TEST_getactivationtoken ', activationToken)
-    return apiClient.get('/activation/' + activationToken)
-  },
-  getemailtoken(emailToken) {
-    return apiClient.get('/email/' + emailToken)
-  },
-  putpasswordtoken({ passToken }) {
-    return apiClient.put('/password/', { passToken }) // { token, new_password })
   },
   putonlinepass({ onlineNewPassword }) {
     console.log('TEST_putonlinepass ', onlineNewPassword)

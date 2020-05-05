@@ -28,7 +28,7 @@ const actions = {
 const getters = {
   searchProfile(state) {
     const copyStr = Object.assign('', state.searchProfile)
-    console.log('COPYSTR_', copyStr)
+    console.log('COPYSTR_searchProfile', copyStr)
     return copyStr
   },
 }

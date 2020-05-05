@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title primary-title>
-      <div class="headline">Account Activation Page<br /><br /></div>
+      <div class="headline">{{ $t('title') }}<br /><br /></div>
     </v-card-title>
     <div>
       <div>
@@ -21,7 +21,6 @@ export default {
   data() {
     return {
       signupToken: this.$route.params.signup,
-      valid: true,
     }
   },
   // props: {
@@ -45,16 +44,14 @@ export default {
 <i18n>
 {
   "en": {
-    "titlea": " ",
-    "title_b": "’s profile",
+    "title": "Account Validation",
     "username": "Username",
     "firstname": "First Name",
     "lastname": "Last Name",
     "language": "Subtitles language preference"
   },
   "fr": {
-    "titlea": "Profil de ",
-    "title_b": " ",
+    "title": "Activation de votre compte",
     "username": "Nom d'utilisateur",
     "firstname": "Prénom",
     "lastname": "Nom",

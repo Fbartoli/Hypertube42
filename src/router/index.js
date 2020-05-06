@@ -10,23 +10,23 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import('../pages/Home.vue'),
-    beforeEnter(routeTo, routeFrom, next) {
-      if (routeTo.query.code) {
-        let code = routeTo.query.code
-        store.dispatch('App/token', routeTo.query.code)
-        store.commit('App/SET_AUTH', true)
-        let info = code.split('.')
-        let userInfo = JSON.parse(atob(info[1]))
-        console.log(userInfo.data)
-        store.commit(
-          'App/TEST',
-          { username: userInfo.data.username },
-          userInfo.exp
-        )
-        store.dispatch('App/getUser')
-      }
-      next()
-    },
+    // beforeEnter(routeTo, routeFrom, next) {
+    //   if (routeTo.query.code) {
+    //     let code = routeTo.query.code
+    //     store.dispatch('App/token', routeTo.query.code)
+    //     store.commit('App/SET_AUTH', true)
+    //     let info = code.split('.')
+    //     let userInfo = JSON.parse(atob(info[1]))
+    //     console.log(userInfo.data)
+    //     store.commit(
+    //       'App/TEST',
+    //       { username: userInfo.data.username },
+    //       userInfo.exp
+    //     )
+    //     store.dispatch('App/getUser')
+    //   }
+    //   next()
+    // },
   },
   {
     path: '/login',

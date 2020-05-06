@@ -74,7 +74,6 @@ export default {
       required,
     },
   },
-  // matt.saubin@gmail.com
   methods: {
     ...mapActions('Email', ['sendResetPassLink']),
     validDscNewPassword(emailResetPassword) {

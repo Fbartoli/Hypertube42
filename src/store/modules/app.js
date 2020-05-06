@@ -76,13 +76,13 @@ const mutations = {
     state.userInfo.exp = newToken.token.exp
   },
   // Code review to do
-  TOKEN: (state, token) => {
-    state.userInfo.token = token
-  },
-  TEST: (state, { username }, exp) => {
-    state.userInfo.username = username
-    state.userInfo.exp = exp
-  },
+  // TOKEN: (state, token) => {
+  //   state.userInfo.token = token
+  // },
+  // TEST: (state, { username }, exp) => {
+  //   state.userInfo.username = username
+  //   state.userInfo.exp = exp
+  // },
   RESET_STATE(state) {
     Object.assign(state, getDefaultState())
   },

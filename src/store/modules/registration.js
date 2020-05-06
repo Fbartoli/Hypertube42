@@ -1,4 +1,4 @@
-import userService from '../../services/UserService.js'
+import emailService from '../../services/EmailService.js'
 import router from '../../router/index'
 
 const state = {}
@@ -10,7 +10,7 @@ const mutations = {}
 // actions
 const actions = {
   register({ dispatch }, { username, email, firstName, lastName, password }) {
-    userService
+    emailService
       .register({ username, email, firstName, lastName, password })
       .then(response => {
         const notification = {

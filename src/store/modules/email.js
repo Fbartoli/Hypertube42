@@ -36,14 +36,30 @@ const actions = {
     commit('PUT_MESSAGE', message)
   },
 
-  // New account activation with email validation
+  // GET and save the account activation token
   setActivationToken({ commit }, activationToken) {
     // console.log('control_', activationToken)
     commit('PUT_ACTIVATION_TOKEN', activationToken)
   },
+  // New account activation with email validation
   getActivationToken({ getters }) {
     console.log('STORE token_ ', getters.activationToken)
     emailService.getactivationtoken(getters.activationToken)
+    //
+    // ajouter le retour de la requete
+    // TO REVIEW
+  },
+  // Replace account activation link with a new email
+  // (replace the first token from registration)
+  getActivationTokenAgain({ commit }, activationEmail) {
+    commit('PUT_ACTIVATION_TOKEN', '')
+    console.log(
+      'Email STORE_ Email Activation account AGAIN_ ',
+      activationEmail
+    )
+    emailService.putactivationtoken(activationEmail)
+    //
+    // ajouter le retour de la requete
   },
 
   // Change email with new email address validation
@@ -53,6 +69,14 @@ const actions = {
   getEmailToken({ getters }) {
     console.log('STORE token_ ', getters.emailToken)
     emailService.getemailtoken(getters.emailToken)
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
   },
 
   // Reset password while disconnected with a link sent to the user mailbox

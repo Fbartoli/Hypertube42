@@ -87,7 +87,7 @@
             <v-col v-if="userApp.auth === true">
               <v-row justify="end">
                 <v-btn
-                  @click="logout"
+                  @click="resetState"
                   color="primary"
                   v-show="userApp.auth === true"
                   :label="$t('sign out')"
@@ -161,9 +161,10 @@ export default {
   }),
   methods: {
     ...mapActions('Social', ['putSearchProfile', 'searchProfile']),
-    logout() {
-      localStorage.removeItem('hypertube')
-    },
+    ...mapActions('App', ['resetState']),
+    // logout() {
+    //   localStorage.removeItem('hypertube')
+    // },
     keySearchUser() {
       // console.log('this.searchUsername_ ', this.searchProfile)
       // console.log('this.searchBox_ ', this.searchBox)
@@ -211,6 +212,7 @@ export default {
   },
 }
 </script>
+
 <style>
 .center {
   display: flex;
@@ -219,6 +221,7 @@ export default {
   height: 100vh;
 }
 </style>
+
 <i18n>
 {
   "en": {

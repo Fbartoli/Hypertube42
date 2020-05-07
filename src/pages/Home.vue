@@ -1,30 +1,11 @@
 <template>
-  <v-form class="center">
+  <div>
     <v-container>
-      <v-row>
-        <v-col cols="12">
-          <v-text-field
-            v-model="email"
-            outlined
-            clearable
-            color="primary"
-            label="Email"
-            type="text"
-          >
-            <template v-slot:append-outer>
-              <v-btn
-                :to="{ name: 'register', params: { email } }"
-                x-large
-                color="green"
-                style="top: -18px"
-                >{{ $t('register') }}</v-btn
-              >
-            </template>
-          </v-text-field>
-        </v-col>
-      </v-row>
+      <v-img src="../assets/Dreamland_Cinema_Title.jpg">
+        test
+      </v-img>
     </v-container>
-  </v-form>
+  </div>
 </template>
 
 <script>
@@ -37,7 +18,18 @@ export default {
   },
 }
 </script>
-<style scoped></style>
+
+<style scoped>
+#custom .custom {
+  /* background-image: ; */
+  background-color: green;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+</style>
+
 <i18n>
 {
   "en": {

@@ -66,6 +66,10 @@ const mutations = {
     state.userInfo.lastname = newUserInfo.lastname
     state.userInfo.language = newUserInfo.language
   },
+  PUT_USERNAME: (state, username) => {
+    console.log('TEST_app_js_PUT_USERNAME', username)
+    state.userInfo.username = username
+  },
   PUT_EMAIL: (state, newEmail) => {
     console.log('TEST_app_js_PUT_EMAIL', newEmail)
     state.userInfo.email = newEmail
@@ -76,13 +80,13 @@ const mutations = {
     state.userInfo.exp = newToken.token.exp
   },
   // Code review to do
-  // TOKEN: (state, token) => {
-  //   state.userInfo.token = token
-  // },
-  // TEST: (state, { username }, exp) => {
-  //   state.userInfo.username = username
-  //   state.userInfo.exp = exp
-  // },
+  TOKEN: (state, token) => {
+    state.userInfo.token = token
+  },
+  TEST: (state, { username }, exp) => {
+    state.userInfo.username = username
+    state.userInfo.exp = exp
+  },
   RESET_STATE(state) {
     Object.assign(state, getDefaultState())
   },
@@ -134,6 +138,42 @@ const actions = {
         const notification = {
           type: 'error',
           message: 'There was a problem login',
+        }
+        if (error.response && error.response.status == 404) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else if (error.response && error.response.status == 403) {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+
+  // GET userInfo
+  getUserAuth: ({ getters, commit, dispatch }) => {
+    const token = getters.storeToken
+    const username = getters.storeUsername
+    userService
+      .getuserauth({ token: token, username: username })
+      .then(response => {
+        commit('SET_USERINFO', response.data.user)
+        const notification = {
+          type: response.data.status,
+          message: 'Get user successful',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        // router.push({ name: '/' })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'There was a problem getting user info',
         }
         if (error.response && error.response.status == 404) {
           dispatch('Notifications/add', notification, {

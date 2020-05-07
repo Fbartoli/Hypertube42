@@ -17,8 +17,16 @@ export default {
 
   // GET userInfo
   getuser(payloadGetUser) {
+    console.log('TTESSTT', payloadGetUser)
     apiClient.defaults.headers['x-access-token'] = payloadGetUser.token.code
     return apiClient.get('/user/' + payloadGetUser.payloadLogin.username)
+  },
+
+  // GET userInfo
+  getuserauth({ token, username }) {
+    console.log('TTESSTT', { token, username })
+    apiClient.defaults.headers['x-access-token'] = token
+    return apiClient.get('/user/' + username)
   },
 
   // PUT user email address

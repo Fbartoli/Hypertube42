@@ -82,7 +82,7 @@
         <v-btn
           class="ma-5"
           @click="validRegister()"
-          :disabled="$v.$invalid"
+          :disabled="$v.$invalid || !agreeToTerms"
           x-large
           color="primary"
         >
@@ -109,6 +109,7 @@ import {
   sameAs,
 } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
+
 const oneLower = helpers.regex('oneLower', /[a-z]+/)
 const oneUpper = helpers.regex('oneUpper', /[A-Z]+/)
 const oneDigit = helpers.regex('oneDigit', /[0-9]+/)
@@ -267,6 +268,7 @@ export default {
     "lastNameRule": "Last Name is required",
     
     "password": "Password",
+    "passwordRule": "Password is required",
     "passwordRuleMin": "Password must be at least 8 characters long",
     "passwordRuleMax": "Password must be at most 15 characters long",
     "repeatpassword": "Confirm Password",
@@ -280,7 +282,6 @@ export default {
     
     "register": "Register !",
     
-    "passwordRule": "Password is required",
     "autofill": "Test_42_AUTOFILL"
   },
   "fr": {

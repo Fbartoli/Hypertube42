@@ -93,14 +93,12 @@ export default {
 {
   "en": {
     "title": "Forgot Password?",
-    "username": "Username",
     "email": "Email",
     "emailRule": "Email is required",
     "askResetPassword": "Ask for a password reset"
   },
   "fr": {
     "title": "Oubli de votre mot de passe?",
-    "username": "Nom d'utilisateur",
     "email": "Email",
     "emailRule": "Un email est requis",
     "askResetPassword": "Demandez une réinitialisation de mot de passe"

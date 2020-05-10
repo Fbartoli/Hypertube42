@@ -9,32 +9,50 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="password"
+                v-model="$v.password.$model"
                 :error-messages="passwordErrors"
+                :label="$t('password')"
                 :counter="15"
+                @blur="$v.password.$touch()"
+                class="ma-5"
                 outlined
                 clearable
-                color="blue"
-                :label="$t('password')"
+                color="primary"
                 type="Password"
-                @input="$v.password.$touch()"
-                @blur="$v.password.$touch()"
               />
             </v-col>
           </v-row>
+
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="new_password"
-                :error-messages="passwordErrors"
+                v-model="$v.newpassword.$model"
+                :error-messages="newpasswordErrors"
+                :label="$t('password')"
                 :counter="15"
+                @blur="$v.newpassword.$touch()"
+                class="ma-5"
                 outlined
                 clearable
-                color="blue"
-                :label="$t('new_password')"
+                color="primary"
                 type="Password"
-                @input="$v.password.$touch()"
-                @blur="$v.password.$touch()"
+              />
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="$v.repeatpassword.$model"
+                :error-messages="repeatpasswordErrors"
+                :label="$t('repeatpassword')"
+                :counter="15"
+                @blur="$v.repeatpassword.$touch()"
+                class="ma-5"
+                outlined
+                clearable
+                color="primary"
+                type="Password"
               />
             </v-col>
           </v-row>
@@ -44,7 +62,7 @@
     <v-divider></v-divider>
     <v-card-actions>
       <v-btn
-        @click="validOnlineNewPassword(password, new_password)"
+        @click="validOnlinenewpassword()"
         x-large
         color="blue"
         :disabled="$v.$invalid"
@@ -56,15 +74,27 @@
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import {
+  required,
+  alphaNum,
+  minLength,
+  maxLength,
+  helpers,
+  sameAs,
+} from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
+
+const oneLower = helpers.regex('oneLower', /[a-z]+/)
+const oneUpper = helpers.regex('oneUpper', /[A-Z]+/)
+const oneDigit = helpers.regex('oneDigit', /[0-9]+/)
 
 export default {
   data() {
     return {
       password: '',
-      new_password: '',
+      newpassword: '',
+      repeatpassword: '',
     }
   },
   // props: {
@@ -80,30 +110,60 @@ export default {
     passwordErrors() {
       const errors = []
       if (!this.$v.password.$dirty) return errors
-      !this.$v.password.minLength &&
-        errors.push('Password must be at least 3 characters long')
-      !this.$v.password.maxLength &&
-        errors.push('Password must be at most 15 characters long')
-      !this.$v.password.required && errors.push('Password is required.')
+      !this.$v.password.required && errors.push(this.$t('passwordRule'))
+      !this.$v.password.alphaNum && errors.push(this.$t('alphaNumRule'))
+      !this.$v.password.minLength && errors.push(this.$t('passwordRuleMin'))
+      !this.$v.password.maxLength && errors.push(this.$t('passwordRuleMax'))
+      return errors
+    },
+    newpasswordErrors() {
+      const errors = []
+      if (!this.$v.newpassword.$dirty) return errors
+      !this.$v.newpassword.required && errors.push(this.$t('passwordRule'))
+      !this.$v.newpassword.alphaNum && errors.push(this.$t('alphaNumRule'))
+      !this.$v.newpassword.oneLower && errors.push(this.$t('lowerPasswordRule'))
+      !this.$v.newpassword.oneUpper && errors.push(this.$t('upperPasswordRule'))
+      !this.$v.newpassword.oneDigit && errors.push(this.$t('digitPasswordRule'))
+      !this.$v.newpassword.minLength && errors.push(this.$t('passwordRuleMin'))
+      !this.$v.newpassword.maxLength && errors.push(this.$t('passwordRuleMax'))
+      return errors
+    },
+    repeatpasswordErrors() {
+      const errors = []
+      if (!this.$v.repeatpassword.$dirty) return errors
+      !this.$v.repeatpassword.sameAsPassword &&
+        errors.push(this.$t('repeatpasswordRule'))
       return errors
     },
   },
   validations: {
     password: {
       required,
-      minLength: minLength(6),
-      maxLength: maxLength(15),
+      alphaNum,
+      minLength: minLength(8),
+      maxLength: maxLength(42),
+    },
+    newpassword: {
+      required,
+      alphaNum,
+      minLength: minLength(8),
+      maxLength: maxLength(42),
+      oneLower,
+      oneUpper,
+      oneDigit,
+    },
+    repeatpassword: {
+      sameAsPassword: sameAs('newpassword'),
     },
   },
   methods: {
     ...mapActions('App', ['putOnlineNewPassword']),
-    validOnlineNewPassword(password, new_password) {
+    validOnlinenewpassword() {
       const onlineNewPassword = {
-        password: password,
-        new_password: new_password,
+        password: this.$v.password.$model,
+        new_password: this.$v.newpassword.$model,
         username: this.storeUsername,
       }
-      console.log('Page_obj_ ', onlineNewPassword)
       this.$v.$touch()
       if (!this.$v.$invalid) {
         this.putOnlineNewPassword({ onlineNewPassword })
@@ -117,18 +177,33 @@ export default {
 <i18n>
 {
   "en": {
-    "title": "You may choose a new password !",
+    "title": "Choose a new password",
     "username": "Username",
+
     "password": "Password",
-    "new_password": "New Password",
+    "passwordRuleMin": "Password must be at least 8 characters long",
+    "passwordRuleMax": "Password must be at most 15 characters long",
+    "repeatpassword": "Confirm Password",
+    "repeatpasswordRule": "Both passwords should be identical",
+    "lowerPasswordRule": "1 lowercase character minimum [abc...]",
+    "upperPasswordRule": "1 uppercase character minimum [ABC...]",
+    "digitPasswordRule": "1 digit minimum [123...]",
+    "newpassword": "New Password",
     "changePassword": "Valid my new password !"
   },
   "fr": {
-    "title": "Vous pouvez choisir un nouveau mot de passe !",
+    "title": "Nouveau mot de passe",
     "username": "Nom d'utilisateur",
-    "password": "Mot de Passe",
-    "new_password": "Nouveau Mot de Passe",
-    "changePassword": "Valider mon nouveau mot de passe !"
+
+    "password": "Mot de passe",
+    "passwordRule": "Un mot de passe est requis",
+    "passwordRuleMin": "8 caractères minimum",
+    "passwordRuleMax": "15 caractères max",
+    "repeatpassword": "Confirmation du mot de passe",
+    "repeatpasswordRule": "Les mots de passe doivent être identiques",
+    "lowerPasswordRule": "1 minuscule minimum [abc...]",
+    "upperPasswordRule": "1 majuscule minimum [ABC...]",
+    "digitPasswordRule": "1 chiffre minimum [123...]"
   }
 }
 </i18n>

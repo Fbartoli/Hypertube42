@@ -301,7 +301,6 @@ const actions = {
   // Called by the user in ../pages/ResetPasswordOnline.vue
   // in order to change the password while connected
   putOnlineNewPassword: ({ dispatch }, { onlineNewPassword }) => {
-    console.log('onlineNewPassword', onlineNewPassword)
     userService
       .putonlinepass({ onlineNewPassword })
       .then(response => {

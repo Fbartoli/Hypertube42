@@ -27,18 +27,32 @@
         {{ movie.description_full }}
       </div>
     </v-card-text>
-
     <v-divider class="mx-4"></v-divider>
+    <MovieComment username="storeUsername" token="storeToken" />
   </v-card>
 </template>
 
 <script>
+import MovieComment from '../components/MovieComment'
+import { mapGetters } from 'vuex'
+
 export default {
+  components: { MovieComment },
   props: {
     movie: {
       type: Object,
       required: true,
     },
+    comments: {
+      type: Object,
+      required: false,
+    },
+  },
+  computed: {
+    ...mapGetters({
+      storeToken: 'App/storeToken',
+      storeUsername: 'App/storeUsername',
+    }),
   },
 }
 </script>

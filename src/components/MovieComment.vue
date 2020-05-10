@@ -1,15 +1,42 @@
 <template>
-  <p>test</p>
+  <div>
+    <label v-if="label">{{ label }}</label>
+    <select :value="value" @submit.prevent="sendCom" v-bind="$attrs">
+      <option
+        v-for="option in options"
+        :value="option"
+        :key="option"
+        :selected="option === value"
+      >
+        {{ option }}
+      </option>
+    </select>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
+// import { mapActions } from 'vuex'
 
 export default {
-  computed: {
-    ...mapGetters({
-      token: 'App/storeUsername',
-    }),
+  props: {
+    username: {
+      type: String,
+      // required: true
+      // for test purposes:
+      required: false,
+      default: 'component_default_username',
+    },
+    token: {
+      type: String,
+      required: false,
+      default: 'component_default_token',
+    },
+  },
+  methods: {
+    sendCom(event) {
+      this.$emit('input', event.target.value)
+    },
   },
 }
 </script>

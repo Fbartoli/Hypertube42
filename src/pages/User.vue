@@ -313,6 +313,7 @@ export default {
 
     validatePersonalInfo() {
       const payloadPutUser = {
+        // THIS ?
         currentUsername: this.currentUsername,
         username: this.userData.username,
         firstName: this.userData.firstname,

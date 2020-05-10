@@ -131,10 +131,11 @@ export default {
       ;(this.agreeToTerms = true),
         (this.$v.email.$model = 'chroniclesofselene@gmail.com'),
         (this.$v.username.$model = 'test'),
-        (this.$v.firstName.$model = 'student')(
-          (this.$v.lastName.$model = 'Duoquadra')
-        ),
-        (this.$v.password.$model = 'qwerty')
+        (this.$v.lastName.$model = 'Duoquadra'),
+        (this.$v.password.$model = '1Qqwerty'),
+        (this.$v.repeatpassword.$model = '1Qqwerty')(
+          (this.$v.firstName.$model = 'Student')
+        )
     },
     validRegister() {
       const object = {
@@ -158,59 +159,47 @@ export default {
     usernameErrors() {
       const errors = []
       if (!this.$v.username.$dirty) return errors
-      !this.$v.username.required && errors.push(this.$t('usernameRule'))
-      !this.$v.username.alphaNum &&
-        errors.push('Must be alphanumeric characters [Abc123...]')
-      !this.$v.username.minLength &&
-        errors.push('Name must be at least 4 characters long')
-      !this.$v.username.maxLength &&
-        errors.push('Name must be at most 15 characters long')
+      !this.$v.username.required && errors.push(this.$t('usernameRuleRequired'))
+      !this.$v.username.alphaNum && errors.push(this.$t('alphaNumRule'))
+      !this.$v.username.minLength && errors.push(this.$t('usernameRuleMin'))
+      !this.$v.username.maxLength && errors.push(this.$t('usernameRuleMax'))
       return errors
     },
     firstNameErrors() {
       const errors = []
       if (!this.$v.firstName.$dirty) return errors
       !this.$v.firstName.required && errors.push(this.$t('firstNameRule'))
-      !this.$v.firstName.alpha && errors.push('Only letters please')
-      !this.$v.firstName.minLength &&
-        errors.push('Name must be at least 2 characters long')
-      !this.$v.firstName.maxLength &&
-        errors.push('Name must be at most 15 characters long')
+      !this.$v.firstName.alpha && errors.push(this.$t('alphaRule'))
+      !this.$v.firstName.minLength && errors.push(this.$t('nameRuleMin'))
+      !this.$v.firstName.maxLength && errors.push(this.$t('nameRuleMax'))
       return errors
     },
     lastNameErrors() {
       const errors = []
       if (!this.$v.lastName.$dirty) return errors
       !this.$v.lastName.required && errors.push(this.$t('lastNameRule'))
-      !this.$v.lastName.alpha && errors.push('Only letters please')
-      !this.$v.lastName.minLength &&
-        errors.push('Name must be at least 2 characters long')
-      !this.$v.lastName.maxLength &&
-        errors.push('Name must be at most 15 characters long')
+      !this.$v.lastName.alpha && errors.push(this.$t('alphaRule'))
+      !this.$v.lastName.minLength && errors.push(this.$t('nameRuleMin'))
+      !this.$v.lastName.maxLength && errors.push(this.$t('nameRuleMax'))
       return errors
     },
     passwordErrors() {
       const errors = []
       if (!this.$v.password.$dirty) return errors
       !this.$v.password.required && errors.push(this.$t('passwordRule'))
-      !this.$v.password.alphaNum &&
-        errors.push('Must be alphanumeric characters [Abc123...]')
-      !this.$v.password.oneLower &&
-        errors.push('1 lowercase letter [abc...] required.')
-      !this.$v.password.oneUpper &&
-        errors.push('1 uppercase letter [ABC...] required.')
-      !this.$v.password.oneDigit && errors.push('1 number [0123...] required.')
-      !this.$v.password.minLength &&
-        errors.push('Password must be at least 8 characters long')
-      !this.$v.password.maxLength &&
-        errors.push('Password must be at most 42 characters long')
+      !this.$v.password.alphaNum && errors.push(this.$t('alphaNumRule'))
+      !this.$v.password.oneLower && errors.push(this.$t('lowerPasswordRule'))
+      !this.$v.password.oneUpper && errors.push(this.$t('upperPasswordRule'))
+      !this.$v.password.oneDigit && errors.push(this.$t('digitPasswordRule'))
+      !this.$v.password.minLength && errors.push(this.$t('passwordRuleMin'))
+      !this.$v.password.maxLength && errors.push(this.$t('passwordRuleMax'))
       return errors
     },
     repeatpasswordErrors() {
       const errors = []
       if (!this.$v.repeatpassword.$dirty) return errors
       !this.$v.repeatpassword.sameAsPassword &&
-        errors.push('Both passwords should be identical')
+        errors.push(this.$t('repeatpasswordRule'))
       return errors
     },
   },
@@ -257,39 +246,78 @@ export default {
 <i18n>
 {
   "en": {
+    "alphaRule": "Must be alphabet characters [Abc...]",
+    "alphaNumRule": "Must be alphanumeric characters [Abc123...]",
+    
     "email": "Email address",
-    "firstName": "First name",
-    "lastName": "Last name",
-    "register": "Register !",
+    "emailRule": "Email is required",
+    
     "username": "Username",
+    "usernameRule": "Username is required",
+    "usernameRuleMin": "Username must be at least 4 characters long",
+    "usernameRuleMax": "Username must be at most 15 characters long",
+    "usernameRuleRequired": "Username is required",
+    
+    "firstName": "First name",
+    "firstNameRule": "First Name is required",
+    "nameRuleMin": "Must be at least 4 characters long",
+    "nameRuleMax": "Must be at most 15 characters long",
+    
+    "lastName": "Last name",
+    "lastNameRule": "Last Name is required",
+    
     "password": "Password",
+    "passwordRuleMin": "Password must be at least 8 characters long",
+    "passwordRuleMax": "Password must be at most 15 characters long",
     "repeatpassword": "Confirm Password",
-    "attachPicture": "Attach a profile picture",
+    "repeatpasswordRule": "Both passwords should be identical",
+    "lowerPasswordRule": "1 lowercase character minimum [abc...]",
+    "upperPasswordRule": "1 uppercase character minimum [ABC...]",
+    "digitPasswordRule": "1 digit minimum [123...]",
+    
     "agree": "Agree to terms and conditions",
     "agreeRule": "You must agree to create an account",
-    "emailRule": "Email is required",
-    "usernameRule": "Username is required",
-    "firstNameRule": "First Name is required",
-    "lastNameRule": "Last Name is required",
+    
+    "register": "Register !",
+    
     "passwordRule": "Password is required",
     "autofill": "Test_42_AUTOFILL"
   },
   "fr": {
+    "alphaRule": "Caractères alphabétiques [Abc...] uniquement",
+    "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
+    
     "email": "Adresse email",
-    "firstName": "Prénom",
-    "lastName": "Nom de famille",
-    "register": "Enregistrer !",
+    "emailRule": "Un email est requis",
+    
     "username": "Pseudo",
+    "usernameRule": "Un pseudo est requis",
+    "usernameRuleMin": "Le nom d'utilisateur doit avoir 4 caractères minimum",
+    "usernameRuleMax": "Le nom d'utilisateur doit avoir 15 caractères maximum",
+    "usernameRuleRequired": "Le nom d'utilisateur est requis",
+    
+    "firstName": "Prénom",
+    "firstNameRule": "Prénom requis",
+    "nameRuleMin": "2 caractères minimum",
+    "nameRuleMax": "15 caractères maximum",
+    
+    "lastName": "Nom de famille",
+    "lastNameRule": "Nom requis",
+    
     "password": "Mot de passe",
+    "passwordRule": "Un mot de passe est requis",
+    "passwordRuleMin": "8 caractères minimum",
+    "passwordRuleMax": "15 caractères max",
     "repeatpassword": "Confirmation du mot de passe",
-    "attachPicture": "Joindre une photo de profil",
+    "repeatpasswordRule": "Les mots de passe doivent être identiques",
+    "lowerPasswordRule": "1 minuscule minimum [abc...]",
+    "upperPasswordRule": "1 majuscule minimum [ABC...]",
+    "digitPasswordRule": "1 chiffre minimum [123...]",
+    
     "agree": "Accepter les termes et conditions",
     "agreeRule": "Vous devez accepter les termes et conditions pour créer un compte",
-    "emailRule": "Un email est requis",
-    "usernameRule": "Un pseudo est requis",
-    "firstNameRule": "Prénom requis",
-    "lastNameRule": "Nom requis",
-    "passwordRule": "Un mot de passe est requis",
+    
+    "register": "Enregistrer !",
     "autofill": "Test_42_AUTOFILL"
   }
 }

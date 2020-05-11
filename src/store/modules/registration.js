@@ -25,20 +25,23 @@ const actions = {
           type: 'error',
           message: 'Wrong login, please try again',
         }
-        if (error.response.status === 404) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-          router.push({ name: '404' })
-        } else if (error.response.status === 403) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+            router.push({ name: '404' })
+          } else if (error.response.status === 403) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          }
         } else {
           dispatch('Notifications/add', notification, {
             root: true,
           })
         }
+        router.push({ name: 'home' })
       })
   },
 }

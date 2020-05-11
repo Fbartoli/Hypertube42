@@ -278,7 +278,6 @@ export default {
     },
     validatePersonalInfo() {
       const payloadPutUser = {
-        // THIS ?
         currentUsername: this.currentUsername,
         username: this.userData.username,
         firstName: this.userData.firstname,
@@ -354,6 +353,9 @@ export default {
               self.$store.dispatch('Notifications/add', notification, {
                 root: true,
               })
+              self.$store.dispatch('App/getUser', '', {
+                root: true,
+              })
               self.$router.push({
                 name: 'home',
               })
@@ -401,7 +403,7 @@ export default {
     "email": "Email",
     "password": "Password",
     "preview": "Preview",
-    "Reset password": "Reset password",
+    "Reset password": "Change my password",
     "usernameRuleRequired": "Username is required"
   },
   "fr": {
@@ -413,7 +415,7 @@ export default {
     "email": "Email",
     "password": "Mot de passe",
     "preview": "Aperçu",
-    "Reset password": "J'ai oublié mon mot de passe",
+    "Reset password": "Modifier mon mot de passe",
     "usernameRuleRequired": "Le nom d'utilisateur est requis"
   }
 }

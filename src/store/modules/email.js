@@ -76,32 +76,34 @@ const actions = {
         }
       })
       .catch(error => {
-        console.log('ERR_Signup_error.response', error.response)
-        console.log(
-          'ERR_Signup_error.response.data.error',
-          error.response.data.error
-        )
-        // dispatch('setMessageToUser', error.response.data.error)
-        console.log('TESTEST_err', error.response)
-        const notification = {
-          type: error.response.status,
-          message: error.response.data.error,
+        if (error.response) {
+          console.log('ERR_Signup_error.response', error.response)
+          console.log(
+            'ERR_Signup_error.response.data.error',
+            error.response.data.error
+          )
+          // dispatch('setMessageToUser', error.response.data.error)
+          console.log('TESTEST_err', error.response)
+          const notification = {
+            type: error.response.status,
+            message: error.response.data.error,
+          }
+          dispatch('Notifications/add', notification, { root: true })
+          if (error.response.status === 404) {
+            router.push({
+              name: '404',
+              params: { resource: 'Account link validation' },
+            })
+          }
+          if (error.response.status === 500) {
+            router.push({
+              name: 'network-issue',
+            })
+          }
         }
-        dispatch('Notifications/add', notification, { root: true })
-        if (error.response.status === 404) {
-          router.push({
-            name: '404',
-            params: { resource: 'Account link validation' },
-          })
-        }
-        if (error.response.status === 500) {
-          router.push({
-            name: 'network-issue',
-          })
-        }
-        // router.push({
-        //   name: 'home'
-        // })
+        router.push({
+          name: 'home',
+        })
       })
   },
   // Replace account activation link with a new email
@@ -127,27 +129,29 @@ const actions = {
         }
       })
       .catch(error => {
-        console.log('ERR_getActivationTokenAgain', error.response)
-        console.log(
-          'ERR_ActTokenAgain_error.response.data.error',
-          error.response.data.error
-        )
-        console.log('TESTEST3', error.response)
-        const notification = {
-          type: error.response.status,
-          message: error.response.data.error,
-        }
-        dispatch('Notifications/add', notification, { root: true })
-        if (error.response.status === 404) {
-          router.push({
-            name: '404',
-            params: { resource: 'Send again an activation link' },
-          })
-        }
-        if (error.response.status === 500) {
-          router.push({
-            name: 'network-issue',
-          })
+        if (error.response) {
+          console.log('ERR_getActivationTokenAgain', error.response)
+          console.log(
+            'ERR_ActTokenAgain_error.response.data.error',
+            error.response.data.error
+          )
+          console.log('TESTEST3', error.response)
+          const notification = {
+            type: error.response.status,
+            message: error.response.data.error,
+          }
+          dispatch('Notifications/add', notification, { root: true })
+          if (error.response.status === 404) {
+            router.push({
+              name: '404',
+              params: { resource: 'Send again an activation link' },
+            })
+          }
+          if (error.response.status === 500) {
+            router.push({
+              name: 'network-issue',
+            })
+          }
         }
         router.push({
           name: 'home',
@@ -181,26 +185,28 @@ const actions = {
         }
       })
       .catch(error => {
-        console.log('ERR_Resetemail_error.response', error.response)
-        console.log(
-          'ERR_Resetemail_error.response.data.error',
-          error.response.data.error
-        )
-        const notification = {
-          type: error.response.status,
-          message: error.response.data.error,
-        }
-        dispatch('Notifications/add', notification, { root: true })
-        if (error.response.status === 404) {
-          router.push({
-            name: '404',
-            params: { resource: 'Account link validation' },
-          })
-        }
-        if (error.response.status === 500) {
-          router.push({
-            name: 'network-issue',
-          })
+        if (error.response) {
+          console.log('ERR_Resetemail_error.response', error.response)
+          console.log(
+            'ERR_Resetemail_error.response.data.error',
+            error.response.data.error
+          )
+          const notification = {
+            type: error.response.status,
+            message: error.response.data.error,
+          }
+          dispatch('Notifications/add', notification, { root: true })
+          if (error.response.status === 404) {
+            router.push({
+              name: '404',
+              params: { resource: 'Account link validation' },
+            })
+          }
+          if (error.response.status === 500) {
+            router.push({
+              name: 'network-issue',
+            })
+          }
         }
         router.push({
           name: 'home',
@@ -231,14 +237,16 @@ const actions = {
       })
       .catch(error => {
         console.log('ERR_Activate New Password', error)
-        if (error.response && error.response.status == 404) {
-          router.push({
-            name: '404',
-            params: { resource: 'Reset password link validation' },
-          })
+        if (error.response) {
+          if (error.response.status === 404) {
+            router.push({
+              name: '404',
+              params: { resource: 'Reset password link validation' },
+            })
+          }
         } else {
           router.push({
-            name: 'network-issue',
+            name: 'home',
           })
         }
       })

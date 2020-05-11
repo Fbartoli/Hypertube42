@@ -80,8 +80,8 @@ const mutations = {
   },
   PUT_TOKEN: (state, newToken) => {
     console.log('TEST_app_js_PUT_TOKEN: ', newToken)
-    state.userInfo.token = newToken.token.code
-    state.userInfo.exp = newToken.token.exp
+    state.userInfo.token = newToken.code
+    state.userInfo.exp = newToken.exp
   },
   // Code review to do
   TOKEN: (state, token) => {
@@ -140,14 +140,16 @@ const actions = {
           type: 'error',
           message: 'There was a problem login',
         }
-        if (error.response && error.response.status == 404) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        } else if (error.response && error.response.status == 403) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          } else if (error.response.status === 403) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          }
         } else {
           dispatch('Notifications/add', notification, {
             root: true,
@@ -155,42 +157,6 @@ const actions = {
         }
       })
   },
-
-  // GET userInfo
-  // getUserAuth: ({ getters, commit, dispatch }) => {
-  //   const token = getters.storeToken
-  //   const username = getters.storeUsername
-  //   userService
-  //     .getuserauth({ token: token, username: username })
-  //     .then(response => {
-  //       commit('SET_USERINFO', response.data.user)
-  //       const notification = {
-  //         type: response.data.status,
-  //         message: 'Get user successful',
-  //       }
-  //       dispatch('Notifications/add', notification, { root: true })
-  //       // router.push({ name: '/' })
-  //     })
-  //     .catch(error => {
-  //       const notification = {
-  //         type: 'error',
-  //         message: 'There was a problem getting user info',
-  //       }
-  //       if (error.response && error.response.status == 404) {
-  //         dispatch('Notifications/add', notification, {
-  //           root: true,
-  //         })
-  //       } else if (error.response && error.response.status == 403) {
-  //         dispatch('Notifications/add', notification, {
-  //           root: true,
-  //         })
-  //       } else {
-  //         dispatch('Notifications/add', notification, {
-  //           root: true,
-  //         })
-  //       }
-  //     })
-  // },
 
   // GET userInfo
   getUser: ({ getters, dispatch, commit }, username) => {
@@ -204,7 +170,7 @@ const actions = {
         commit('SET_USERINFO', response.data.user)
         const notification = {
           type: response.data.status,
-          message: 'Get user successful',
+          message: 'User info updated',
         }
         dispatch('Notifications/add', notification, { root: true })
         // router.push({ name: '/' })
@@ -214,14 +180,16 @@ const actions = {
           type: 'error',
           message: 'There was a problem getting user info',
         }
-        if (error.response && error.response.status == 404) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        } else if (error.response && error.response.status == 403) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          } else if (error.response.status === 403) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          }
         } else {
           dispatch('Notifications/add', notification, {
             root: true,
@@ -237,28 +205,34 @@ const actions = {
       .putuser({ payloadPutUser })
       .then(response => {
         console.log('TEST_validatePersonalInfo_User.vue', response)
-        commit('SET_USERINFO', response.data.user)
         commit('PUT_TOKEN', response.data.token)
+        dispatch('getUser', '')
+        console.log('*** tracker ***')
         const notification = {
           type: response.data.status,
           message: 'Personal information updated !',
         }
         dispatch('Notifications/add', notification, { root: true })
         // router.push({ name: '/' })
+        console.log('router ??', router)
+        router.push({ name: 'home' })
       })
       .catch(error => {
+        // console.log('updateUserInfo_error.response', error.response)
         const notification = {
           type: 'error',
           message: 'Issue occured while updating your personal information',
         }
-        if (error.response && error.response.status == 404) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        } else if (error.response && error.response.status == 403) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          } else if (error.response.status === 403) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          }
         } else {
           dispatch('Notifications/add', notification, {
             root: true,
@@ -280,21 +254,25 @@ const actions = {
           message: 'Please, valid the message sent to your new email address',
         }
         dispatch('Notifications/add', notification, { root: true })
-        // router.push({ name: 'home' })
+        dispatch('getUser', '')
+        router.push({ name: 'home' })
       })
       .catch(error => {
         const notification = {
           type: 'error',
           message: 'Issue occured while changing your email',
         }
-        if (error.response.status === 404) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        } else if (error.response.status === 403) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
+        if (error.response) {
+          console.log('OBSERVE_ ', error)
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          } else if (error.response.status === 403) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          }
         } else {
           dispatch('Notifications/add', notification, {
             root: true,
@@ -316,21 +294,24 @@ const actions = {
           message: 'Your new password is set !',
         }
         dispatch('Notifications/add', notification, { root: true })
-        // router.push({ name: '/' })
+        dispatch('getUser', '')
+        router.push({ name: 'home' })
       })
       .catch(error => {
         const notification = {
           type: 'error',
           message: 'Issue occured while changing your password',
         }
-        if (error.response && error.response.status == 404) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        } else if (error.response && error.response.status == 403) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          } else if (error.response.status === 403) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+          }
         } else {
           dispatch('Notifications/add', notification, {
             root: true,

@@ -22,13 +22,6 @@ export default {
     return apiClient.get('/user/' + username)
   },
 
-  // GET userInfo
-  // getuserauth({ token, username }) {
-  //   console.log('TTESSTT', { token, username })
-  //   apiClient.defaults.headers['x-access-token'] = token
-  //   return apiClient.get('/user/' + username)
-  // },
-
   // PUT user email address
   putemail(payloadPutEmail) {
     console.log('putEmail_ ', payloadPutEmail)
@@ -38,8 +31,8 @@ export default {
   },
 
   // PUT userInfo
-  putuser(payloadPutUser) {
-    console.log('putEmail_ ', payloadPutUser)
+  putuser({ payloadPutUser }) {
+    console.log('UserService.js_putuser_ ', payloadPutUser)
     return apiClient.put(
       `/user/${payloadPutUser.currentUsername}`,
       payloadPutUser

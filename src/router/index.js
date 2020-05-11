@@ -64,7 +64,7 @@ const routes = [
     //       next()
     //     })
     //     .catch(error => {
-    //       if (error.response && error.response.status == 404) {
+    //       if (error.response.status === 404) {
     //         next({ name: '404', params: { resource: 'user' } })
     //       }
     //       next({ name: 'network-issue' })
@@ -107,7 +107,7 @@ const routes = [
           next()
         })
         .catch(error => {
-          if (error.response && error.response.status == 404) {
+          if (error.response.status === 404) {
             next({ name: '404', params: { resource: 'movie' } })
           }
           next({ name: 'network-issue' })

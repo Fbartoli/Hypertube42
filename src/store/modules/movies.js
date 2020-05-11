@@ -37,11 +37,13 @@ const actions = {
         return response.data.data.movies
       })
       .catch(error => {
-        const notification = {
-          type: 'error',
-          message: 'There was a problem fetching movies: ' + error.message,
+        if (error.message) {
+          const notification = {
+            type: 'error',
+            message: 'There was a problem fetching movies: ' + error.message,
+          }
+          dispatch('Notifications/add', notification, { root: true })
         }
-        dispatch('Notifications/add', notification, { root: true })
       })
   },
   fetchMovie({ commit }, id) {

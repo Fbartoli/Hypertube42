@@ -44,6 +44,8 @@ new Vue({
         this.$store.commit('App/SET_TOKEN', token)
         this.$store.commit('App/SET_AUTH', true)
         // router.push({ name: 'movies' })
+        this.$store.dispatch('App/getUser', '')
+        this.$router.push({ name: 'home' })
       }
     }
   },

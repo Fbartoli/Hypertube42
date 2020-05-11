@@ -17,14 +17,15 @@ const routes = [
         store.commit('App/SET_AUTH', true)
         let info = code.split('.')
         let userInfo = JSON.parse(atob(info[1]))
-        console.log(userInfo.data)
+        console.log('Home router_userInfo.data_ ', userInfo.data)
         // store.commit('App/PUT_USERNAME', userInfo.data.username)
         store.commit(
-          'App/TEST',
+          'App/RESET_LOCALSTORAGE_USERNAME',
           { username: userInfo.data.username },
           userInfo.exp
         )
-        store.dispatch('App/getUserAuth')
+        // store.dispatch('App/getUserAuth')
+        store.dispatch('App/getUser', '')
       }
       next()
     },
@@ -33,6 +34,12 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import('../pages/Login.vue'),
+    beforeEnter(routeTo, routeFrom, next) {
+      if (store.getters['App/isAuth'] === true) {
+        next({ name: 'home' })
+      }
+      next()
+    },
   },
   {
     path: '/register',

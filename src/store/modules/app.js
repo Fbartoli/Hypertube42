@@ -70,6 +70,10 @@ const mutations = {
     console.log('TEST_app_js_PUT_USERNAME', username)
     state.userInfo.username = username
   },
+  RESET_LOCALSTORAGE_USERNAME: (state, { username }, exp) => {
+    state.userInfo.username = username
+    state.userInfo.exp = exp
+  },
   PUT_EMAIL: (state, newEmail) => {
     console.log('TEST_app_js_PUT_EMAIL', newEmail)
     state.userInfo.email = newEmail
@@ -82,10 +86,6 @@ const mutations = {
   // Code review to do
   TOKEN: (state, token) => {
     state.userInfo.token = token
-  },
-  TEST: (state, { username }, exp) => {
-    state.userInfo.username = username
-    state.userInfo.exp = exp
   },
   RESET_STATE(state) {
     Object.assign(state, getDefaultState())
@@ -116,17 +116,18 @@ const actions = {
   },
 
   // Called by the user in ../pages/Login.vue to sign in
-  login: ({ commit, dispatch }, payloadLogin) => {
-    console.log('SUMMER_ ', payloadLogin)
+  login: ({ commit, dispatch }, { username, password }) => {
+    console.log('CHECK_IN_Login Bro', { username, password })
     userService
-      .login(payloadLogin)
+      .login({ username, password })
       .then(response => {
         const token = response.data.token
         localStorage.setItem('hypertube', JSON.stringify(token))
         commit('SET_TOKEN', token)
         commit('SET_AUTH', true)
+        commit('PUT_USERNAME', username)
         // apiClient.defaults.headers.common['x-access-token'] = token
-        dispatch('getUser', { token, payloadLogin })
+        dispatch('getUser', '')
         const notification = {
           type: response.data.status,
           message: 'Login successful',
@@ -156,46 +157,49 @@ const actions = {
   },
 
   // GET userInfo
-  getUserAuth: ({ getters, commit, dispatch }) => {
-    const token = getters.storeToken
-    const username = getters.storeUsername
-    userService
-      .getuserauth({ token: token, username: username })
-      .then(response => {
-        commit('SET_USERINFO', response.data.user)
-        const notification = {
-          type: response.data.status,
-          message: 'Get user successful',
-        }
-        dispatch('Notifications/add', notification, { root: true })
-        // router.push({ name: '/' })
-      })
-      .catch(error => {
-        const notification = {
-          type: 'error',
-          message: 'There was a problem getting user info',
-        }
-        if (error.response && error.response.status == 404) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        } else if (error.response && error.response.status == 403) {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        } else {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
-        }
-      })
-  },
+  // getUserAuth: ({ getters, commit, dispatch }) => {
+  //   const token = getters.storeToken
+  //   const username = getters.storeUsername
+  //   userService
+  //     .getuserauth({ token: token, username: username })
+  //     .then(response => {
+  //       commit('SET_USERINFO', response.data.user)
+  //       const notification = {
+  //         type: response.data.status,
+  //         message: 'Get user successful',
+  //       }
+  //       dispatch('Notifications/add', notification, { root: true })
+  //       // router.push({ name: '/' })
+  //     })
+  //     .catch(error => {
+  //       const notification = {
+  //         type: 'error',
+  //         message: 'There was a problem getting user info',
+  //       }
+  //       if (error.response && error.response.status == 404) {
+  //         dispatch('Notifications/add', notification, {
+  //           root: true,
+  //         })
+  //       } else if (error.response && error.response.status == 403) {
+  //         dispatch('Notifications/add', notification, {
+  //           root: true,
+  //         })
+  //       } else {
+  //         dispatch('Notifications/add', notification, {
+  //           root: true,
+  //         })
+  //       }
+  //     })
+  // },
 
   // GET userInfo
-  getUser: ({ commit, dispatch }, payloadGetUser) => {
-    console.log('payloadGetUser', payloadGetUser)
+  getUser: ({ getters, dispatch, commit }, username) => {
+    if (username === '') {
+      username = getters.storeUsername
+    }
+    console.log('payloadGetUser', username)
     userService
-      .getuser(payloadGetUser)
+      .getuser({ username: username, token: getters.storeToken })
       .then(response => {
         commit('SET_USERINFO', response.data.user)
         const notification = {

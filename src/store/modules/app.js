@@ -270,23 +270,24 @@ const actions = {
       .putemail(payloadPutEmail)
       .then(response => {
         console.log('RESPONSE changeEmail app.js', response)
+        // dispatch('Email/setChecker', 'OK', { root: true })
         const notification = {
           type: response.data.status,
           message: 'Please, valid the message sent to your new email address',
         }
         dispatch('Notifications/add', notification, { root: true })
-        // router.push({ name: '/' })
+        // router.push({ name: 'home' })
       })
       .catch(error => {
         const notification = {
           type: 'error',
           message: 'Issue occured while changing your email',
         }
-        if (error.response && error.response.status == 404) {
+        if (error.response.status === 404) {
           dispatch('Notifications/add', notification, {
             root: true,
           })
-        } else if (error.response && error.response.status == 403) {
+        } else if (error.response.status === 403) {
           dispatch('Notifications/add', notification, {
             root: true,
           })
@@ -295,6 +296,7 @@ const actions = {
             root: true,
           })
         }
+        router.push({ name: 'home' })
       })
   },
 
@@ -332,47 +334,6 @@ const actions = {
         }
       })
   },
-
-  // getUser: ({ state, dispatch, commit }) => {
-  //   axios
-  //     .get(
-  //       `https://hypertube42.herokuapp.com/users/user/${state.userInfo.username}`,
-  //       {
-  //         headers: {
-  //           // 'Access-Control-Allow-Origin': true,
-  //           'x-access-token': state.userInfo.token,
-  //         },
-  //       }
-  //     )
-  //     .then(function(response) {
-  //       console.log('TEST_getUser: ', response)
-  //       commit('SET_USERINFO', response.data.user)
-  //       const notification = {
-  //         type: response.data.status,
-  //         message: 'Get user successful',
-  //       }
-  //       dispatch('Notifications/add', notification, { root: true })
-  //     })
-  //     .catch(error => {
-  //       const notification = {
-  //         type: 'error',
-  //         message: 'There was a problem getting user info',
-  //       }
-  //       if (error.response && error.response.status == 404) {
-  //         dispatch('Notifications/add', notification, {
-  //           root: true,
-  //         })
-  //       } else if (error.response && error.response.status == 403) {
-  //         dispatch('Notifications/add', notification, {
-  //           root: true,
-  //         })
-  //       } else {
-  //         dispatch('Notifications/add', notification, {
-  //           root: true,
-  //         })
-  //       }
-  //     })
-  // },
 }
 
 // getters

@@ -23,13 +23,14 @@ const actions = {
       .catch(error => {
         const notification = {
           type: 'error',
-          message: 'There was a problem login',
+          message: 'Wrong login, please try again',
         }
-        if (error.response && error.response.status == 404) {
+        if (error.response.status === 404) {
           dispatch('Notifications/add', notification, {
             root: true,
           })
-        } else if (error.response && error.response.status == 403) {
+          router.push({ name: '404' })
+        } else if (error.response.status === 403) {
           dispatch('Notifications/add', notification, {
             root: true,
           })

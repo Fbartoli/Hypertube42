@@ -59,16 +59,16 @@ const actions = {
       .then(response => {
         console.log('RESPONSE_Signup_email.js line 56_ ', response)
         console.log('should be 200: ', response.status)
-        console.log('should be 200_type: ', typeof response.status)
         if (response.status === 200) {
           dispatch('setChecker', 'OK')
           console.log('OK_Activate New Account', response)
           // dispatch('setMessageToUser', 'Your account was successfully activated !')
-          dispatch(
-            'Notifications/add',
-            'Your account was successfully activated !',
-            { root: true }
-          )
+          console.log('TESTEST', response.data)
+          const notification = {
+            type: 200,
+            message: 'Your account was successfully activated !',
+          }
+          dispatch('Notifications/add', notification, { root: true })
         } else {
           router.push({
             name: 'home',
@@ -82,7 +82,12 @@ const actions = {
           error.response.data.error
         )
         // dispatch('setMessageToUser', error.response.data.error)
-        dispatch('Notifications/add', error.response.data.error, { root: true })
+        console.log('TESTEST_err', error.response)
+        const notification = {
+          type: error.response.status,
+          message: error.response.data.error,
+        }
+        dispatch('Notifications/add', notification, { root: true })
         if (error.response.status === 404) {
           router.push({
             name: '404',
@@ -101,15 +106,53 @@ const actions = {
   },
   // Replace account activation link with a new email
   // (replace the first token from registration)
-  getActivationTokenAgain({ commit }, activationEmail) {
+  getActivationTokenAgain({ commit, dispatch }, activationEmail) {
     commit('PUT_ACTIVATION_TOKEN', '')
-    console.log(
-      'Email STORE_ Email Activation account AGAIN_ ',
-      activationEmail
-    )
-    emailService.putactivationtoken(activationEmail)
-    //
-    // ajouter le retour de la requete
+    emailService
+      .putactivationtoken(activationEmail)
+      .then(response => {
+        console.log('RESPONSE_getActivationTokenAgain_ ', response)
+        console.log('should be 200: ', response.status)
+        if (response.status === 200) {
+          console.log('OK_getActivationTokenAgain', response)
+          const notification = {
+            type: 200,
+            message: 'Email received with a new activation link !',
+          }
+          dispatch('Notifications/add', notification, { root: true })
+        } else {
+          router.push({
+            name: 'home',
+          })
+        }
+      })
+      .catch(error => {
+        console.log('ERR_getActivationTokenAgain', error.response)
+        console.log(
+          'ERR_ActTokenAgain_error.response.data.error',
+          error.response.data.error
+        )
+        console.log('TESTEST3', error.response)
+        const notification = {
+          type: error.response.status,
+          message: error.response.data.error,
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        if (error.response.status === 404) {
+          router.push({
+            name: '404',
+            params: { resource: 'Send again an activation link' },
+          })
+        }
+        if (error.response.status === 500) {
+          router.push({
+            name: 'network-issue',
+          })
+        }
+        router.push({
+          name: 'home',
+        })
+      })
   },
 
   // Change email with new email address validation
@@ -123,16 +166,14 @@ const actions = {
       .then(response => {
         console.log('RESPONSE_Resetemail_email.js line 114_ ', response)
         console.log('should be 200: ', response.status)
-        console.log('should be 200_type: ', typeof response.status)
         if (response.status === 200) {
           dispatch('setChecker', 'OK')
           console.log('OK_Reset Email', response)
-          console.log('OK_Reset Email', response.data)
-          dispatch(
-            'Notifications/add',
-            'Your account was successfully activated !',
-            { root: true }
-          )
+          const notification = {
+            type: 200,
+            message: 'Your account was successfully activated !',
+          }
+          dispatch('Notifications/add', notification, { root: true })
         } else {
           router.push({
             name: 'home',
@@ -145,7 +186,11 @@ const actions = {
           'ERR_Resetemail_error.response.data.error',
           error.response.data.error
         )
-        dispatch('Notifications/add', error.response.data.error, { root: true })
+        const notification = {
+          type: error.response.status,
+          message: error.response.data.error,
+        }
+        dispatch('Notifications/add', notification, { root: true })
         if (error.response.status === 404) {
           router.push({
             name: '404',

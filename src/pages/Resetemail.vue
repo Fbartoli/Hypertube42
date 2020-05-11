@@ -1,64 +1,31 @@
 <template>
   <v-card>
     <v-card-title primary-title>
-      <div class="headline">Reset email Page<br /><br /></div>
+      <div class="headline">{{ $t('title') }}<br /><br /></div>
     </v-card-title>
-    <div>
-      <div>
-        <v-container>
-          Token du lien d'activation:<br />
-          {{ emailToken }}<br />
-        </v-container>
-      </div>
-    </div>
+    <v-container>
+      Your new email address was successfully activated !<br /><br />
+    </v-container>
   </v-card>
 </template>
-<script>
-// import { mapGetters } from 'vuex'
-// import { mapActions } from 'vuex'
 
-export default {
-  data() {
-    return {
-      emailToken: this.$route.params.resetemail,
-      valid: true,
-    }
-  },
-  // props: {
-  //   userInfo: {
-  //     type: Object,
-  //     required: true,
-  //   },
-  // },
-  // computed: {
-  //   ...mapGetters({
-  //     userProfile: 'App/storeUser',
-  //   }),
-  // },
-  // methods: {
-  //   ...mapActions('App', ['getUser', 'putUserInfo', 'putToken']),
-  // },
-}
+<script>
+export default {}
 </script>
 
 <style scoped></style>
+
 <i18n>
 {
   "en": {
-    "titlea": " ",
-    "title_b": "’s profile",
-    "username": "Username",
-    "firstname": "First Name",
-    "lastname": "Last Name",
-    "language": "Subtitles language preference"
+    "title": "Email change confirmation",
+    "error": "This link is invalid: already used or expired (10 min length)",
+    "question": "Do you want a new link to activate your account ?"
   },
   "fr": {
-    "titlea": "Profil de ",
-    "title_b": " ",
-    "username": "Nom d'utilisateur",
-    "firstname": "Prénom",
-    "lastname": "Nom",
-    "language": "Langue préférée de sous-titres"
+    "title": "Confirmation de changement d'email",
+    "error": "Ce lien est expiré: déjà utilisé ou expiré (10 min de validité)",
+    "question": "Voulez-vous un nouveau lien pour activer votre compte ?"
   }
 }
 </i18n>

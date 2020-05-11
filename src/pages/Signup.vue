@@ -4,12 +4,13 @@
       <div class="headline">{{ $t('title') }}<br /><br /></div>
     </v-card-title>
     <v-container v-if="storeChecker === 'OK'">
-      Your account was successfully activated !
+      Your account was successfully activated !<br /><br />
     </v-container>
     <v-container v-else>
       <v-form>
         <v-row>
           <v-col cols="12">
+            {{ $t('error') }}<br /><br />
             {{ $t('question') }}<br /><br />
             <v-text-field
               v-model="email"
@@ -36,6 +37,7 @@
     </v-container>
   </v-card>
 </template>
+
 <script>
 import { required, email } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
@@ -45,16 +47,9 @@ export default {
   data() {
     return {
       email: '',
-      signupToken: this.$route.params.signup,
+      // signupToken: this.$route.params.signup,
     }
   },
-  // props: {
-  //   resource: {
-  //     type: String,
-  //     required: false,
-  //     default: ''
-  //   }
-  // },
   computed: {
     ...mapGetters({
       storeChecker: 'Email/storeChecker',
@@ -91,6 +86,7 @@ export default {
 {
   "en": {
     "title": "Account Validation",
+    "error": "This link is invalid: already used or expired (10 min length)",
     "question": "Do you want a new link to activate your account ?",
     "email": "Email",
     "emailRule": "Email is required",
@@ -98,6 +94,7 @@ export default {
   },
   "fr": {
     "title": "Activation de votre compte",
+    "error": "Ce lien est expiré: déjà utilisé ou expiré (10 min de validité)",
     "question": "Voulez-vous un nouveau lien pour activer votre compte ?",
     "email": "Email",
     "emailRule": "Email is required",

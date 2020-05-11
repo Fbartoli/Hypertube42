@@ -114,6 +114,11 @@
                       <br />
                       <v-avatar class="profile indigo accent-4" size="164">
                         <v-img
+                          v-if="showPictures[0]"
+                          :src="`data:image/*;base64,${showPictures[0]}`"
+                        />
+                        <v-img
+                          v-else
                           :src="`data:image/*;base64,${userData.avatar}`"
                         />
                       </v-avatar>
@@ -177,20 +182,6 @@
           </v-container>
         </v-form>
         <v-container>
-          <div v-if="showPictures[0]">
-            <v-row v-if="showPictures[0]" align="end" class="fill-height">
-              <v-col cols="3" align="center">
-                {{ $t('preview') + ':' }}<br />
-              </v-col>
-            </v-row>
-            <v-row align="center">
-              <v-col cols="3" align="center">
-                <v-avatar class="profile blue accent-4" size="164">
-                  <v-img :src="`data:image/*;base64,${showPictures[0]}`" />
-                </v-avatar>
-              </v-col>
-            </v-row>
-          </div>
           <v-row class="font-italic">
             <v-col>
               <br />

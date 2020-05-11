@@ -69,6 +69,9 @@ const routes = [
     name: 'profile',
     component: () => import('../pages/Profile.vue'),
     props: true,
+    meta: {
+      requiresAuth: true,
+    },
   },
 
   {
@@ -111,28 +114,10 @@ const routes = [
     name: 'signup',
     component: () => import('../pages/Signup.vue'),
     props: true,
-    beforeEnter(routeTo, routeFrom, next) {
+    beforeEnter(routeTo) {
+      //, routeFrom, next) {
       store.dispatch('Email/setActivationToken', routeTo.params.signup)
-      store
-        .dispatch('Email/getActivationToken')
-        .then(response => {
-          console.log('code 200?', response)
-          if (response === 200) {
-            console.log('OK_Activate New Account', response)
-            store.dispatch('Email/setMessageToUser', response.data)
-          }
-          next()
-        })
-        .catch(error => {
-          console.log('ERR_Activate New Account', error)
-          if (error.response && error.response.status == 404) {
-            next({
-              name: '404',
-              params: { resource: 'Account link validation' },
-            })
-          }
-          next({ name: 'network-issue' })
-        })
+      store.dispatch('Email/getActivationToken')
     },
   },
 
@@ -142,28 +127,9 @@ const routes = [
     name: 'resetemail',
     component: () => import('../pages/Resetemail.vue'),
     props: true,
-    beforeEnter(routeTo, routeFrom, next) {
+    beforeEnter(routeTo) {
       store.dispatch('Email/setEmailToken', routeTo.params.resetemail)
-      store
-        .dispatch('Email/getEmailToken')
-        .then(response => {
-          console.log('code 200?', response)
-          if (response === 200) {
-            console.log('OK_Reset Email', response)
-            store.dispatch('Email/setMessageToUser', response.data)
-          }
-          next()
-        })
-        .catch(error => {
-          console.log('ERR_Activate New Account', error)
-          if (error.response && error.response.status == 404) {
-            next({
-              name: '404',
-              params: { resource: 'Reset email link validation' },
-            })
-          }
-          next({ name: 'network-issue' })
-        })
+      store.dispatch('Email/getEmailToken')
     },
   },
   // Valid your password change online:
@@ -224,6 +190,9 @@ const router = new VueRouter({
 
 router.beforeEach((routeTo, routeFrom, next) => {
   nprogress.start()
+  if (store.getters['Email/storeChecker'] === 'OK') {
+    store.dispatch('Email/resetChecker')
+  }
   if (routeTo.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters['App/isAuth']) next()
     else next({ name: 'login' })

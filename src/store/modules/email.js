@@ -3,6 +3,7 @@ import router from '../../router/index'
 
 const state = {
   messageToUser: '',
+  checker: '',
   activationToken: '',
   emailToken: '',
   passwordToken: '',
@@ -10,6 +11,13 @@ const state = {
 
 // mutations
 const mutations = {
+  PUT_MESSAGE(state, message) {
+    console.log('STORE_email.js_PUT_MESSAGE')
+    state.messageToUser = message
+  },
+  PUT_CHECKER(state, check) {
+    state.checker = check
+  },
   PUT_ACTIVATION_TOKEN: (state, accountToken) => {
     state.activationToken = accountToken
   },
@@ -25,29 +33,67 @@ const mutations = {
   PUT_PASSWORD_TOKEN: (state, passwordToken) => {
     state.passwordToken = passwordToken
   },
-  PUT_MESSAGE({ state }, message) {
-    state.messageToUser = message
-  },
 }
 // actions
 const actions = {
   // Show a message on the user page
   setMessageToUser({ commit }, message) {
+    console.log('STORE_email.js_setMessageToUser', typeof message)
     commit('PUT_MESSAGE', message)
+  },
+  setChecker({ commit }, check) {
+    commit('PUT_CHECKER', check)
+  },
+  resetChecker({ commit }) {
+    commit('PUT_CHECKER', '')
   },
 
   // GET and save the account activation token
   setActivationToken({ commit }, activationToken) {
-    // console.log('control_', activationToken)
     commit('PUT_ACTIVATION_TOKEN', activationToken)
   },
   // New account activation with email validation
-  getActivationToken({ getters }) {
-    console.log('STORE token_ ', getters.activationToken)
-    emailService.getactivationtoken(getters.activationToken)
-    //
-    // ajouter le retour de la requete
-    // TO REVIEW
+  getActivationToken({ getters, dispatch }) {
+    emailService
+      .getactivationtoken(getters.activationToken)
+      .then(response => {
+        console.log('RESPONSE_Signup_email.js line 56_ ', response)
+        console.log('should be 200: ', response.status)
+        console.log('should be 200_type: ', typeof response.status)
+        if (response.status === 200) {
+          dispatch('setChecker', 'OK')
+          console.log('OK_Activate New Account', response)
+          // dispatch('setMessageToUser', 'Your account was successfully activated !')
+          // dispatch('Notifications/add', 'Your account was successfully activated !', { root: true })
+        } else {
+          router.push({
+            name: 'home',
+          })
+        }
+      })
+      .catch(error => {
+        console.log('ERR_Signup_error.response', error.response)
+        console.log(
+          'ERR_Signup_error.response.data.error',
+          error.response.data.error
+        )
+        // dispatch('setMessageToUser', error.response.data.error)
+        dispatch('Notifications/add', error.response.data.error, { root: true })
+        if (error.response.status === 404) {
+          router.push({
+            name: '404',
+            params: { resource: 'Account link validation' },
+          })
+        }
+        if (error.response.status === 500) {
+          router.push({
+            name: 'network-issue',
+          })
+        }
+        // router.push({
+        //   name: 'home'
+        // })
+      })
   },
   // Replace account activation link with a new email
   // (replace the first token from registration)
@@ -66,17 +112,51 @@ const actions = {
   setEmailToken({ commit }, emailToken) {
     commit('PUT_EMAIL_TOKEN', emailToken)
   },
-  getEmailToken({ getters }) {
+  getEmailToken({ getters, dispatch }) {
     console.log('STORE token_ ', getters.emailToken)
-    emailService.getemailtoken(getters.emailToken)
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
+    emailService
+      .getemailtoken(getters.emailToken)
+      .then(response => {
+        console.log('RESPONSE_Resetemail_email.js line 114_ ', response)
+        console.log('should be 200: ', response.status)
+        console.log('should be 200_type: ', typeof response.status)
+        if (response.status === 200) {
+          dispatch('setChecker', 'OK')
+          console.log('OK_Reset Email', response)
+          console.log('OK_Reset Email', response.data)
+          dispatch(
+            'Notifications/add',
+            'Your account was successfully activated !',
+            { root: true }
+          )
+        } else {
+          router.push({
+            name: 'home',
+          })
+        }
+      })
+      .catch(error => {
+        console.log('ERR_Resetemail_error.response', error.response)
+        console.log(
+          'ERR_Resetemail_error.response.data.error',
+          error.response.data.error
+        )
+        dispatch('Notifications/add', error.response.data.error, { root: true })
+        if (error.response.status === 404) {
+          router.push({
+            name: '404',
+            params: { resource: 'Account link validation' },
+          })
+        }
+        if (error.response.status === 500) {
+          router.push({
+            name: 'network-issue',
+          })
+        }
+        router.push({
+          name: 'home',
+        })
+      })
   },
 
   // Reset password while disconnected with a link sent to the user mailbox
@@ -118,6 +198,12 @@ const actions = {
 
 // getters
 const getters = {
+  storeMessageToUser(state) {
+    return state.messageToUser
+  },
+  storeChecker(state) {
+    return state.checker
+  },
   activationToken(state) {
     return state.activationToken
     // const copyStr = Object.assign("", state.activationToken)
@@ -126,15 +212,9 @@ const getters = {
   },
   emailToken(state) {
     return state.emailToken
-    // const copyStr = Object.assign("", state.emailToken)
-    // console.log('emailToken_ ', copyStr)
-    // return copyStr
   },
   passwordToken(state) {
     return state.passwordToken
-    // const copyStr = Object.assign("", state.emailToken)
-    // console.log('emailToken_ ', copyStr)
-    // return copyStr
   },
 }
 export default {

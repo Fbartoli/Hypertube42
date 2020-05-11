@@ -23,12 +23,11 @@ export default {
   },
   // A-2-a) Validate a new account (10min duration)
   getactivationtoken(activationToken) {
-    console.log('TEST_getactivationtoken ', activationToken)
     return apiClientEmail.get('/activation/' + activationToken)
   },
   // A-2-b) Resend an activation link to confirm account creation
   putactivationtoken(activationEmail) {
-    console.log('TEST_getactivationtoken ', activationEmail)
+    console.log('TEST_putactivationtoken ', activationEmail)
     return apiClientEmail.put('/activation', {
       email: activationEmail,
     })

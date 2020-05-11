@@ -3,13 +3,13 @@
     <v-card-title primary-title>
       <div class="headline">{{ $t('title') }}<br /><br /></div>
     </v-card-title>
+    storeChecker: {{ storeChecker }}
     <v-container>
-      Token du lien d'activation du compte:<br />
-      {{ signupToken }}<br />
+      Your account was successfully activated !
     </v-container>
-    <v-card-text class="mt-5">
+    <v-container>
       <v-form>
-        <v-container>
+        <v-card-text class="mt-5">
           <v-row>
             <v-col cols="12">
               <v-text-field
@@ -25,26 +25,26 @@
               />
             </v-col>
           </v-row>
-        </v-container>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn
+            @click="validActivationAccountAgain(email)"
+            x-large
+            color="blue"
+            :disabled="$v.$invalid"
+          >
+            {{ $t('askActivationAccountAgain') }}
+          </v-btn>
+        </v-card-actions>
       </v-form>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-btn
-        @click="validActivationAccountAgain(email)"
-        x-large
-        color="blue"
-        :disabled="$v.$invalid"
-      >
-        {{ $t('askActivationAccountAgain') }}
-      </v-btn>
-    </v-card-actions>
+    </v-container>
   </v-card>
 </template>
 <script>
 import { required, email } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -54,15 +54,16 @@ export default {
     }
   },
   // props: {
-  //   userInfo: {
-  //     type: Object,
-  //     required: true,
-  //   },
+  //   resource: {
+  //     type: String,
+  //     required: false,
+  //     default: ''
+  //   }
   // },
   computed: {
-    //   ...mapGetters({
-    //     userProfile: 'App/storeUser',
-    //   }),
+    ...mapGetters({
+      storeChecker: 'Email/storeChecker',
+    }),
     emailErrors() {
       const errors = []
       if (!this.$v.email.$dirty) return errors

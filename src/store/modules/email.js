@@ -64,7 +64,11 @@ const actions = {
           dispatch('setChecker', 'OK')
           console.log('OK_Activate New Account', response)
           // dispatch('setMessageToUser', 'Your account was successfully activated !')
-          // dispatch('Notifications/add', 'Your account was successfully activated !', { root: true })
+          dispatch(
+            'Notifications/add',
+            'Your account was successfully activated !',
+            { root: true }
+          )
         } else {
           router.push({
             name: 'home',

@@ -3,40 +3,35 @@
     <v-card-title primary-title>
       <div class="headline">{{ $t('title') }}<br /><br /></div>
     </v-card-title>
-    storeChecker: {{ storeChecker }}
-    <v-container>
+    <v-container v-if="storeChecker === 'OK'">
       Your account was successfully activated !
     </v-container>
-    <v-container>
+    <v-container v-else>
       <v-form>
-        <v-card-text class="mt-5">
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="email"
-                :error-messages="emailErrors"
-                :label="$t('email')"
-                @input="$v.email.$touch()"
-                @blur="$v.email.$touch()"
-                outlined
-                clearable
-                color="blue"
-                type="Email"
-              />
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-btn
-            @click="validActivationAccountAgain(email)"
-            x-large
-            color="blue"
-            :disabled="$v.$invalid"
-          >
-            {{ $t('askActivationAccountAgain') }}
-          </v-btn>
-        </v-card-actions>
+        <v-row>
+          <v-col cols="12">
+            {{ $t('question') }}<br /><br />
+            <v-text-field
+              v-model="email"
+              :error-messages="emailErrors"
+              :label="$t('email')"
+              @input="$v.email.$touch()"
+              @blur="$v.email.$touch()"
+              outlined
+              clearable
+              color="blue"
+              type="Email"
+            />
+          </v-col>
+        </v-row>
+        <v-btn
+          @click="validActivationAccountAgain(email)"
+          x-large
+          color="blue"
+          :disabled="$v.$invalid"
+        >
+          {{ $t('askActivationAccountAgain') }}
+        </v-btn>
       </v-form>
     </v-container>
   </v-card>
@@ -96,12 +91,14 @@ export default {
 {
   "en": {
     "title": "Account Validation",
+    "question": "Do you want a new link to activate your account ?",
     "email": "Email",
     "emailRule": "Email is required",
     "askActivationAccountAgain": "Get a new account activation email"
   },
   "fr": {
     "title": "Activation de votre compte",
+    "question": "Voulez-vous un nouveau lien pour activer votre compte ?",
     "email": "Email",
     "emailRule": "Email is required",
     "askActivationAccountAgain": "Obtenir un nouvel email d'activation de compte"

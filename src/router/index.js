@@ -114,10 +114,10 @@ const routes = [
     name: 'signup',
     component: () => import('../pages/Signup.vue'),
     props: true,
-    beforeEnter(routeTo) {
-      //, routeFrom, next) {
+    beforeEnter(routeTo, routeFrom, next) {
       store.dispatch('Email/setActivationToken', routeTo.params.signup)
       store.dispatch('Email/getActivationToken')
+      next()
     },
   },
 
@@ -127,9 +127,10 @@ const routes = [
     name: 'resetemail',
     component: () => import('../pages/Resetemail.vue'),
     props: true,
-    beforeEnter(routeTo) {
+    beforeEnter(routeTo, routeFrom, next) {
       store.dispatch('Email/setEmailToken', routeTo.params.resetemail)
       store.dispatch('Email/getEmailToken')
+      next()
     },
   },
   // Valid your password change online:

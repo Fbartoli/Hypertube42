@@ -11,33 +11,31 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="username"
+                  @input="$v.username.$touch()"
+                  @blur="$v.username.$touch()"
                   :error-messages="usernameErrors"
+                  :label="$t('username')"
                   :counter="15"
                   outlined
                   clearable
                   color="blue"
-                  :label="$t('username')"
                   type="text"
-                  @input="$v.username.$touch()"
-                  @blur="$v.username.$touch()"
-                >
-                  <template v-slot:prepend> </template>
-                </v-text-field>
+                />
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12">
                 <v-text-field
                   v-model="password"
+                  @input="$v.password.$touch()"
+                  @blur="$v.password.$touch()"
                   :error-messages="passwordErrors"
+                  :label="$t('password')"
                   :counter="15"
                   outlined
                   clearable
                   color="blue"
-                  :label="$t('password')"
                   type="Password"
-                  @input="$v.password.$touch()"
-                  @blur="$v.password.$touch()"
                 />
               </v-col>
             </v-row>

@@ -89,6 +89,10 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    beforeEnter(routeTo, routeFrom, next) {
+      store.dispatch('Movies/getViews')
+      next()
+    },
   },
   {
     path: '/movie/:id',
@@ -112,6 +116,9 @@ const routes = [
           }
           next({ name: 'network-issue' })
         })
+      store.dispatch('Movies/getComments', routeTo.params.id)
+      store.dispatch('Movies/sendView', routeTo.params.id)
+      // next()
     },
   },
 

@@ -148,6 +148,7 @@ const actions = {
             dispatch('Notifications/add', notification, {
               root: true,
             })
+            router.push({ name: '404', params: { resource: 'login' } })
           } else if (error.response.status === 403) {
             dispatch('Notifications/add', notification, {
               root: true,
@@ -186,6 +187,10 @@ const actions = {
           if (error.response.status === 404) {
             dispatch('Notifications/add', notification, {
               root: true,
+            })
+            router.push({
+              name: '404',
+              params: { resource: 'getting user info' },
             })
           } else if (error.response.status === 403) {
             dispatch('Notifications/add', notification, {
@@ -230,6 +235,10 @@ const actions = {
             dispatch('Notifications/add', notification, {
               root: true,
             })
+            router.push({
+              name: '404',
+              params: { resource: 'updating user info' },
+            })
           } else if (error.response.status === 403) {
             dispatch('Notifications/add', notification, {
               root: true,
@@ -270,6 +279,7 @@ const actions = {
             dispatch('Notifications/add', notification, {
               root: true,
             })
+            router.push({ name: '404', params: { resource: 'updating email' } })
           } else if (error.response.status === 403) {
             dispatch('Notifications/add', notification, {
               root: true,
@@ -308,6 +318,10 @@ const actions = {
           if (error.response.status === 404) {
             dispatch('Notifications/add', notification, {
               root: true,
+            })
+            router.push({
+              name: '404',
+              params: { resource: 'modifying password' },
             })
           } else if (error.response.status === 403) {
             dispatch('Notifications/add', notification, {

@@ -131,7 +131,7 @@ export default {
     autofill() {
       ;(this.agreeToTerms = true),
         (this.$v.email.$model = 'chroniclesofselene@gmail.com'),
-        (this.$v.username.$model = 'test'),
+        (this.$v.username.$model = 'test9'),
         (this.$v.lastName.$model = 'Duoquadra'),
         (this.$v.password.$model = '1Qqwerty'),
         (this.$v.repeatpassword.$model = '1Qqwerty')(

@@ -1,16 +1,9 @@
 <template>
   <div>
     <label v-if="label">{{ label }}</label>
-    <select :value="value" @submit.prevent="sendCom" v-bind="$attrs">
-      <option
-        v-for="option in options"
-        :value="option"
-        :key="option"
-        :selected="option === value"
-      >
-        {{ option }}
-      </option>
-    </select>
+    <select :value="value" @submit.prevent="sendCom" v-bind="$attrs"> </select>
+    <label v-if="label">{{ label }}</label>
+    <input :type="type" :value="value" @input="updateValue" v-bind="$attrs" />
   </div>
 </template>
 

@@ -25,7 +25,7 @@
                       <br />
                       <v-avatar class="profile indigo accent-4" size="164">
                         <v-img
-                          :src="`data:image/*;base64,${userProfile.avatar}`"
+                          :src="`data:image/*;base64,${userProfile.photo}`"
                         />
                       </v-avatar>
                       <v-card-subtitle>
@@ -38,13 +38,16 @@
                           <a
                             class="title font-italic blue--text text--accent-3"
                           >
-                            {{ userProfile.firstname }}
+                            {{ userProfile.firstName }}
                           </a>
                           <a
                             class="title font-italic blue--text text--accent-3"
                           >
-                            {{ userProfile.lastname }}
+                            {{ userProfile.lastName }}
                           </a>
+                          <div class="title blue--text text--accent-3">
+                            {{ $t('language') }} {{ userProfile.language }}
+                          </div>
                         </div>
                       </v-card-subtitle>
                     </v-col>
@@ -60,7 +63,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
 
 export default {
   data() {
@@ -69,23 +71,13 @@ export default {
       // username: 'test_username',
       // password: 'test_password',
       // lastName: 'test_lastname',
-      // firstName: 'test_firstname',
-      valid: true,
+      // firstName: 'test_firstname'
     }
   },
-  // props: {
-  //   userInfo: {
-  //     type: Object,
-  //     required: true,
-  //   },
-  // },
   computed: {
     ...mapGetters({
-      userProfile: 'App/storeUser',
+      userProfile: 'Social/storeSearchProfileData',
     }),
-  },
-  methods: {
-    ...mapActions('App', ['getUser', 'putUserInfo', 'putToken']),
   },
 }
 </script>
@@ -99,7 +91,7 @@ export default {
     "username": "Username",
     "firstname": "First Name",
     "lastname": "Last Name",
-    "language": "Subtitles language preference"
+    "language": "Language preference: "
   },
   "fr": {
     "titlea": "Profil de ",
@@ -107,7 +99,7 @@ export default {
     "username": "Nom d'utilisateur",
     "firstname": "Prénom",
     "lastname": "Nom",
-    "language": "Langue préférée de sous-titres"
+    "language": "Langue préférée: "
   }
 }
 </i18n>

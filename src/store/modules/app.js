@@ -116,7 +116,7 @@ const actions = {
   },
 
   // Called by the user in ../pages/Login.vue to sign in
-  login: ({ commit, dispatch }, { username, password }) => {
+  login: ({ getters, dispatch, commit }, { username, password }) => {
     console.log('CHECK_IN_Login Bro', { username, password })
     userService
       .login({ username, password })
@@ -133,12 +133,15 @@ const actions = {
           message: 'Login successful',
         }
         dispatch('Notifications/add', notification, { root: true })
+        if (getters.storePhoto) {
+          console.log('Choose a profile pic at login ?', getters.storePhoto)
+        }
         router.push({ name: 'movies' })
       })
       .catch(error => {
         const notification = {
           type: 'error',
-          message: 'There was a problem login',
+          message: 'Wrong login or password, please try again',
         }
         if (error.response) {
           if (error.response.status === 404) {
@@ -173,7 +176,6 @@ const actions = {
           message: 'User info updated',
         }
         dispatch('Notifications/add', notification, { root: true })
-        // router.push({ name: '/' })
       })
       .catch(error => {
         const notification = {
@@ -333,6 +335,9 @@ const getters = {
   storeUser: state => {
     const resUser = {}
     return Object.assign(resUser, state.userInfo)
+  },
+  storePhoto: state => {
+    return state.userInfo.avatar
   },
   // storeUsername: state => state.userInfo.username
   storeAppName: state => {

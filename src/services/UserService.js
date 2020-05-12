@@ -41,7 +41,8 @@ export default {
 
   // GET another profile - TO REVIEW & TEST
   searchProfile(payloadSearchProfile) {
-    return apiClient.get('/profile/' + payloadSearchProfile)
+    // console.log('UserService.js_payloadSearchProfile_ ', payloadSearchProfile)
+    return apiClient.get('/user/' + payloadSearchProfile)
   },
 
   // PUT user password

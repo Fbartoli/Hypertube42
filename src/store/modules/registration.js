@@ -23,7 +23,7 @@ const actions = {
       .catch(error => {
         const notification = {
           type: 'error',
-          message: 'Wrong login, please try again',
+          message: 'Error on the registration request, please try again',
         }
         if (error.response) {
           if (error.response.status === 404) {

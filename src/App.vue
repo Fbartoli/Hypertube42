@@ -28,7 +28,7 @@
           <v-row justify="center">
             <v-form @submit.prevent="keySearchUser()">
               <v-text-field
-                :value="this.searchProfile"
+                v-model="searchProfile"
                 :append-icon-cb="() => {}"
                 :label="$t('search_box_label')"
                 append-icon="mdi-account-search"
@@ -157,20 +157,21 @@ export default {
   name: 'App',
   components: { NotificationContainer },
   data: () => ({
-    searchProfile: ' ',
+    searchProfile: '',
   }),
   methods: {
-    ...mapActions('Social', ['putSearchProfile', 'searchProfile']),
+    ...mapActions('Social', ['putSearchProfile', 'getSearchProfile']),
     ...mapActions('App', ['resetState']),
     // logout() {
     //   localStorage.removeItem('hypertube')
     // },
     keySearchUser() {
-      // console.log('this.searchUsername_ ', this.searchProfile)
+      console.log('this.searchUsername_ ', this.searchProfile)
+      // console.log('searchUsername_ ', searchProfile)
       // console.log('this.searchBox_ ', this.searchBox)
       // this.putSearchProfile(this.searchBox)
       this.putSearchProfile(this.searchProfile)
-      this.searchProfile
+      this.getSearchProfile()
       // this.$router.push('/profile/' + `${this.searchBox}`)
     },
   },
@@ -194,7 +195,7 @@ export default {
       userApp: 'App/storeUser',
       langs: 'App/storeLangs',
       appName: 'App/storeAppName',
-      searchProfile: 'Social/searchProfile',
+      // searchProfile: 'Social/searchProfile',
       // currentUsername: 'App/storeUsername',
     }),
     fullName: {

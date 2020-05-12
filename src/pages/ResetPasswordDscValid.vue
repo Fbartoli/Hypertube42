@@ -3,27 +3,38 @@
     <v-card-title class="pb-0">
       <h1>{{ $t('title') }}</h1>
     </v-card-title>
-    <v-container>
-      TEST_New Password activation Token:<br />
-      {{ passToken }}<br />
-    </v-container>
     <v-card-text class="mt-5">
       <v-form>
         <v-container>
           <v-row>
-            <v-col cols="12">
+            <v-col>
               <v-text-field
                 v-model="password"
+                @blur="$v.password.$touch()"
                 :error-messages="passwordErrors"
+                :label="$t('password')"
                 :counter="15"
                 outlined
                 clearable
                 color="blue"
-                :label="$t('password')"
                 type="Password"
-                @input="$v.password.$touch()"
-                @blur="$v.password.$touch()"
                 required
+              />
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="repeatpassword"
+                @blur="$v.repeatpassword.$touch()"
+                :error-messages="repeatpasswordErrors"
+                :label="$t('repeatpassword')"
+                :counter="15"
+                outlined
+                clearable
+                color="primary"
+                type="Password"
               />
             </v-col>
           </v-row>
@@ -66,19 +77,9 @@ export default {
       passToken: this.$route.params.resetpassword,
       password: '',
       repeatpassword: '',
-      // valid: true,
     }
   },
-  // props: {
-  //   userInfo: {
-  //     type: Object,
-  //     required: true,
-  //   },
-  // },
   computed: {
-    //   ...mapGetters({
-    //     passwordToken: 'Email/storePasswordToken',
-    //   }),
     passwordErrors() {
       const errors = []
       if (!this.$v.password.$dirty) return errors
@@ -137,6 +138,7 @@ export default {
   "en": {
     "title": "You may choose a new password !",
     "username": "Username",
+    "alphaNumRule": "Must be alphanumeric characters [Abc123...]",
 
     "password": "Password",
     "passwordRule": "Password is required",
@@ -153,6 +155,7 @@ export default {
   "fr": {
     "title": "Vous pouvez choisir un nouveau mot de passe !",
     "username": "Nom d'utilisateur",
+    "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
     
     "password": "Mot de passe",
     "passwordRule": "Un mot de passe est requis",

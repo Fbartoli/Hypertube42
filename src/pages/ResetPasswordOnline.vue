@@ -28,7 +28,7 @@
               <v-text-field
                 v-model="$v.newpassword.$model"
                 :error-messages="newpasswordErrors"
-                :label="$t('password')"
+                :label="$t('newpassword')"
                 :counter="15"
                 @blur="$v.newpassword.$touch()"
                 class="ma-5"
@@ -81,6 +81,7 @@ import {
   maxLength,
   helpers,
   sameAs,
+  not,
 } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
@@ -120,6 +121,8 @@ export default {
       const errors = []
       if (!this.$v.newpassword.$dirty) return errors
       !this.$v.newpassword.required && errors.push(this.$t('passwordRule'))
+      !this.$v.newpassword.sameAsOldPassword &&
+        errors.push(this.$t('passwordChangeRule'))
       !this.$v.newpassword.alphaNum && errors.push(this.$t('alphaNumRule'))
       !this.$v.newpassword.oneLower && errors.push(this.$t('lowerPasswordRule'))
       !this.$v.newpassword.oneUpper && errors.push(this.$t('upperPasswordRule'))
@@ -145,6 +148,7 @@ export default {
     },
     newpassword: {
       required,
+      sameAsOldPassword: not(sameAs('password')),
       alphaNum,
       minLength: minLength(8),
       maxLength: maxLength(42),
@@ -179,8 +183,12 @@ export default {
   "en": {
     "title": "Choose a new password",
     "username": "Username",
+    "alphaNumRule": "Must be alphanumeric characters [Abc123...]",
 
     "password": "Password",
+    "newpassword": "New Password",
+    "passwordChangeRule": "The new password should be different from the previous one",
+    "passwordRule": "Password required",
     "passwordRuleMin": "Password must be at least 8 characters long",
     "passwordRuleMax": "Password must be at most 15 characters long",
     "repeatpassword": "Confirm Password",
@@ -194,8 +202,11 @@ export default {
   "fr": {
     "title": "Nouveau mot de passe",
     "username": "Nom d'utilisateur",
+    "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
 
     "password": "Mot de passe",
+    "newpassword": "Nouveau Password",
+    "passwordChangeRule": "Le nouveau mot de passe doit être différent de l'ancien",
     "passwordRule": "Un mot de passe est requis",
     "passwordRuleMin": "8 caractères minimum",
     "passwordRuleMax": "15 caractères max",

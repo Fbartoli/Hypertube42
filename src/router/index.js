@@ -106,8 +106,9 @@ const routes = [
           if (parseInt(movie.id) === 0) {
             next({ name: '404', params: { resource: 'movie' } })
           }
-          // line to delete ?
           routeTo.params.movie = movie
+          store.dispatch('Movies/getComments', routeTo.params.id)
+          store.dispatch('Movies/sendView', routeTo.params.id)
           next()
         })
         .catch(error => {
@@ -116,9 +117,6 @@ const routes = [
           }
           next({ name: 'network-issue' })
         })
-      store.dispatch('Movies/getComments', routeTo.params.id)
-      store.dispatch('Movies/sendView', routeTo.params.id)
-      // next()
     },
   },
 

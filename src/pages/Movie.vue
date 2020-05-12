@@ -97,7 +97,7 @@ export default {
     validComment() {
       // console.log('this.ref_', this.ref)
       // console.log('this.comment_', this.comment)
-      this.$v.$touch()
+      // this.$v.$touch()
       if (!this.$v.$invalid) {
         this.sendComment({ ref: this.ref, text: this.comment })
       }

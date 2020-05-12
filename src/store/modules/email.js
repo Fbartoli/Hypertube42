@@ -175,7 +175,7 @@ const actions = {
           console.log('OK_Reset Email', response)
           const notification = {
             type: 200,
-            message: 'Your account was successfully activated !',
+            message: 'Your email was successfully updated !',
           }
           dispatch('Notifications/add', notification, { root: true })
         } else {
@@ -224,6 +224,8 @@ const actions = {
   setPasswordToken({ commit }, passwordToken) {
     commit('PUT_PASSWORD_TOKEN', passwordToken)
   },
+  // Valid password change in offline mode
+  // (through a link sent by email leading to page/ResetPasswordDscValid.vue)
   putDscResetPassword({ dispatch }, { dscNewPassword }) {
     console.log('STORE put Dsc Password Reset_ ', dscNewPassword)
     emailService

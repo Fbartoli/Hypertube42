@@ -89,6 +89,10 @@ const actions = {
             message: error.response.data.error,
           }
           dispatch('Notifications/add', notification, { root: true })
+          if (error.response.status === 403) {
+            return
+          }
+          dispatch('Notifications/add', notification, { root: true })
           if (error.response.status === 404) {
             router.push({
               name: '404',

@@ -71,7 +71,7 @@ export default {
   methods: {
     ...mapActions('Email', ['getActivationTokenAgain']),
     validActivationAccountAgain(activationEmail) {
-      this.$v.$touch()
+      // this.$v.$touch()
       if (!this.$v.$invalid) {
         console.log('Signup.vue_Email Activation AGAIN_ ', activationEmail)
         this.getActivationTokenAgain(activationEmail)

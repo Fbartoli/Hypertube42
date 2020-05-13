@@ -11,8 +11,6 @@ const state = {
   comments: {},
 }
 
-// getters
-const getters = {}
 // mutations
 const mutations = {
   FETCH_MOVIES(state, movies) {
@@ -25,6 +23,7 @@ const mutations = {
     state.movieTotal = moviesTotal
   },
   PUT_COMMENTS(state, com) {
+    console.log('COM', com)
     state.comments = com
   },
 }
@@ -113,7 +112,8 @@ const actions = {
     userService
       .getcomment(ref)
       .then(response => {
-        commit
+        console.log('RESPONSE', response.data.comments)
+        commit('PUT_COMMENTS', response.data.comments)
         const notification = {
           type: response.data.status,
           message: 'TEST ONLY_Comments loaded',
@@ -218,6 +218,13 @@ const actions = {
           })
         }
       })
+  },
+}
+
+// getters
+const getters = {
+  storeComments(state) {
+    return state.comments
   },
 }
 

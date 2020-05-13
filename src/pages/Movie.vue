@@ -28,12 +28,41 @@
       </div>
     </v-card-text>
     <v-divider class="mx-4"></v-divider>
-    {{ storeUsername }}
+
+    <v-card-title>Comments</v-card-title>
+    <v-list subheader two-line style="background-color: transparent">
+      <v-list-item v-for="(itemComment, id) in storeComments" :key="id">
+        <v-row v-if="itemComment.username == storeUsername">
+          <v-col>
+            <v-list-item-content>
+              <v-list-item-subtitle class="my-4 subtitle-1"
+                >{{ itemComment.username }}:</v-list-item-subtitle
+              >
+              <v-list-item-title>{{ itemComment.text }}</v-list-item-title>
+            </v-list-item-content>
+          </v-col>
+        </v-row>
+        <v-row v-else>
+          <v-col cols="2" />
+          <v-col cols="10">
+            <v-list-item-content>
+              <v-list-item-subtitle class="my-4 subtitle-1"
+                >{{ itemComment.username }}:</v-list-item-subtitle
+              >
+              <v-list-item-title>{{ itemComment.text }}</v-list-item-title>
+            </v-list-item-content>
+          </v-col>
+        </v-row>
+      </v-list-item>
+    </v-list>
 
     <v-form submit.prevent="validComment()">
       <v-container>
         <v-row>
           <v-col cols="12">
+            <v-list-item-subtitle class="ma-1 subtitle-1">
+              {{ storeUsername }}:<br />
+            </v-list-item-subtitle>
             <v-text-field
               v-model="comment"
               @input="$v.comment.$touch()"
@@ -107,6 +136,7 @@ export default {
     ...mapGetters({
       storeToken: 'App/storeToken',
       storeUsername: 'App/storeUsername',
+      storeComments: 'Movies/storeComments',
     }),
     commentErrors() {
       const errors = []

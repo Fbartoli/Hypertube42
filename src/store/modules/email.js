@@ -280,6 +280,7 @@ const getters = {
     return state.passwordToken
   },
 }
+
 export default {
   namespaced: true,
   state,

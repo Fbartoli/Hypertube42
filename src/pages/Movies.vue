@@ -15,18 +15,6 @@
         </v-lazy>
       </v-col>
     </v-row>
-    <template v-if="page != 1">
-      <router-link :to="{ name: 'movies', query: { page: page - 1 } }"
-        >Previous Page</router-link
-      >
-      <template v-if="hasNextPage">|</template>
-    </template>
-
-    <router-link
-      v-if="hasNextPage"
-      :to="{ name: 'movies', query: { page: page + 1 } }"
-      >Next Page</router-link
-    >
   </div>
 </template>
 
@@ -72,9 +60,6 @@ export default {
     getPageMovies(routeTo, next)
   },
   computed: {
-    hasNextPage() {
-      return this.Movies.movieTotal > this.page * this.Movies.perPage
-    },
     ...mapState(['Movies']),
   },
   created() {

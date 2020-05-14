@@ -3,7 +3,16 @@
     <h1>Showing movies</h1>
     <v-row dense>
       <v-col v-for="movie in Movies.movies" :key="movie.id">
-        <MovieCard :movie="movie" />
+        <v-lazy
+          v-model="isActive"
+          :options="{
+            threshold: 0.5,
+          }"
+          min-height="200"
+          transition="fade-transition"
+        >
+          <MovieCard :movie="movie" />
+        </v-lazy>
       </v-col>
     </v-row>
     <template v-if="page != 1">
@@ -44,6 +53,12 @@ function getPageMovies(routeTo, next) {
 
 export default {
   components: { MovieCard },
+  data() {
+    return {
+      isActive: false,
+      bottom: false,
+    }
+  },
   props: {
     page: {
       type: Number,
@@ -61,6 +76,34 @@ export default {
       return this.Movies.movieTotal > this.page * this.Movies.perPage
     },
     ...mapState(['Movies']),
+  },
+  created() {
+    window.addEventListener('scroll', () => {
+      this.bottom = this.bottomVisible()
+    })
+  },
+  methods: {
+    addMovies() {
+      console.log('loading')
+      this.page += 1
+      console.log()
+      store.dispatch('Movies/addMovies', this.page)
+    },
+    bottomVisible() {
+      const scrollY = window.scrollY
+      const visible = document.documentElement.clientHeight
+      const pageHeight = document.documentElement.scrollHeight
+      const bottomOfPage = visible + scrollY >= pageHeight
+      return bottomOfPage || pageHeight < visible
+    },
+  },
+  watch: {
+    bottom(bottom) {
+      if (bottom) {
+        console.log('test')
+        this.addMovies()
+      }
+    },
   },
 }
 </script>

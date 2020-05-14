@@ -3,7 +3,7 @@ import axios from 'axios'
 const apiCLient = axios.create({
   baseURL: 'https://yts.mx/api/v2',
   withCredentials: false, //default value
-  timeout: 10000,
+  timeout: 20000,
   headers: {
     Accept: 'application/json',
     'Content-type': 'application/json',

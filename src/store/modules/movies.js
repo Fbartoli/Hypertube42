@@ -1,6 +1,7 @@
 import movieService from '../../services/MovieService.js'
 import userService from '../../services/UserService'
 import router from '../../router/index'
+import nProgress from 'nprogress'
 
 const state = {
   movies: [],
@@ -15,6 +16,9 @@ const state = {
 const mutations = {
   FETCH_MOVIES(state, movies) {
     state.movies = movies
+  },
+  ADD_MOVIES(state, movies) {
+    state.movies = state.movies.concat(movies)
   },
   FETCH_MOVIE(state, movie) {
     state.movie = movie
@@ -52,6 +56,14 @@ const actions = {
           dispatch('Notifications/add', notification, { root: true })
         }
       })
+  },
+  addMovies({ commit, state }, page) {
+    nProgress.start()
+    return movieService.getMovies(state.perPage, page).then(response => {
+      commit('ADD_MOVIES', response.data.data.movies)
+      nProgress.done()
+      return response.data.data.movies
+    })
   },
   //
   fetchMovie({ commit }, id) {

@@ -33,7 +33,8 @@ const mutations = {
 }
 // actions
 const actions = {
-  //
+  // A) Movies API:
+  // A.1.a) GET movies from YTS with standard search paramaters
   fetchMovies({ commit, dispatch, state }, page) {
     return movieService
       .getMovies(state.perPage, page)
@@ -57,6 +58,7 @@ const actions = {
         }
       })
   },
+  // A.1.b) Follow up action of 'fetchMovies' (1.a) to GET the next page of movies
   addMovies({ commit, state }, page) {
     nProgress.start()
     return movieService.getMovies(state.perPage, page).then(response => {
@@ -65,7 +67,7 @@ const actions = {
       return response.data.data.movies
     })
   },
-  //
+  // A.1.c) GET the specific movie details from the api YTS
   fetchMovie({ commit }, id) {
     return movieService.getMovie(id).then(response => {
       commit('FETCH_MOVIE', response.data.data.movie)
@@ -73,8 +75,33 @@ const actions = {
     })
   },
 
-  // Comments:
-  // POST movie comment
+  // A.2.a) get movies from YTS with standard search paramaters
+  filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
+    return movieService
+      .getMovies({ perPage: state.perPage, page, filter, order })
+      .then(response => {
+        commit('FETCH_MOVIES', response.data.data.movies)
+        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
+        const notification = {
+          type: 'success',
+          message: 'Movies fetched successfully',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        return response.data.data.movies
+      })
+      .catch(error => {
+        if (error.message) {
+          const notification = {
+            type: 'error',
+            message: 'There was a problem fetching movies: ' + error.message,
+          }
+          dispatch('Notifications/add', notification, { root: true })
+        }
+      })
+  },
+
+  // B) Comments:
+  // B.1) POST movie comment
   sendComment: ({ dispatch }, { ref, text }) => {
     // console.log('POST comments_app.js_REF_', ref)
     // console.log('app.js_TEXT_', text)
@@ -118,7 +145,7 @@ const actions = {
         }
       })
   },
-  // GET movie comments
+  // B.2) GET movie comments
   getComments: ({ dispatch, commit }, ref) => {
     console.log('GET comments_app.js_REF', ref)
     userService
@@ -159,8 +186,8 @@ const actions = {
       })
   },
 
-  // Views:
-  // POST movie comment
+  // C) Views:
+  // C.1) POST movie comment
   sendView: ({ dispatch }, filmRef) => {
     console.log('POST view_app.js_REF_', filmRef)
     userService
@@ -196,7 +223,7 @@ const actions = {
         }
       })
   },
-  // GET movie comments
+  // C.2) GET movie comments
   getViews: ({ dispatch, commit }) => {
     userService
       .getview()
@@ -237,6 +264,9 @@ const actions = {
 const getters = {
   storeComments(state) {
     return state.comments
+  },
+  storeMovies: state => {
+    return state.movies
   },
 }
 

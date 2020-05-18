@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar hide-on-scroll color="secondary" app>
       <v-container fluid>
-        <v-row align="center" justify="space-between">
+        <v-row align="center" justify="space-around">
           <v-col cols="md-auto lg-auto">
             <v-toolbar-title>
               <v-row justify="start">
@@ -21,7 +21,7 @@
               </v-row>
             </v-toolbar-title>
           </v-col>
-          <v-col v-if="userApp.auth === true" cols="md-auto">
+          <v-col v-if="userApp.auth === true" cols="md-auto hidden-sm-and-down">
             <v-row align="center">
               <v-form @submit.prevent="keySearchUser()">
                 <v-text-field
@@ -38,7 +38,7 @@
               </v-form>
             </v-row>
           </v-col>
-          <v-col cols="md-auto">
+          <v-col cols="md-auto 	hidden-sm-and-down">
             <v-btn
               v-if="userApp.auth === true"
               class="mx-5"
@@ -112,6 +112,84 @@
                 :src="`data:image/*;base64,${userApp.avatar}`"
               />
             </v-avatar>
+          </v-col>
+          <v-col cols="md-auto hidden-md-and-up">
+            <v-row justify="end">
+              <v-menu allow-overflow="true" offset-y bottom>
+                <template v-resize v-slot:activator="{ on }">
+                  <v-btn color="primary" dark v-on="on">
+                    Menu
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item v-if="userApp.auth === true">
+                    <v-btn
+                      class="mx-5"
+                      color="primary"
+                      :label="$t('movies')"
+                      :to="{
+                        name: 'movies',
+                        params: { page: 1 },
+                      }"
+                    >
+                      <i class="fas fa-film fa-2x" />
+                    </v-btn>
+                  </v-list-item>
+                  <v-list-item v-if="userApp.auth === true">
+                    <v-btn
+                      class="mx-5"
+                      color="primary"
+                      :label="$t('user')"
+                      :to="{
+                        name: 'user',
+                        params: { username: userApp.username || 'none' },
+                      }"
+                    >
+                      <i class="fas fa-cog fa-lg" />
+                    </v-btn>
+                  </v-list-item>
+                  <v-list-item v-show="userApp.auth === false">
+                    <v-btn
+                      color="primary"
+                      class="mx-5"
+                      :to="{ name: 'register' }"
+                    >
+                      <div class="hidden-xs-only">
+                        {{ $t('register') }}
+                        &nbsp;
+                      </div>
+                      <v-icon class="blue--text text--lighten-5">
+                        mdi-content-save
+                      </v-icon>
+                    </v-btn>
+                  </v-list-item>
+                  <v-list-item v-show="userApp.auth === true">
+                    <v-btn
+                      @click="resetState"
+                      class="mx-5"
+                      color="primary"
+                      :label="$t('sign out')"
+                      :to="{ name: 'home' }"
+                    >
+                      <v-icon class="blue--text text--lighten-5">
+                        mdi-power
+                      </v-icon>
+                    </v-btn>
+                  </v-list-item>
+                  <v-list-item v-show="userApp.auth === false">
+                    <v-btn color="primary" class="mx-5" :to="{ name: 'login' }">
+                      <div class="hidden-xs-only">
+                        {{ $t('sign in') }}
+                        &nbsp;
+                      </div>
+                      <v-icon class="blue--text text--lighten-5">
+                        mdi-login
+                      </v-icon>
+                    </v-btn>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-row>
           </v-col>
         </v-row>
       </v-container>

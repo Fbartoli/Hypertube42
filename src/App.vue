@@ -115,7 +115,7 @@
           </v-col>
           <v-col cols="md-auto hidden-md-and-up">
             <v-row justify="end">
-              <v-menu allow-overflow="true" offset-y bottom>
+              <v-menu allow-overflow offset-y bottom>
                 <template v-resize v-slot:activator="{ on }">
                   <v-btn color="primary" dark v-on="on">
                     Menu

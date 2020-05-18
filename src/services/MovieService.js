@@ -16,7 +16,7 @@ export default {
   getMovie(id) {
     return apiCLient.get(`/movie_details.json?movie_id=${id}`)
   },
-  getMovieFilterBy({ perPage, page, filter, order }) {
+  getMoviesFilterBy({ perPage, page, filter, order }) {
     console.log('A_', perPage)
     console.log('B_', page)
     console.log('C_', filter)

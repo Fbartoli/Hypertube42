@@ -78,7 +78,7 @@ const actions = {
   // A.2.a) get movies from YTS with standard search paramaters
   filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
     return movieService
-      .getMovies({ perPage: state.perPage, page, filter, order })
+      .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
         commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))

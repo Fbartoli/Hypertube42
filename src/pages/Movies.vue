@@ -49,7 +49,8 @@
 <script>
 import MovieCard from '../components/MovieCard'
 import store from '../store'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+// import { mapActions } from 'vuex'
 
 function getPageMovies(routeTo, next) {
   const currentPage = parseInt(routeTo.query.page) || 1
@@ -76,7 +77,7 @@ export default {
       filterSelected: '',
       filterByList: ['', 'date_added', 'download_count', 'title', 'rating'],
       orderSelected: '',
-      orderByList: ['', '-->', '<--'],
+      orderByList: ['', 'desc', 'asc'],
     }
   },
   props: {
@@ -93,7 +94,7 @@ export default {
   },
   computed: {
     ...mapState(['Movies']),
-    ...mapActions('Movies', ['addMovies', 'filteredFetchMovies']),
+    // ...mapActions('Movies', ['addMovies', 'filteredFetchMovies', 'filteredAddMovies']),
     ...mapGetters({
       storeMovies: 'Movies/storeMovies',
     }),
@@ -107,8 +108,15 @@ export default {
     addMovies() {
       console.log('loading')
       this.page += 1
-      console.log()
-      store.dispatch('Movies/addMovies', this.page)
+      if (this.filterSelected !== '' || this.orderSelected !== '') {
+        store.dispatch('Movies/filteredAddMovies', {
+          page: this.page,
+          filter: this.filterSelected,
+          order: this.orderSelected,
+        })
+      } else {
+        store.dispatch('Movies/addMovies', this.page)
+      }
     },
     bottomVisible() {
       const scrollY = window.scrollY
@@ -128,7 +136,8 @@ export default {
   watch: {
     bottom(bottom) {
       if (bottom) {
-        console.log('test')
+        console.log('--- infinite scrolling ! ---')
+        // console.log(this.addMovies())
         this.addMovies()
       }
     },

@@ -60,6 +60,7 @@ const actions = {
   },
   // A.1.b) Follow up action of 'fetchMovies' (1.a) to GET the next page of movies
   addMovies({ commit, state }, page) {
+    console.log('/// addMovies ///')
     nProgress.start()
     return movieService.getMovies(state.perPage, page).then(response => {
       commit('ADD_MOVIES', response.data.data.movies)
@@ -69,6 +70,7 @@ const actions = {
   },
   // A.1.c) GET the specific movie details from the api YTS
   fetchMovie({ commit }, id) {
+    console.log('/// fetchMovies ///')
     return movieService.getMovie(id).then(response => {
       commit('FETCH_MOVIE', response.data.data.movie)
       return response.data.data.movie
@@ -77,6 +79,7 @@ const actions = {
 
   // A.2.a) get movies from YTS with standard search paramaters
   filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
+    console.log('/// filteredFetchMovies ///')
     return movieService
       .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
       .then(response => {
@@ -97,6 +100,19 @@ const actions = {
           }
           dispatch('Notifications/add', notification, { root: true })
         }
+      })
+  },
+  // A.2.b) Follow up action of 'filteredFetchMovies' (2.a) to GET the next page of movies
+  // It is the equivalent to 'addMovies' (1.b) but filtered
+  filteredAddMovies({ commit, state }, { page, filter, order }) {
+    console.log('/// filteredAddMovies ///')
+    nProgress.start()
+    return movieService
+      .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
+      .then(response => {
+        commit('ADD_MOVIES', response.data.data.movies)
+        nProgress.done()
+        return response.data.data.movies
       })
   },
 

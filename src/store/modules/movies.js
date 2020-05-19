@@ -60,6 +60,7 @@ const actions = {
   addMovies({ commit, state }, page) {
     nProgress.start()
     return movieService.getMovies(state.perPage, page).then(response => {
+      response.data.data.movies.shift()
       commit('ADD_MOVIES', response.data.data.movies)
       nProgress.done()
       return response.data.data.movies

@@ -45,6 +45,7 @@ export default {
     return {
       isActive: false,
       bottom: false,
+      pageData: this.page,
     }
   },
   props: {
@@ -70,9 +71,9 @@ export default {
   methods: {
     addMovies() {
       console.log('loading')
-      this.page += 1
+      this.pageData += 1
       console.log()
-      store.dispatch('Movies/addMovies', this.page)
+      store.dispatch('Movies/addMovies', this.pageData)
     },
     bottomVisible() {
       const scrollY = window.scrollY

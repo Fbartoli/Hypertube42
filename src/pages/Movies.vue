@@ -1,6 +1,34 @@
 <template>
   <div>
-    <h1>Showing movies</h1>
+    <h1>{{ $t('title') }}</h1>
+    <br /><br />
+    <v-row>
+      <v-col cols="1" />
+      <v-col cols="4">
+        <v-row>
+          <v-select
+            v-model.lazy="orderSelected"
+            :items="orderByList"
+            :label="$t('orderby')"
+            @change="updateMoviesList"
+            outlined
+          />
+        </v-row>
+      </v-col>
+      <v-col cols="2" />
+      <v-col cols="4">
+        <v-row>
+          <v-select
+            v-model.lazy="filterSelected"
+            :items="filterByList"
+            :label="$t('filterby')"
+            @change="updateMoviesList"
+            outlined
+          />
+        </v-row>
+      </v-col>
+      <v-col cols="1" />
+    </v-row>
     <v-row dense>
       <v-col v-for="movie in Movies.movies" :key="movie.id">
         <v-lazy
@@ -21,7 +49,8 @@
 <script>
 import MovieCard from '../components/MovieCard'
 import store from '../store'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+// import { mapActions } from 'vuex'
 
 function getPageMovies(routeTo, next) {
   const currentPage = parseInt(routeTo.query.page) || 1
@@ -45,6 +74,10 @@ export default {
     return {
       isActive: false,
       bottom: false,
+      filterSelected: '',
+      filterByList: ['', 'date_added', 'download_count', 'title', 'rating'],
+      orderSelected: '',
+      orderByList: ['', 'desc', 'asc'],
       pageData: this.page,
     }
   },
@@ -62,6 +95,10 @@ export default {
   },
   computed: {
     ...mapState(['Movies']),
+    // ...mapActions('Movies', ['addMovies', 'filteredFetchMovies', 'filteredAddMovies']),
+    ...mapGetters({
+      storeMovies: 'Movies/storeMovies',
+    }),
   },
   created() {
     window.addEventListener('scroll', () => {
@@ -72,8 +109,15 @@ export default {
     addMovies() {
       console.log('loading')
       this.pageData += 1
-      console.log()
-      store.dispatch('Movies/addMovies', this.pageData)
+      if (this.filterSelected !== '' || this.orderSelected !== '') {
+        store.dispatch('Movies/filteredAddMovies', {
+          page: this.page,
+          filter: this.filterSelected,
+          order: this.orderSelected,
+        })
+      } else {
+        store.dispatch('Movies/addMovies', this.pageData)
+      }
     },
     bottomVisible() {
       const scrollY = window.scrollY
@@ -82,11 +126,19 @@ export default {
       const bottomOfPage = visible + scrollY >= pageHeight
       return bottomOfPage || pageHeight < visible
     },
+    updateMoviesList() {
+      store.dispatch('Movies/filteredFetchMovies', {
+        page: this.page,
+        filter: this.filterSelected,
+        order: this.orderSelected,
+      })
+    },
   },
   watch: {
     bottom(bottom) {
       if (bottom) {
-        console.log('test')
+        console.log('--- infinite scrolling ! ---')
+        // console.log(this.addMovies())
         this.addMovies()
       }
     },
@@ -95,3 +147,18 @@ export default {
 </script>
 
 <style></style>
+
+<i18n>
+{
+  "en": {
+    "title": "Movies",
+    "orderby": "Order by",
+    "filterby": "Filter"
+  },
+  "fr": {
+    "title": "Films",
+    "orderby": "Trier",
+    "filterby": "Filtrer"
+  }
+}
+</i18n>

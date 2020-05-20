@@ -78,6 +78,7 @@ export default {
       filterByList: ['', 'date_added', 'download_count', 'title', 'rating'],
       orderSelected: '',
       orderByList: ['', 'desc', 'asc'],
+      pageData: this.page,
     }
   },
   props: {
@@ -107,7 +108,7 @@ export default {
   methods: {
     addMovies() {
       console.log('loading')
-      this.page += 1
+      this.pageData += 1
       if (this.filterSelected !== '' || this.orderSelected !== '') {
         store.dispatch('Movies/filteredAddMovies', {
           page: this.page,
@@ -115,7 +116,7 @@ export default {
           order: this.orderSelected,
         })
       } else {
-        store.dispatch('Movies/addMovies', this.page)
+        store.dispatch('Movies/addMovies', this.pageData)
       }
     },
     bottomVisible() {

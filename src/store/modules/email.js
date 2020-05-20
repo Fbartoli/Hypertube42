@@ -236,13 +236,20 @@ const actions = {
       .putdscresetpassword({ dscNewPassword })
       .then(response => {
         console.log('code 200?', response)
-        if (response === 200) {
+        if (response.status === 200) {
           console.log('OK_Reset Password', response)
-          dispatch('setMessageToUser', response.data)
+          const notification = {
+            type: response.data.status,
+            message: 'Password updated successfully !',
+          }
+          dispatch('Notifications/add', notification, { root: true })
+          router.push({
+            name: 'home',
+          })
         }
       })
       .catch(error => {
-        console.log('ERR_Activate New Password', error)
+        // console.log('ERR_Activate New Password', error)
         if (error.response) {
           if (error.response.status === 404) {
             router.push({
@@ -250,11 +257,18 @@ const actions = {
               params: { resource: 'Reset password link validation' },
             })
           }
-        } else {
-          router.push({
-            name: 'home',
-          })
+          // else if (error.response.status === 400) {
+          //   const notification = {
+          //     type: error.response.status,
+          //     message: 'The new password should be different than the previous one',
+          //   }
+          //   dispatch('Notifications/add', notification, { root: true })
+          //   return
+          // }
         }
+        router.push({
+          name: 'home',
+        })
       })
   },
 }

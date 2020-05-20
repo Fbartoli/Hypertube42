@@ -11,18 +11,22 @@ const apiCLient = axios.create({
 })
 export default {
   getMovies(perPage, page) {
-    return apiCLient.get(`/list_movies.json?limit=${perPage}&page=${page}`)
+    return apiCLient.get(
+      `/list_movies.json?limit=${perPage}&page=${page}&sort_by=title`
+    )
   },
   getMovie(id) {
     return apiCLient.get(`/movie_details.json?movie_id=${id}`)
   },
   getMoviesFilterBy({ perPage, page, filter, order }) {
-    console.log('perPage_', perPage)
-    console.log('page_', page)
-    console.log('filter_', filter)
-    console.log('order_', order)
     return apiCLient.get(
       `/list_movies.json?limit=${perPage}&page=${page}&sort_by=${filter}&order_by=${order}`
+    )
+  },
+  getMoviesSearch({ findMovieField }) {
+    console.log('findMovieField_', findMovieField)
+    return apiCLient.get(
+      `/list_movies.json?limit=50&sort_by=title&query_term=${findMovieField}`
     )
   },
 }

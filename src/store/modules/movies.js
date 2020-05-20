@@ -59,7 +59,7 @@ const actions = {
       })
   },
   // A.1.b) Follow up action of 'fetchMovies' (1.a) to GET the next page of movies
-  addMovies({ commit, state }, page) {
+  addMovies({ commit, state }, { page }) {
     console.log('/// addMovies ///')
     nProgress.start()
     return movieService.getMovies(state.perPage, page).then(response => {
@@ -116,6 +116,45 @@ const actions = {
         return response.data.data.movies
       })
   },
+
+  // A.3.a) get movies from YTS with specific search paramaters
+  searchFetchMovies({ commit, dispatch }, { findMovieField }) {
+    console.log('/// searchFetchMovies ///')
+    return movieService
+      .getMoviesSearch({ findMovieField })
+      .then(response => {
+        commit('FETCH_MOVIES', response.data.data.movies)
+        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
+        const notification = {
+          type: 'success',
+          message: 'Movies fetched successfully',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        return response.data.data.movies
+      })
+      .catch(error => {
+        if (error.message) {
+          const notification = {
+            type: 'error',
+            message: 'There was a problem fetching movies: ' + error.message,
+          }
+          dispatch('Notifications/add', notification, { root: true })
+        }
+      })
+  },
+  // A.3.b) Follow up action of 'searchFetchMovies' (3.a) to GET the next page of movies
+  // It is the equivalent to 'addMovies' (1.b) but for a search
+  // searchAddMovies({ commit, state }, { page, findMovieField }) {
+  //   console.log('/// searchAddMovies ///')
+  //   nProgress.start()
+  //   return movieService
+  //     .getMoviesSearch({ perPage: state.perPage, page, findMovieField })
+  //     .then(response => {
+  //       commit('ADD_MOVIES', response.data.data.movies)
+  //       nProgress.done()
+  //       return response.data.data.movies
+  //     })
+  // },
 
   // B) Comments:
   // B.1) POST movie comment

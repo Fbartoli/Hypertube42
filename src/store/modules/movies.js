@@ -10,11 +10,23 @@ const state = {
   page: 1,
   movieTotal: 0,
   comments: {},
+  views: {},
 }
 
 // mutations
 const mutations = {
   FETCH_MOVIES(state, movies) {
+    // console.log('*** FETCH_MOVIES ***')
+    for (let i = 0; i < parseInt(movies.length); i++) {
+      // console.log('** movies **', movies[i].id)
+      for (let j = 0; j < parseInt(state.views.length); j++) {
+        // console.log('* views *', state.views[j].filmRef)
+        if (movies[i].id == state.views[j].filmRef) {
+          console.log('* * * OH YEAH ! * * *', movies[i].id)
+          movies[i].view = true
+        }
+      }
+    }
     state.movies = movies
   },
   ADD_MOVIES(state, movies) {
@@ -27,8 +39,18 @@ const mutations = {
     state.movieTotal = moviesTotal
   },
   PUT_COMMENTS(state, com) {
-    console.log('COM', com)
     state.comments = com
+  },
+  PUT_VIEWS(state, views) {
+    // for (let i = 0; i < parseInt(views.length); i++) {
+    //   for (let j = 0; j < parseInt(state.movies.length); j++) {
+    //     if (state.movies[j].id === views[i].filmRef) {
+    //       state.movies[j].view = true
+    //     }
+    //   }
+    // }
+    console.log('VIEWS', views)
+    state.views = views
   },
 }
 // actions
@@ -243,7 +265,7 @@ const actions = {
   },
 
   // C) Views:
-  // C.1) POST movie comment
+  // C.1) POST movie view
   sendView: ({ dispatch }, filmRef) => {
     console.log('POST view_app.js_REF_', filmRef)
     userService
@@ -279,12 +301,12 @@ const actions = {
         }
       })
   },
-  // C.2) GET movie comments
+  // C.2) GET movie views
   getViews: ({ dispatch, commit }) => {
     userService
       .getview()
       .then(response => {
-        commit
+        commit('PUT_VIEWS', response.data.views)
         const notification = {
           type: response.data.status,
           message: 'TEST ONLY_Views loaded',

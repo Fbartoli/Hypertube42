@@ -60,7 +60,7 @@
           min-height="200"
           transition="fade-transition"
         >
-          <MovieCard :movie="movie" />
+          <MovieCard :movie="movie" :viewed="movie.view" />
         </v-lazy>
       </v-col>
     </v-row>
@@ -120,7 +120,7 @@ export default {
     ...mapState(['Movies']),
     // ...mapActions('Movies', ['addMovies', 'filteredFetchMovies', 'filteredAddMovies']),
     // ...mapGetters({
-    //   storeMovies: 'Movies/storeMovies',
+    //   storeViews: 'Movies/views',
     // }),
   },
   created() {

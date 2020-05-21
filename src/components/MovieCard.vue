@@ -5,6 +5,17 @@
   >
     <v-card class="mx-auto" height="400px" width="300px">
       <v-img :src="movie.large_cover_image" height="400" contain>
+        <v-card-actions>
+          <v-icon
+            v-if="viewed === true"
+            class="blue--text text--lighten-5"
+            large
+            right
+            color="blue-grey lighten-1"
+          >
+            mdi-check
+          </v-icon>
+        </v-card-actions>
         <v-list-item three-line>
           <v-list-item-content>
             <div class="overline mb-4"></div>
@@ -19,6 +30,7 @@
 export default {
   props: {
     movie: Object,
+    viewed: Boolean,
   },
 }
 </script>

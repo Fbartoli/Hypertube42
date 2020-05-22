@@ -31,11 +31,25 @@
     <v-divider class="mx-4"></v-divider>
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
 
-    <div id="app">
-      <vue-core-video-player
-        src="https://media.vued.vanthink.cn/sparkle_your_name_am720p.mp4"
+    <div class="player">
+      <video-player
+        ref="videoPlayer"
+        class="video-player-box"
+        :options="playerOptions"
+        :playsinline="true"
+        @play="onPlayerPlay($event)"
+        @pause="onPlayerPause($event)"
+        @ended="onPlayerEnded($event)"
+        @waiting="onPlayerWaiting($event)"
+        @playing="onPlayerPlaying($event)"
+        @loadeddata="onPlayerLoadeddata($event)"
+        @timeupdate="onPlayerTimeupdate($event)"
+        @canplay="onPlayerCanplay($event)"
+        @canplaythrough="onPlayerCanplaythrough($event)"
+        @statechanged="playerStateChanged($event)"
+        @ready="playerReadied"
       >
-      </vue-core-video-player>
+      </video-player>
     </div>
 
     <v-divider class="mx-4"></v-divider>
@@ -111,19 +125,38 @@ import {
   minLength,
   maxLength,
 } from 'vuelidate/lib/validators'
-import Vue from 'vue'
-import VueCoreVideoPlayer from 'vue-core-video-player'
+// import Vue from 'vue'
+// import VueCoreVideoPlayer from 'vue-core-video-player'
+// import VideoPlayer from "@/components/VideoPlayer.vue"
 // import MovieComment from '../components/MovieComment'
 import { mapGetters, mapActions } from 'vuex'
 
-Vue.use(VueCoreVideoPlayer)
-
 export default {
+  name: 'VideoHypertube',
+  // components: {
+  //   VideoPlayer
+  // },
   data() {
     return {
       comment: '',
       ref: this.$route.params.id,
       // componentKey: 0,
+      playerOptions: {
+        // videojs options
+        height: '360',
+        autoplay: true,
+        controls: true,
+        muted: true,
+        language: 'en',
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        sources: [
+          {
+            type: 'video/mp4',
+            src: 'http://vjs.zencdn.net/v/oceans.mp4',
+          },
+        ],
+        poster: '/static/images/author.jpg',
+      },
     }
   },
   // components: { MovieComment },
@@ -150,6 +183,48 @@ export default {
       // this.comment = ''
       // this.componentKey += 1
     },
+    // listen event
+    onPlayerPlay(player) {
+      console.log('player play!', player)
+    },
+    onPlayerPause(player) {
+      console.log('player pause!', player)
+    },
+    // ...player event
+
+    // or listen state event
+
+    onPlayerEnded(player) {
+      console.log('player ended!', player)
+    },
+    onPlayerWaiting(player) {
+      console.log('player waiting!', player)
+    },
+    onPlayerPlaying(player) {
+      console.log('player playing!', player)
+    },
+    onPlayerLoadeddata(player) {
+      console.log('player Loadeddata!', player)
+    },
+    onPlayerTimeupdate(player) {
+      console.log('player Timeupdate!', player)
+    },
+    onPlayerCanplay(player) {
+      console.log('player Canplay!', player)
+    },
+    onPlayerCanplaythrough(player) {
+      console.log('player Canplaythrough!', player)
+    },
+    playerStateChanged(playerCurrentState) {
+      console.log('player current update state', playerCurrentState)
+    },
+
+    // player is ready
+    playerReadied(player) {
+      console.log('the player is readied', player)
+      // you can use it to do something...
+      // player.[methods]
+    },
   },
   computed: {
     ...mapGetters({
@@ -157,6 +232,9 @@ export default {
       storeUsername: 'App/storeUsername',
       storeComments: 'Movies/storeComments',
     }),
+    player() {
+      return this.$refs.videoPlayer.player
+    },
     commentErrors() {
       const errors = []
       if (!this.$v.comment.$dirty) return errors

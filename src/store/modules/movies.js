@@ -191,10 +191,11 @@ const actions = {
           message: 'Your comment was successfully sent !',
         }
         dispatch('Notifications/add', notification, { root: true })
-        router.push({
-          name: 'movie',
-          params: { id: ref || '' },
-        })
+        dispatch('getComments', ref)
+        // router.push({
+        //   name: 'movie',
+        //   params: { id: ref || '' },
+        // })
       })
       .catch(error => {
         console.log('STORE movies.js_sendComment_error_', error)

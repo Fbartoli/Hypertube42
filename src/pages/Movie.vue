@@ -29,7 +29,7 @@
     </v-card-text>
     <v-divider class="mx-4"></v-divider>
 
-    <v-card-title>Comments</v-card-title>
+    <v-card-title>{{ $t('commentTitle') }}</v-card-title>
     <v-list subheader two-line style="background-color: transparent">
       <v-list-item v-for="(itemComment, id) in storeComments" :key="id">
         <v-row v-if="itemComment.username == storeUsername">
@@ -56,7 +56,7 @@
       </v-list-item>
     </v-list>
 
-    <v-form submit.prevent="validComment()">
+    <v-form ref="formComment" submit.prevent="validComment()">
       <v-container>
         <v-row>
           <v-col cols="12">
@@ -64,7 +64,7 @@
               {{ storeUsername }}:<br />
             </v-list-item-subtitle>
             <v-text-field
-              v-model="comment"
+              v-model.lazy="comment"
               @input="$v.comment.$touch()"
               @blur="$v.comment.$touch()"
               :error-messages="commentErrors"
@@ -108,6 +108,7 @@ export default {
     return {
       comment: '',
       ref: this.$route.params.id,
+      // componentKey: 0,
     }
   },
   // components: { MovieComment },
@@ -130,6 +131,9 @@ export default {
       if (!this.$v.$invalid) {
         this.sendComment({ ref: this.ref, text: this.comment })
       }
+      this.$refs.formComment.reset()
+      // this.comment = ''
+      // this.componentKey += 1
     },
   },
   computed: {
@@ -141,7 +145,7 @@ export default {
     commentErrors() {
       const errors = []
       if (!this.$v.comment.$dirty) return errors
-      !this.$v.comment.required && errors.push(this.$t('commentRuleRequired'))
+      // !this.$v.comment.required && errors.push(this.$t('commentRuleRequired'))
       // !this.$v.comment.alphaNum && errors.push(this.$t('alphaNumRule'))
       !this.$v.comment.minLength && errors.push(this.$t('commentRuleMin'))
       !this.$v.comment.maxLength && errors.push(this.$t('commentRuleMax'))
@@ -169,6 +173,7 @@ export default {
     "commentRuleMin": "Comment must be at least 2 characters long",
     "commentRuleMax": "Comment must be at most 142 characters long",
     "commentRuleRequired": "Comment required",
+    "commentTitle": "Comments: ",
     "postComment": "Share !"
   },
   "fr": {
@@ -178,6 +183,7 @@ export default {
     "commentRuleMin": "Le commentaire doit avoir 2 caractères minimum",
     "commentRuleMax": "Le commentaire doit avoir 142 caractères maximum",
     "commentRuleRequired": "Un commentaire est requis",
+    "commentTitle": "Commentaires: ",
     "postComment": "Partager !"
   }
 }

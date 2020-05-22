@@ -27,6 +27,17 @@
         {{ movie.description_full }}
       </div>
     </v-card-text>
+
+    <v-divider class="mx-4"></v-divider>
+    <v-card-title>{{ $t('playerTitle') }}</v-card-title>
+
+    <div id="app">
+      <vue-core-video-player
+        src="https://media.vued.vanthink.cn/sparkle_your_name_am720p.mp4"
+      >
+      </vue-core-video-player>
+    </div>
+
     <v-divider class="mx-4"></v-divider>
 
     <v-card-title>{{ $t('commentTitle') }}</v-card-title>
@@ -100,8 +111,12 @@ import {
   minLength,
   maxLength,
 } from 'vuelidate/lib/validators'
+import Vue from 'vue'
+import VueCoreVideoPlayer from 'vue-core-video-player'
 // import MovieComment from '../components/MovieComment'
 import { mapGetters, mapActions } from 'vuex'
+
+Vue.use(VueCoreVideoPlayer)
 
 export default {
   data() {
@@ -174,7 +189,8 @@ export default {
     "commentRuleMax": "Comment must be at most 142 characters long",
     "commentRuleRequired": "Comment required",
     "commentTitle": "Comments: ",
-    "postComment": "Share !"
+    "postComment": "Share !",
+    "playerTitle": "Player: "
   },
   "fr": {
     "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
@@ -184,7 +200,8 @@ export default {
     "commentRuleMax": "Le commentaire doit avoir 142 caractères maximum",
     "commentRuleRequired": "Un commentaire est requis",
     "commentTitle": "Commentaires: ",
-    "postComment": "Partager !"
+    "postComment": "Partager !",
+    "playerTitle": "Lecteur: "
   }
 }
 </i18n>

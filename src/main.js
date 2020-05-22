@@ -38,10 +38,9 @@ new Vue({
   i18n,
   created() {
     let token = localStorage.getItem('hypertube')
-    console.log(token)
-    console.log(Math.floor(token.exp) - Math.floor(Date.now() / 1000))
-    token = JSON.parse(token)
+
     if (token) {
+      token = JSON.parse(token)
       if (Math.floor(token.exp) - Math.floor(Date.now() / 1000) > 60 * 10) {
         this.$store.commit('App/SET_TOKEN', token)
         this.$store.commit('App/SET_AUTH', true)

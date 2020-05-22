@@ -38,6 +38,7 @@ new Vue({
   i18n,
   created() {
     let token = localStorage.getItem('hypertube')
+
     if (token) {
       token = JSON.parse(token)
       if (Math.floor(token.exp) - Math.floor(Date.now() / 1000) > 60 * 10) {

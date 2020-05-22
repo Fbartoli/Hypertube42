@@ -17,7 +17,6 @@ export default {
 
   // GET userInfo
   getuser({ username, token }) {
-    console.log('TTESSTT', { username, token })
     apiClient.defaults.headers['x-access-token'] = token
     return apiClient.get('users/user/' + username)
   },

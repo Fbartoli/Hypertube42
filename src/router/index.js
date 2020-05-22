@@ -17,12 +17,15 @@ const routes = [
         store.commit('App/SET_AUTH', true)
         let info = code.split('.')
         let userInfo = JSON.parse(atob(info[1]))
+        let exp = userInfo.exp
         console.log('Home router_userInfo.data_ ', userInfo.data)
         // store.commit('App/PUT_USERNAME', userInfo.data.username)
+        localStorage.setItem('hypertube', JSON.stringify({ code, exp }))
         store.commit(
           'App/RESET_LOCALSTORAGE_USERNAME',
-          { username: userInfo.data.username },
-          userInfo.exp
+          userInfo.data.username,
+          userInfo.exp,
+          routeTo.query.code
         )
         // store.dispatch('App/getUserAuth')
         store.dispatch('App/getUser', '')
@@ -99,6 +102,9 @@ const routes = [
     name: 'movie',
     component: () => import('../pages/Movie.vue'),
     props: true,
+    meta: {
+      requiresAuth: true,
+    },
     beforeEnter(routeTo, routeFrom, next) {
       store
         .dispatch('Movies/fetchMovie', routeTo.params.id)

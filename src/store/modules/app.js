@@ -70,7 +70,7 @@ const mutations = {
     console.log('TEST_app_js_PUT_USERNAME', username)
     state.userInfo.username = username
   },
-  RESET_LOCALSTORAGE_USERNAME: (state, { username }, exp) => {
+  RESET_LOCALSTORAGE_USERNAME: (state, username, exp) => {
     state.userInfo.username = username
     state.userInfo.exp = exp
   },

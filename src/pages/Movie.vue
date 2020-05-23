@@ -31,9 +31,10 @@
     <v-divider class="mx-4"></v-divider>
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
 
-    <div class="player">
+    <div class="player" v-if="playerShow !== ''">
       <video-player
         ref="videoPlayer"
+        :key="componentKey"
         class="video-player-box"
         :options="playerOptions"
         :playsinline="true"
@@ -49,15 +50,9 @@
         @statechanged="playerStateChanged($event)"
         @ready="playerReadied"
       >
-        <video>
-          <source
-            src="http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V"
-            type="video/webm"
-          />
-        </video>
       </video-player>
-      <br /><br />
-      {{ this.storeMovieMeta.torrents[0] }}
+    </div>
+    <div>
       <v-btn
         v-if="this.storeMovieMeta.torrents[0]"
         class="ma-5"
@@ -66,8 +61,6 @@
       >
         {{ this.storeMovieMeta.torrents[0].quality }}
       </v-btn>
-      <br /><br />
-      {{ this.storeMovieMeta.torrents[1] }}
       <v-btn
         v-if="this.storeMovieMeta.torrents[1]"
         class="ma-5"
@@ -76,8 +69,6 @@
       >
         {{ this.storeMovieMeta.torrents[1].quality }}
       </v-btn>
-      <br /><br />
-      {{ this.storeMovieMeta.torrents[2] }}
       <v-btn
         v-if="this.storeMovieMeta.torrents[2]"
         class="ma-5"
@@ -86,13 +77,18 @@
       >
         {{ this.storeMovieMeta.torrents[2].quality }}
       </v-btn>
-      <br /><br />
-      {{ this.storeMovieMeta.torrents[3] }}
-      <v-btn class="ma-5" @click="threeStream()" color="primary">
-        Test Video
+      <v-btn
+        v-if="this.storeMovieMeta.torrents[3]"
+        class="ma-5"
+        @click="threeStream()"
+        color="primary"
+      >
+        {{ this.storeMovieMeta.torrents[3].quality }}
+      </v-btn>
+      <v-btn class="ma-5" @click="resetPlayer()" color="primary">
+        Reset Player component
       </v-btn>
     </div>
-
     <v-divider class="mx-4"></v-divider>
 
     <v-card-title>{{ $t('commentTitle') }}</v-card-title>
@@ -169,7 +165,6 @@ import {
 // import Vue from 'vue'
 // import VueCoreVideoPlayer from 'vue-core-video-player'
 // import VideoPlayer from "@/components/VideoPlayer.vue"
-// import MovieComment from '../components/MovieComment'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -181,39 +176,27 @@ export default {
     return {
       comment: '',
       ref: this.$route.params.id,
-      // componentKey: 0,
-      playerOptions: {
-        // videojs options
-        aspectRatio: '16:9',
-        autoplay: false,
-        controls: true,
-        muted: true,
-        language: 'en',
-        playbackRates: [0.7, 1.0, 1.5, 2.0],
-        // canPlayType: 'video/webm',
-        sources: [
-          {
-            //   src: 'http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
-            //   type: 'video/mp4'
-            // }, {
-            src:
-              'http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
-            type: 'video/webm',
-          },
-        ],
-        // [
-        // {
-        // type: 'video/webm',
-        // canPlayType: 'video/webm',
-        //     // src: 'http://vjs.zencdn.net/v/oceans.mp4',
-        //     // src: this.getStream({ magnetHash: 'OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V', id: this.ref })
-        //   src: "http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V"
-        // }],
-        poster: '',
-      },
+      videoSource: undefined,
+      playerShow: '',
+      componentKey: 0,
+      playerHash: '',
+      // playerOptions: {
+      //   autoplay: true,
+      //   controls: true,
+      //   language: 'en',
+      //   playbackRates: [0.7, 1.0, 1.5, 2.0],
+      //   aspectRatio: '16:9',
+      //   sources: [{
+      //     type: 'video/webm',
+      //     // src: 'http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
+      //     // src: this.videoSource
+      //     src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`
+      //   }],
+      // },
+      // src: 'http://vjs.zencdn.net/v/oceans.mp4',
+      // src: this.getStream({ magnetHash: 'OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V', id: this.ref })
     }
   },
-  // components: { MovieComment },
   props: {
     movie: {
       type: Object,
@@ -279,32 +262,45 @@ export default {
       // you can use it to do something...
       // player.[methods]
     },
+    resetPlayer() {
+      this.componentKey += 1
+    },
     zeroStream() {
-      this.getStream({
-        magnetHash: this.storeMovieMeta.torrents[0].hash,
-        id: this.ref,
-      })
+      this.playerHash = this.storeMovieMeta.torrents[0].hash
+      const startPlayer = this
+      setTimeout(function() {
+        startPlayer.playerShow = 'OK'
+        // console.log('=== [0] OK ===')
+      }, 1000)
+      // return this.getStream({
+      //   magnetHash: this.storeMovieMeta.torrents[0].hash,
+      //   id: this.ref,
+      // })
       // this.playerOptions.sources[0].src = this.storeMovieMeta.torrents[0].url
     },
     oneStream() {
-      this.getStream({
-        magnetHash: this.storeMovieMeta.torrents[1].hash,
-        id: this.ref,
-      })
-      // this.playerOptions.sources[1].src = this.storeMovieMeta.torrents[1].url
+      this.playerHash = this.storeMovieMeta.torrents[1].hash
+      const startPlayer = this
+      setTimeout(function() {
+        startPlayer.playerShow = 'OK'
+        // console.log('=== [1] OK ===')
+      }, 1000)
     },
     twoStream() {
-      this.getStream({
-        magnetHash: this.storeMovieMeta.torrents[2].hash,
-        id: this.ref,
-      })
-      // this.playerOptions.sources[2].src = this.storeMovieMeta.torrents[2].url
+      this.playerHash = this.storeMovieMeta.torrents[2].hash
+      const startPlayer = this
+      setTimeout(function() {
+        startPlayer.playerShow = 'OK'
+        // console.log('=== [2] OK ===')
+      }, 1000)
     },
     threeStream() {
-      this.getStream({
-        magnetHash: 'OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
-        id: this.ref,
-      })
+      this.playerHash = 'OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V'
+      const startPlayer = this
+      setTimeout(function() {
+        startPlayer.playerShow = 'OK'
+        // console.log('=== test [3] OK ===')
+      }, 1000)
       // this.playerOptions.sources[3].src = this.storeMovieMeta.torrents[3].url
     },
   },
@@ -326,6 +322,26 @@ export default {
       !this.$v.comment.minLength && errors.push(this.$t('commentRuleMin'))
       !this.$v.comment.maxLength && errors.push(this.$t('commentRuleMax'))
       return errors
+    },
+    serverMessage() {
+      return this.$store.getters['interact/serverMessage']
+    },
+    playerOptions() {
+      return {
+        autoplay: true,
+        controls: true,
+        language: 'en',
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        aspectRatio: '16:9',
+        sources: [
+          {
+            type: 'video/webm',
+            // src: 'http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
+            // src: this.videoSource
+            src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`,
+          },
+        ],
+      }
     },
   },
   validations: {
@@ -351,7 +367,7 @@ export default {
     "commentRuleRequired": "Comment required",
     "commentTitle": "Comments: ",
     "postComment": "Share !",
-    "playerTitle": "Player: "
+    "playerTitle": "Video: "
   },
   "fr": {
     "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
@@ -362,7 +378,7 @@ export default {
     "commentRuleRequired": "Un commentaire est requis",
     "commentTitle": "Commentaires: ",
     "postComment": "Partager !",
-    "playerTitle": "Lecteur: "
+    "playerTitle": "Film: "
   }
 }
 </i18n>

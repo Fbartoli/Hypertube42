@@ -49,6 +49,12 @@
         @statechanged="playerStateChanged($event)"
         @ready="playerReadied"
       >
+        <video>
+          <source
+            src="http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V"
+            type="video/webm"
+          />
+        </video>
       </video-player>
       <br /><br />
       {{ this.storeMovieMeta.torrents[0] }}
@@ -82,13 +88,8 @@
       </v-btn>
       <br /><br />
       {{ this.storeMovieMeta.torrents[3] }}
-      <v-btn
-        v-if="this.storeMovieMeta.torrents[3]"
-        class="ma-5"
-        @click="threeStream()"
-        color="primary"
-      >
-        {{ this.storeMovieMeta.torrents[3].quality }}
+      <v-btn class="ma-5" @click="threeStream()" color="primary">
+        Test Video
       </v-btn>
     </div>
 
@@ -183,18 +184,31 @@ export default {
       // componentKey: 0,
       playerOptions: {
         // videojs options
-        // height: '360',
-        autoplay: true,
+        aspectRatio: '16:9',
+        autoplay: false,
         controls: true,
         muted: true,
         language: 'en',
         playbackRates: [0.7, 1.0, 1.5, 2.0],
+        // canPlayType: 'video/webm',
         sources: [
           {
-            // type: 'video/mp4',
-            src: 'http://vjs.zencdn.net/v/oceans.mp4',
+            //   src: 'http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
+            //   type: 'video/mp4'
+            // }, {
+            src:
+              'http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
+            type: 'video/webm',
           },
         ],
+        // [
+        // {
+        // type: 'video/webm',
+        // canPlayType: 'video/webm',
+        //     // src: 'http://vjs.zencdn.net/v/oceans.mp4',
+        //     // src: this.getStream({ magnetHash: 'OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V', id: this.ref })
+        //   src: "http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V"
+        // }],
         poster: '',
       },
     }
@@ -266,19 +280,31 @@ export default {
       // player.[methods]
     },
     zeroStream() {
-      this.getStream(this.storeMovieMeta.torrents[0].hash)
+      this.getStream({
+        magnetHash: this.storeMovieMeta.torrents[0].hash,
+        id: this.ref,
+      })
       // this.playerOptions.sources[0].src = this.storeMovieMeta.torrents[0].url
     },
     oneStream() {
-      this.getStream(this.storeMovieMeta.torrents[1].hash)
+      this.getStream({
+        magnetHash: this.storeMovieMeta.torrents[1].hash,
+        id: this.ref,
+      })
       // this.playerOptions.sources[1].src = this.storeMovieMeta.torrents[1].url
     },
     twoStream() {
-      this.getStream(this.storeMovieMeta.torrents[2].hash)
+      this.getStream({
+        magnetHash: this.storeMovieMeta.torrents[2].hash,
+        id: this.ref,
+      })
       // this.playerOptions.sources[2].src = this.storeMovieMeta.torrents[2].url
     },
     threeStream() {
-      this.getStream(this.storeMovieMeta.torrents[3].hash)
+      this.getStream({
+        magnetHash: 'OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
+        id: this.ref,
+      })
       // this.playerOptions.sources[3].src = this.storeMovieMeta.torrents[3].url
     },
   },

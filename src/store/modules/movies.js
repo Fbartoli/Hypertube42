@@ -345,11 +345,12 @@ const actions = {
 
   // D) Streaming:
   // D.1) GET
-  getStream: ({ dispatch, commit }, magnetHash) => {
+  getStream: ({ dispatch, commit }, { magnetHash, id }) => {
     streamService
-      .getstream(magnetHash)
+      .getstream({ magnetHash, id })
       .then(response => {
         console.log(' *** Stream, response_', response)
+        console.log(' *** Stream, response_', response.data)
         commit('PUT_STREAM', response.data)
         const notification = {
           type: response.data.status,

@@ -50,6 +50,46 @@
         @ready="playerReadied"
       >
       </video-player>
+      <br /><br />
+      {{ this.storeMovieMeta.torrents[0] }}
+      <v-btn
+        v-if="this.storeMovieMeta.torrents[0]"
+        class="ma-5"
+        @click="zeroStream()"
+        color="primary"
+      >
+        {{ this.storeMovieMeta.torrents[0].quality }}
+      </v-btn>
+      <br /><br />
+      {{ this.storeMovieMeta.torrents[1] }}
+      <v-btn
+        v-if="this.storeMovieMeta.torrents[1]"
+        class="ma-5"
+        @click="oneStream()"
+        color="primary"
+      >
+        {{ this.storeMovieMeta.torrents[1].quality }}
+      </v-btn>
+      <br /><br />
+      {{ this.storeMovieMeta.torrents[2] }}
+      <v-btn
+        v-if="this.storeMovieMeta.torrents[2]"
+        class="ma-5"
+        @click="twoStream()"
+        color="primary"
+      >
+        {{ this.storeMovieMeta.torrents[2].quality }}
+      </v-btn>
+      <br /><br />
+      {{ this.storeMovieMeta.torrents[3] }}
+      <v-btn
+        v-if="this.storeMovieMeta.torrents[3]"
+        class="ma-5"
+        @click="threeStream()"
+        color="primary"
+      >
+        {{ this.storeMovieMeta.torrents[3].quality }}
+      </v-btn>
     </div>
 
     <v-divider class="mx-4"></v-divider>
@@ -143,7 +183,7 @@ export default {
       // componentKey: 0,
       playerOptions: {
         // videojs options
-        height: '360',
+        // height: '360',
         autoplay: true,
         controls: true,
         muted: true,
@@ -151,11 +191,11 @@ export default {
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         sources: [
           {
-            type: 'video/mp4',
+            // type: 'video/mp4',
             src: 'http://vjs.zencdn.net/v/oceans.mp4',
           },
         ],
-        poster: '/static/images/author.jpg',
+        poster: '',
       },
     }
   },
@@ -171,7 +211,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('Movies', ['sendComment']),
+    ...mapActions('Movies', ['sendComment', 'getStream']),
     validComment() {
       // console.log('this.ref_', this.ref)
       // console.log('this.comment_', this.comment)
@@ -225,10 +265,27 @@ export default {
       // you can use it to do something...
       // player.[methods]
     },
+    zeroStream() {
+      this.getStream(this.storeMovieMeta.torrents[0].hash)
+      // this.playerOptions.sources[0].src = this.storeMovieMeta.torrents[0].url
+    },
+    oneStream() {
+      this.getStream(this.storeMovieMeta.torrents[1].hash)
+      // this.playerOptions.sources[1].src = this.storeMovieMeta.torrents[1].url
+    },
+    twoStream() {
+      this.getStream(this.storeMovieMeta.torrents[2].hash)
+      // this.playerOptions.sources[2].src = this.storeMovieMeta.torrents[2].url
+    },
+    threeStream() {
+      this.getStream(this.storeMovieMeta.torrents[3].hash)
+      // this.playerOptions.sources[3].src = this.storeMovieMeta.torrents[3].url
+    },
   },
   computed: {
     ...mapGetters({
       storeToken: 'App/storeToken',
+      storeMovieMeta: 'Movies/storeMovieMeta',
       storeUsername: 'App/storeUsername',
       storeComments: 'Movies/storeComments',
     }),

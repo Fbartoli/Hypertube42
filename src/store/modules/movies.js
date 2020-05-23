@@ -1,5 +1,6 @@
 import movieService from '../../services/MovieService.js'
 import userService from '../../services/UserService'
+import streamService from '../../services/StreamService'
 import router from '../../router/index'
 import nProgress from 'nprogress'
 
@@ -11,6 +12,7 @@ const state = {
   movieTotal: 0,
   comments: {},
   views: {},
+  stream: {},
 }
 
 // mutations
@@ -51,6 +53,9 @@ const mutations = {
     // }
     console.log('VIEWS', views)
     state.views = views
+  },
+  PUT_STREAM(state, stream) {
+    state.stream = stream
   },
 }
 // actions
@@ -337,6 +342,44 @@ const actions = {
         }
       })
   },
+
+  // D) Streaming:
+  // D.1) GET
+  getStream: ({ dispatch, commit }, magnetHash) => {
+    streamService
+      .getstream(magnetHash)
+      .then(response => {
+        console.log(' *** Stream, response_', response)
+        commit('PUT_STREAM', response.data)
+        const notification = {
+          type: response.data.status,
+          message: 'Streaming...',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'There was an issue while loading the stream',
+        }
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+            router.push({ name: '404', params: { resource: 'getting stream' } })
+            // } else if (error.response.status === 403) {
+            //   dispatch('Notifications/add', notification, {
+            //     root: true,
+            //   })
+          }
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
 }
 
 // getters
@@ -346,6 +389,9 @@ const getters = {
   },
   storeMovies: state => {
     return state.movies
+  },
+  storeMovieMeta: state => {
+    return state.movie
   },
 }
 

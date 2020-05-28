@@ -2,7 +2,7 @@
   <v-card class="mx-auto my-12" width="80%">
     <v-img max-height="auto" :src="movie.large_cover_image"></v-img>
 
-    <v-card-title>{{ movie.title }} </v-card-title>
+    <v-card-title>{{ movie.title }}</v-card-title>
 
     <v-card-text>
       <v-row align="center" class="mx-0">
@@ -20,7 +20,8 @@
       </v-row>
 
       <div class="my-4 subtitle-1">
-        {{ movie.year }} • {{ movie.genres[0] }}
+        {{ movie.year }} • {{ movie.genres[0] }} {{ movie.genres[1] }}
+        {{ movie.genres[2] }}
       </div>
 
       <div>
@@ -30,11 +31,29 @@
 
     <v-divider class="mx-4"></v-divider>
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
+    <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
 
     <div class="player" v-if="playerShow !== ''">
+      <video controls autoplay>
+        <source
+          :src="
+            `http://localhost:3000/torrent/18F05A35A335909B384D1D40D79EFEC3E71BCEE0?id=8539`
+          "
+          type="video/webm"
+        />
+        <track
+          src="../assets/abc.vtt"
+          kind="subtitles"
+          srclang="en"
+          label="en"
+          default
+        />
+      </video>
+    </div>
+
+    <div class="player" v-if="playerShow === 't'">
       <video-player
         ref="videoPlayer"
-        :key="componentKey"
         class="video-player-box"
         :options="playerOptions"
         :playsinline="true"
@@ -50,7 +69,15 @@
         @statechanged="playerStateChanged($event)"
         @ready="playerReadied"
       >
+        <track
+          kind="subtitles"
+          src="../assets/abc.vtt"
+          srclang="trackLanguage"
+          label="language"
+          default
+        />
       </video-player>
+      User Language: {{ language }}
     </div>
     <div>
       <v-btn
@@ -61,6 +88,7 @@
       >
         {{ this.storeMovieMeta.torrents[0].quality }}
       </v-btn>
+      {{ this.storeMovieMeta.torrents[0].hash }}
       <v-btn
         v-if="this.storeMovieMeta.torrents[1]"
         class="ma-5"
@@ -69,6 +97,7 @@
       >
         {{ this.storeMovieMeta.torrents[1].quality }}
       </v-btn>
+      {{ this.storeMovieMeta.torrents[1].hash }}
       <v-btn
         v-if="this.storeMovieMeta.torrents[2]"
         class="ma-5"
@@ -84,9 +113,6 @@
         color="primary"
       >
         {{ this.storeMovieMeta.torrents[3].quality }}
-      </v-btn>
-      <v-btn class="ma-5" @click="resetPlayer()" color="primary">
-        Reset Player component
       </v-btn>
     </div>
     <v-divider class="mx-4"></v-divider>
@@ -155,7 +181,20 @@
   </v-card>
 </template>
 
+//
 <script>
+// // Get all text tracks for the current player.
+// var tracks = player.textTracks();
+
+// for (var i = 0; i < tracks.length; i++) {
+//   var track = tracks[i];
+
+//   // Find the English captions track and mark it as "showing".
+//   if (track.kind === 'captions' && track.language === 'en') {
+//     track.mode = 'showing';
+//   }
+// }
+
 import {
   required,
   // alphaNum,
@@ -166,6 +205,7 @@ import {
 // import VueCoreVideoPlayer from 'vue-core-video-player'
 // import VideoPlayer from "@/components/VideoPlayer.vue"
 import { mapGetters, mapActions } from 'vuex'
+// import subtitlestotest from src/assets/subtitlestotest.srt
 
 export default {
   name: 'VideoHypertube',
@@ -177,8 +217,11 @@ export default {
       comment: '',
       ref: this.$route.params.id,
       videoSource: undefined,
+      trackSource: undefined,
+      trackLanguage: 'en',
+      trackLanguageList: ['en', 'fr', 'es'],
       playerShow: '',
-      componentKey: 0,
+      // componentKey: 0,
       playerHash: '',
       // playerOptions: {
       //   autoplay: true,
@@ -198,14 +241,18 @@ export default {
     }
   },
   props: {
+    language: {
+      type: String,
+      required: false,
+    },
     movie: {
       type: Object,
       required: true,
     },
-    comments: {
-      type: Object,
-      required: false,
-    },
+    // comments: {
+    //   type: Object,
+    //   required: false,
+    // },
   },
   methods: {
     ...mapActions('Movies', ['sendComment', 'getStream']),
@@ -262,9 +309,9 @@ export default {
       // you can use it to do something...
       // player.[methods]
     },
-    resetPlayer() {
-      this.componentKey += 1
-    },
+    // resetPlayer() {
+    //   this.componentKey += 1
+    // },
     zeroStream() {
       this.playerHash = this.storeMovieMeta.torrents[0].hash
       const startPlayer = this
@@ -295,14 +342,21 @@ export default {
       }, 1000)
     },
     threeStream() {
-      this.playerHash = 'OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V'
+      this.playerHash = this.storeMovieMeta.torrents[3].hash
       const startPlayer = this
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
         // console.log('=== test [3] OK ===')
       }, 1000)
-      // this.playerOptions.sources[3].src = this.storeMovieMeta.torrents[3].url
     },
+    // fourStream() {
+    //   this.playerHash = this.storeMovieMeta.torrents[4].hash
+    //   const startPlayer = this
+    //   setTimeout(function() {
+    //     startPlayer.playerShow = 'OK'
+    //     // console.log('=== test [3] OK ===')
+    //   }, 1000)
+    // },
   },
   computed: {
     ...mapGetters({
@@ -336,7 +390,7 @@ export default {
         sources: [
           {
             type: 'video/webm',
-            // src: 'http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
+            // src: 'http://localhost:3000/torrent/E774B886539A3F7EBF1FFE7CD01A107F73298248',
             // src: this.videoSource
             src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`,
           },

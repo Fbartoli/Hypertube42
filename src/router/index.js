@@ -109,10 +109,12 @@ const routes = [
       store
         .dispatch('Movies/fetchMovie', routeTo.params.id)
         .then(movie => {
+          console.log('*** ALLO ***', store.getters['App/storeLanguage'])
           if (parseInt(movie.id) === 0) {
             next({ name: '404', params: { resource: 'movie' } })
           }
           routeTo.params.movie = movie
+          routeTo.params.language = store.getters['App/storeLanguage']
           store.dispatch('Movies/getComments', routeTo.params.id)
           store.dispatch('Movies/sendView', routeTo.params.id)
           next()

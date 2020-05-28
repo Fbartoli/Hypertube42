@@ -363,6 +363,9 @@ const getters = {
   storeUsername: state => {
     return state.userInfo.username
   },
+  storeLanguage: state => {
+    return state.userInfo.language
+  },
 }
 
 export default {

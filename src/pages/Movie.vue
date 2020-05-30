@@ -33,16 +33,16 @@
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
     <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
 
-    <div class="player" v-if="playerShow === 'tre'">
+    <div class="player" v-if="playerShow !== ''">
       <video controls autoplay>
         <source
           :src="
-            `http://localhost:3000/torrent/02767050E0BE2FD4DB9A2AD6C12416AC806ED6ED?id=7781`
+            `http://localhost:3000/torrent/18F05A35A335909B384D1D40D79EFEC3E71BCEE0?id=8539`
           "
-          type="video/webm"
+          type="video/mp4"
         />
         <track
-          src="../assets/abc.vtt"
+          src="../assets/en.tt5463162.vtt"
           kind="subtitles"
           srclang="en"
           label="en"
@@ -51,7 +51,7 @@
       </video>
     </div>
 
-    <div class="player" v-if="playerShow !== ''">
+    <div class="player" v-if="playerShow === 't'">
       <video-player
         ref="videoPlayer"
         class="video-player-box"

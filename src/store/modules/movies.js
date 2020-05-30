@@ -483,6 +483,12 @@ const getters = {
   storeMovieMeta: state => {
     return state.movie
   },
+  storeFormats: state => {
+    return state.formats
+  },
+  storeSubtitles: state => {
+    return state.subtitles
+  },
 }
 
 export default {

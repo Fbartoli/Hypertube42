@@ -74,4 +74,10 @@ export default {
     console.log('UserService.js_GETview_OK')
     return apiClient.get(`films/view`)
   },
+
+  // GET subtitles on a specific movie
+  getsubs(imdbid) {
+    console.log('UserService.js_GETview_OK')
+    return apiClient.get(`films/subs/${imdbid}`)
+  },
 }

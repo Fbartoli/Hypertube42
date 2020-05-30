@@ -109,7 +109,7 @@ const routes = [
       store
         .dispatch('Movies/fetchMovie', routeTo.params.id)
         .then(movie => {
-          console.log('*** ALLO ***', store.getters['App/storeLanguage'])
+          console.log('*** ALLO ***', movie)
           if (parseInt(movie.id) === 0) {
             next({ name: '404', params: { resource: 'movie' } })
           }
@@ -117,13 +117,24 @@ const routes = [
           routeTo.params.language = store.getters['App/storeLanguage']
           store.dispatch('Movies/getComments', routeTo.params.id)
           store.dispatch('Movies/sendView', routeTo.params.id)
+          store.dispatch('Movies/getSubtitles', movie.imdb_code)
+          console.log('T Y P E O F_ ', typeof movie.torrents.length)
+          for (let i = 0; i < parseInt(movie.torrents.length); i++) {
+            store.dispatch('Movies/getStreamFormat', {
+              magnetHash: movie.torrents[i].hash,
+              id: movie.id,
+              indice: i,
+            })
+          }
           next()
         })
         .catch(error => {
-          if (error.response.status === 404) {
-            next({ name: '404', params: { resource: 'movie' } })
+          if (error.response) {
+            if (error.response.status === 404) {
+              next({ name: '404', params: { resource: 'movie' } })
+            }
+            next({ name: 'network-issue' })
           }
-          next({ name: 'network-issue' })
         })
     },
   },

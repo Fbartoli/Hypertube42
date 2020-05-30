@@ -33,11 +33,11 @@
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
     <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
 
-    <div class="player" v-if="playerShow !== ''">
+    <div class="player" v-if="playerShow === 'tre'">
       <video controls autoplay>
         <source
           :src="
-            `http://localhost:3000/torrent/18F05A35A335909B384D1D40D79EFEC3E71BCEE0?id=8539`
+            `http://localhost:3000/torrent/02767050E0BE2FD4DB9A2AD6C12416AC806ED6ED?id=7781`
           "
           type="video/webm"
         />
@@ -51,7 +51,7 @@
       </video>
     </div>
 
-    <div class="player" v-if="playerShow === 't'">
+    <div class="player" v-if="playerShow !== ''">
       <video-player
         ref="videoPlayer"
         class="video-player-box"
@@ -390,9 +390,9 @@ export default {
         sources: [
           {
             type: 'video/webm',
-            // src: 'http://localhost:3000/torrent/E774B886539A3F7EBF1FFE7CD01A107F73298248',
             // src: this.videoSource
-            src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`,
+            // src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`,
+            src: `http://localhost:3000/torrent/02767050E0BE2FD4DB9A2AD6C12416AC806ED6ED?id=7783`,
           },
         ],
       }

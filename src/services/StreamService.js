@@ -14,4 +14,7 @@ export default {
   getstream({ magnetHash, id }) {
     return apiCLientStream.get(`/torrent/${magnetHash}?id=${id}`)
   },
+  getstreamformats({ magnetHash }) {
+    return apiCLientStream.get(`/torrent/mime/${magnetHash}`)
+  },
 }

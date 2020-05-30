@@ -13,6 +13,8 @@ const state = {
   comments: {},
   views: {},
   stream: {},
+  formats: [],
+  subtitles: {},
 }
 
 // mutations
@@ -56,6 +58,12 @@ const mutations = {
   },
   PUT_STREAM(state, stream) {
     state.stream = stream
+  },
+  PUT_STREAM_FORMAT(state, { format, indice }) {
+    state.formats[indice] = format
+  },
+  PUT_SUBTITLES(state, subtitles) {
+    state.subtitles = subtitles
   },
 }
 // actions
@@ -344,7 +352,7 @@ const actions = {
   },
 
   // D) Streaming:
-  // D.1) GET
+  // D.1) GET video and sound stream
   getStream: ({ dispatch, commit }, { magnetHash, id }) => {
     streamService
       .getstream({ magnetHash, id })
@@ -362,6 +370,87 @@ const actions = {
         const notification = {
           type: 'error',
           message: 'There was an issue while loading the stream',
+        }
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+            router.push({ name: '404', params: { resource: 'getting stream' } })
+            // } else if (error.response.status === 403) {
+            //   dispatch('Notifications/add', notification, {
+            //     root: true,
+            //   })
+          }
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+  // D.2) GET stream formats
+  getStreamFormat: ({ dispatch, commit }, { magnetHash, id, indice }) => {
+    console.log('&& hash &&', magnetHash)
+    console.log('&& id &&', id)
+    console.log('&& indice &&', indice)
+    streamService
+      .getstreamformats({ magnetHash, id })
+      .then(response => {
+        console.log(' *** Format, response_', response)
+        console.log(' *** Format, response_', response.data)
+        commit('PUT_STREAM_FORMAT', {
+          format: response.data.mimetype,
+          indice: indice,
+        })
+        const notification = {
+          type: response.data.status,
+          message: 'Stream format received',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'There was an issue detecting stream format',
+        }
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+            router.push({ name: '404', params: { resource: 'getting stream' } })
+            // } else if (error.response.status === 403) {
+            //   dispatch('Notifications/add', notification, {
+            //     root: true,
+            //   })
+          }
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+  // D.3) GET subtitles
+  getSubtitles: ({ dispatch, commit }, imdbid) => {
+    console.log(' * imdbid * ', imdbid)
+    userService
+      .getsubs(imdbid)
+      .then(response => {
+        console.log(' *** Subtitles, response_', response)
+        console.log(' *** Stream, response_', response.data.file)
+        commit('PUT_SUBTITLES', response.data.file)
+        const notification = {
+          type: response.data.status,
+          message: 'Subtitles ready',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'No subtitles available',
         }
         if (error.response) {
           if (error.response.status === 404) {

@@ -1,8 +1,9 @@
 import axios from 'axios'
 
 const apiCLientStream = axios.create({
-  // baseURL: 'https://hypertube.yolvhi.net',
-  baseURL: 'http://localhost:3000',
+  baseURL: `${process.env.VUE_APP_BACKEND_URL}`,
+  // baseURL: 'https://hypertube42.herokuapp.com/',
+  // baseURL: 'http://localhost:3000',
   withCredentials: false, //default value
   // timeout: 20000,
   headers: {

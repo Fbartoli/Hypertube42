@@ -200,6 +200,7 @@ export default {
   data() {
     return {
       comment: '',
+      src: '',
       ref: this.$route.params.id,
       videoSource: undefined,
       trackSource: undefined,
@@ -302,6 +303,7 @@ export default {
       this.playerHash = this.storeMovieMeta.torrents[0].hash
       this.playerFormat = this.storeFormats[0]
       const startPlayer = this
+      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
         // console.log('=== [0] OK ===')
@@ -316,7 +318,7 @@ export default {
       this.playerHash = this.storeMovieMeta.torrents[1].hash
       this.playerFormat = this.storeFormats[1]
       const startPlayer = this
-      this.src = `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`
+      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
         // console.log('=== [1] OK ===')
@@ -385,7 +387,7 @@ export default {
           {
             type: `${this.playerFormat}`,
             // src: this.videoSource
-            src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`,
+            src: `${process.env.VUE_APP_BACKEND_URL}/torrent/${this.playerHash}?id=${this.ref}`,
             // src: `http://localhost:3000/torrent/02767050E0BE2FD4DB9A2AD6C12416AC806ED6ED?id=7783`,
           },
         ],

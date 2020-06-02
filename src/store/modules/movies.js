@@ -62,8 +62,9 @@ const mutations = {
   PUT_STREAM_FORMAT(state, { format, indice }) {
     state.formats[indice] = format
   },
-  PUT_SUBTITLES(state, subtitles) {
-    state.subtitles = subtitles
+  PUT_SUBTITLES(state, { url, language }) {
+    if (language === 'en') state.subtitles.en = url
+    if (language === 'fr') state.subtitles.fr = url
   },
 }
 // actions
@@ -433,14 +434,15 @@ const actions = {
       })
   },
   // D.3) GET subtitles
-  getSubtitles: ({ dispatch, commit }, imdbid) => {
+  getSubtitles: ({ dispatch, commit }, { imdbid, language }) => {
     console.log(' * imdbid * ', imdbid)
+    console.log(' * language subtitles * ', language)
     userService
-      .getsubs(imdbid)
+      .getsubs({ imdbid, language })
       .then(response => {
         console.log(' *** Subtitles, response_', response)
         console.log(' *** Stream, response_', response.data.file)
-        commit('PUT_SUBTITLES', response.data.file)
+        commit('PUT_SUBTITLES', { url: response.data.file, language: language })
         const notification = {
           type: response.data.status,
           message: 'Subtitles ready',

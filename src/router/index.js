@@ -117,7 +117,14 @@ const routes = [
           routeTo.params.language = store.getters['App/storeLanguage']
           store.dispatch('Movies/getComments', routeTo.params.id)
           store.dispatch('Movies/sendView', routeTo.params.id)
-          store.dispatch('Movies/getSubtitles', movie.imdb_code)
+          store.dispatch('Movies/getSubtitles', {
+            imdbid: movie.imdb_code,
+            language: 'en',
+          })
+          store.dispatch('Movies/getSubtitles', {
+            imdbid: movie.imdb_code,
+            language: 'fr',
+          })
           console.log('T Y P E O F_ ', typeof movie.torrents.length)
           for (let i = 0; i < parseInt(movie.torrents.length); i++) {
             store.dispatch('Movies/getStreamFormat', {

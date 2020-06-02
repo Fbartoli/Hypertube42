@@ -6,15 +6,7 @@
 
     <v-card-text>
       <v-row align="center" class="mx-0">
-        <v-rating
-          length="10"
-          :value="movie.rating"
-          color="amber"
-          dense
-          half-increments
-          readonly
-          size="14"
-        ></v-rating>
+        <v-rating></v-rating>
 
         <div class="grey--text ml-4">{{ movie.rating }}</div>
       </v-row>
@@ -24,34 +16,33 @@
         {{ movie.genres[2] }}
       </div>
 
-      <div>
-        {{ movie.description_full }}
-      </div>
+      <div>{{ movie.description_full }}</div>
     </v-card-text>
 
     <v-divider class="mx-4"></v-divider>
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
     <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
 
-    <div class="player" v-if="playerShow === 'DEPRECATED'">
-      <video controls autoplay>
-        <source
-          :src="
-            `http://localhost:3000/torrent/18F05A35A335909B384D1D40D79EFEC3E71BCEE0?id=8539`
-          "
-          type="video/mp4"
-        />
+    <div class="player" v-if="playerShow !== ''">
+      <video controls autoplay crossorigin="anonymous">
+        <source :src="src" :type="playerFormat" />
         <track
-          src="../assets/en.tt5463162.vtt"
+          :src="storeSubtitles.en"
           kind="subtitles"
           srclang="en"
           label="en"
           default
         />
+        <track
+          :src="storeSubtitles.fr"
+          kind="subtitles"
+          srclang="fr"
+          label="fr"
+        />
       </video>
     </div>
 
-    <div class="player" v-if="playerShow !== ''">
+    <!-- <div class="player" v-if="playerShow !== ''">
       <video-player
         ref="videoPlayer"
         class="video-player-box"
@@ -78,40 +69,36 @@
         />
       </video-player>
       User Language: {{ language }}
-    </div>
+    </div>-->
     <div>
       <v-btn
         v-if="this.storeMovieMeta.torrents[0]"
         class="ma-5"
         @click="zeroStream()"
         color="primary"
+        >{{ this.storeMovieMeta.torrents[0].quality }}</v-btn
       >
-        {{ this.storeMovieMeta.torrents[0].quality }}
-      </v-btn>
       <v-btn
         v-if="this.storeMovieMeta.torrents[1]"
         class="ma-5"
         @click="oneStream()"
         color="primary"
+        >{{ this.storeMovieMeta.torrents[1].quality }}</v-btn
       >
-        {{ this.storeMovieMeta.torrents[1].quality }}
-      </v-btn>
       <v-btn
         v-if="this.storeMovieMeta.torrents[2]"
         class="ma-5"
         @click="twoStream()"
         color="primary"
+        >{{ this.storeMovieMeta.torrents[2].quality }}</v-btn
       >
-        {{ this.storeMovieMeta.torrents[2].quality }}
-      </v-btn>
       <v-btn
         v-if="this.storeMovieMeta.torrents[3]"
         class="ma-5"
         @click="threeStream()"
         color="primary"
+        >{{ this.storeMovieMeta.torrents[3].quality }}</v-btn
       >
-        {{ this.storeMovieMeta.torrents[3].quality }}
-      </v-btn>
     </div>
     <v-divider class="mx-4"></v-divider>
 
@@ -147,7 +134,8 @@
         <v-row>
           <v-col cols="12">
             <v-list-item-subtitle class="ma-1 subtitle-1">
-              {{ storeUsername }}:<br />
+              {{ storeUsername }}:
+              <br />
             </v-list-item-subtitle>
             <v-text-field
               v-model.lazy="comment"
@@ -171,9 +159,8 @@
           x-large
           color="blue"
           :disabled="$v.$invalid"
+          >{{ $t('postComment') }}</v-btn
         >
-          {{ $t('postComment') }}
-        </v-btn>
       </v-card-actions>
     </v-form>
   </v-card>
@@ -329,6 +316,7 @@ export default {
       this.playerHash = this.storeMovieMeta.torrents[1].hash
       this.playerFormat = this.storeFormats[1]
       const startPlayer = this
+      this.src = `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
         // console.log('=== [1] OK ===')
@@ -368,6 +356,7 @@ export default {
       storeUsername: 'App/storeUsername',
       storeComments: 'Movies/storeComments',
       storeFormats: 'Movies/storeFormats',
+      storeSubtitles: 'Movies/storeSubtitles',
     }),
     player() {
       return this.$refs.videoPlayer.player

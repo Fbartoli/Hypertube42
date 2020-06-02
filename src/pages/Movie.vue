@@ -328,6 +328,7 @@ export default {
       this.playerHash = this.storeMovieMeta.torrents[2].hash
       this.playerFormat = this.storeFormats[2]
       const startPlayer = this
+      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
         // console.log('=== [2] OK ===')
@@ -337,6 +338,7 @@ export default {
       this.playerHash = this.storeMovieMeta.torrents[3].hash
       this.playerFormat = this.storeFormats[3]
       const startPlayer = this
+      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
         // console.log('=== test [3] OK ===')

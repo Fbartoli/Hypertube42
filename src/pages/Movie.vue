@@ -33,7 +33,7 @@
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
     <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
 
-    <div class="player" v-if="playerShow !== ''">
+    <div class="player" v-if="playerShow === 'DEPRECATED'">
       <video controls autoplay>
         <source
           :src="
@@ -51,7 +51,7 @@
       </video>
     </div>
 
-    <div class="player" v-if="playerShow === 't'">
+    <div class="player" v-if="playerShow !== ''">
       <video-player
         ref="videoPlayer"
         class="video-player-box"
@@ -88,7 +88,6 @@
       >
         {{ this.storeMovieMeta.torrents[0].quality }}
       </v-btn>
-      {{ this.storeMovieMeta.torrents[0].hash }}
       <v-btn
         v-if="this.storeMovieMeta.torrents[1]"
         class="ma-5"
@@ -97,7 +96,6 @@
       >
         {{ this.storeMovieMeta.torrents[1].quality }}
       </v-btn>
-      {{ this.storeMovieMeta.torrents[1].hash }}
       <v-btn
         v-if="this.storeMovieMeta.torrents[2]"
         class="ma-5"
@@ -223,6 +221,7 @@ export default {
       playerShow: '',
       // componentKey: 0,
       playerHash: '',
+      playerFormat: '',
       // playerOptions: {
       //   autoplay: true,
       //   controls: true,
@@ -314,6 +313,7 @@ export default {
     // },
     zeroStream() {
       this.playerHash = this.storeMovieMeta.torrents[0].hash
+      this.playerFormat = this.storeFormats[0]
       const startPlayer = this
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
@@ -327,6 +327,7 @@ export default {
     },
     oneStream() {
       this.playerHash = this.storeMovieMeta.torrents[1].hash
+      this.playerFormat = this.storeFormats[1]
       const startPlayer = this
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
@@ -335,6 +336,7 @@ export default {
     },
     twoStream() {
       this.playerHash = this.storeMovieMeta.torrents[2].hash
+      this.playerFormat = this.storeFormats[2]
       const startPlayer = this
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
@@ -343,6 +345,7 @@ export default {
     },
     threeStream() {
       this.playerHash = this.storeMovieMeta.torrents[3].hash
+      this.playerFormat = this.storeFormats[3]
       const startPlayer = this
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
@@ -364,6 +367,7 @@ export default {
       storeMovieMeta: 'Movies/storeMovieMeta',
       storeUsername: 'App/storeUsername',
       storeComments: 'Movies/storeComments',
+      storeFormats: 'Movies/storeFormats',
     }),
     player() {
       return this.$refs.videoPlayer.player
@@ -381,6 +385,7 @@ export default {
       return this.$store.getters['interact/serverMessage']
     },
     playerOptions() {
+      console.log('$ $ $', this.playerFormat)
       return {
         autoplay: true,
         controls: true,
@@ -389,10 +394,10 @@ export default {
         aspectRatio: '16:9',
         sources: [
           {
-            type: 'video/webm',
+            type: `${this.playerFormat}`,
             // src: this.videoSource
-            // src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`,
-            src: `http://localhost:3000/torrent/02767050E0BE2FD4DB9A2AD6C12416AC806ED6ED?id=7783`,
+            src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`,
+            // src: `http://localhost:3000/torrent/02767050E0BE2FD4DB9A2AD6C12416AC806ED6ED?id=7783`,
           },
         ],
       }

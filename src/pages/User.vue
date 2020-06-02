@@ -196,9 +196,6 @@
           </v-col>
         </v-row>
         <br />
-        <v-btn @click="getUser()" color="blue lighten-4" class="mr-4">
-          GetUser_TEST
-        </v-btn>
       </v-container>
     </v-card>
   </div>

@@ -10,6 +10,7 @@ import vuelidate from 'vuelidate'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import 'nprogress/nprogress.css'
+import './assets/css/background.css'
 
 const requireComponent = require.context(
   './components',

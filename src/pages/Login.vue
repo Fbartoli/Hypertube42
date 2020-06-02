@@ -1,8 +1,9 @@
 <template>
-  <v-container>
+  <v-container fluid class="background">
     <v-card width="80%" class="mx-auto mt-5">
+      <br />
       <v-card-title class="pb-0">
-        <h1>Login</h1>
+        <h1>{{ $t('title') }}</h1>
       </v-card-title>
       <v-card-text class="mt-5">
         <v-form>
@@ -154,6 +155,8 @@ export default {
 <i18n>
 {
   "en": {
+    "title": "Login",
+
     "alphaNumRule": "Must be alphanumeric characters [Abc123...]",
 
     "username": "Username",
@@ -171,6 +174,8 @@ export default {
     "login":"Log in"
   },
   "fr": {
+    "title": "Connexion",
+
     "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
 
     "username": "Nom d'utilisateur",

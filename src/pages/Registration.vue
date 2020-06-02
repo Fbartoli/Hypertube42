@@ -1,6 +1,10 @@
 <template>
-  <v-container>
-    <v-card width="1000">
+  <v-container class="background">
+    <v-card width="80%" class="mx-auto mt-5">
+      <br />
+      <v-card-title class="pb-0">
+        <h1>{{ $t('title') }}</h1>
+      </v-card-title>
       <br />
       <v-form ref="signUpForm">
         <v-text-field
@@ -247,6 +251,8 @@ export default {
 <i18n>
 {
   "en": {
+    "title": "Registration",
+
     "alphaRule": "Must be alphabet characters [Abc...]",
     "alphaNumRule": "Must be alphanumeric characters [Abc123...]",
     
@@ -285,6 +291,8 @@ export default {
     "autofill": "Test_42_AUTOFILL"
   },
   "fr": {
+    "title": "Inscription",
+
     "alphaRule": "Caractères alphabétiques [Abc...] uniquement",
     "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
     

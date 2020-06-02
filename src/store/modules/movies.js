@@ -1,4 +1,5 @@
 import movieService from '../../services/MovieService.js'
+import popcornService from '../../services/popcornService.js'
 import userService from '../../services/UserService'
 import streamService from '../../services/StreamService'
 import router from '../../router/index'
@@ -72,7 +73,7 @@ const actions = {
   // A) Movies API:
   // A.1.a) GET movies from YTS with standard search paramaters
   fetchMovies({ commit, dispatch, state }, page) {
-    return movieService
+    movieService
       .getMovies(state.perPage, page)
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
@@ -91,6 +92,23 @@ const actions = {
             message: 'There was a problem fetching movies: ' + error.message,
           }
           dispatch('Notifications/add', notification, { root: true })
+        }
+      })
+    return popcornService
+      .getMovies(state.perPage, page)
+      .then(response => {
+        commit('FETCH_MOVIES')
+        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
+        const notification = {
+          type: 'success',
+          message: 'Movies fetched successfully',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        return response.data.data.movies
+      })
+      .catch(error => {
+        if (error.code) {
+          console.log(error)
         }
       })
   },
@@ -117,7 +135,7 @@ const actions = {
   // A.2.a) get movies from YTS with standard search paramaters
   filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
     console.log('/// filteredFetchMovies ///')
-    return movieService
+    movieService
       .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
@@ -136,6 +154,23 @@ const actions = {
             message: 'There was a problem fetching movies: ' + error.message,
           }
           dispatch('Notifications/add', notification, { root: true })
+        }
+      })
+    return popcornService
+      .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
+      .then(response => {
+        commit('FETCH_MOVIES', response.data.data.movies)
+        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
+        const notification = {
+          type: 'success',
+          message: 'Movies fetched successfully',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        return response.data.data.movies
+      })
+      .catch(error => {
+        if (error.code) {
+          console.log(error)
         }
       })
   },
@@ -156,7 +191,7 @@ const actions = {
   // A.3.a) get movies from YTS with specific search paramaters
   searchFetchMovies({ commit, dispatch }, { findMovieField }) {
     console.log('/// searchFetchMovies ///')
-    return movieService
+    movieService
       .getMoviesSearch({ findMovieField })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
@@ -175,6 +210,23 @@ const actions = {
             message: 'There was a problem fetching movies: ' + error.message,
           }
           dispatch('Notifications/add', notification, { root: true })
+        }
+      })
+    return popcornService
+      .getMoviesSearch({ findMovieField })
+      .then(response => {
+        commit('FETCH_MOVIES', response.data.data.movies)
+        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
+        const notification = {
+          type: 'success',
+          message: 'Movies fetched successfully',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        return response.data.data.movies
+      })
+      .catch(error => {
+        if (error.code) {
+          console.log(error)
         }
       })
   },

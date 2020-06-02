@@ -1,102 +1,108 @@
 <template>
-  <v-container class="background">
+  <v-container fluid class="background">
     <v-card width="80%" class="mx-auto mt-5">
       <br />
       <v-card-title class="pb-0">
         <h1>{{ $t('title') }}</h1>
       </v-card-title>
-      <br />
-      <v-form ref="signUpForm">
-        <v-text-field
-          v-model="$v.email.$model"
-          :error-messages="emailErrors"
-          :label="$t('email')"
-          @blur="$v.email.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="text"
-        />
+      <v-card-text class="mt-5">
+        <v-form ref="signUpForm"
+          ><br />
+          <v-text-field
+            v-model="$v.email.$model"
+            :error-messages="emailErrors"
+            :label="$t('email')"
+            @blur="$v.email.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="text"
+          />
 
-        <v-text-field
-          v-model="$v.username.$model"
-          :error-messages="usernameErrors"
-          :label="$t('username')"
-          @blur="$v.username.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="text"
-        />
+          <v-text-field
+            v-model="$v.username.$model"
+            :error-messages="usernameErrors"
+            :label="$t('username')"
+            @blur="$v.username.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="text"
+          />
 
-        <v-text-field
-          v-model="$v.firstName.$model"
-          :error-messages="firstNameErrors"
-          :label="$t('firstName')"
-          @blur="$v.firstName.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="text"
-        />
+          <v-text-field
+            v-model="$v.firstName.$model"
+            :error-messages="firstNameErrors"
+            :label="$t('firstName')"
+            @blur="$v.firstName.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="text"
+          />
 
-        <v-text-field
-          v-model="$v.lastName.$model"
-          :error-messages="lastNameErrors"
-          :label="$t('lastName')"
-          @blur="$v.lastName.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="text"
-        />
+          <v-text-field
+            v-model="$v.lastName.$model"
+            :error-messages="lastNameErrors"
+            :label="$t('lastName')"
+            @blur="$v.lastName.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="text"
+          />
 
-        <v-text-field
-          v-model="$v.password.$model"
-          :error-messages="passwordErrors"
-          :label="$t('password')"
-          :counter="15"
-          @blur="$v.password.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="Password"
-        />
+          <v-text-field
+            v-model="$v.password.$model"
+            :error-messages="passwordErrors"
+            :label="$t('password')"
+            :counter="15"
+            @blur="$v.password.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="Password"
+          />
 
-        <v-text-field
-          v-model="$v.repeatpassword.$model"
-          :error-messages="repeatpasswordErrors"
-          :label="$t('repeatpassword')"
-          :counter="15"
-          @blur="$v.repeatpassword.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="Password"
-        />
+          <v-text-field
+            v-model="$v.repeatpassword.$model"
+            :error-messages="repeatpasswordErrors"
+            :label="$t('repeatpassword')"
+            :counter="15"
+            @blur="$v.repeatpassword.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="Password"
+          />
 
-        <v-checkbox v-model="agreeToTerms" :label="$t('agree')" class="ma-5" />
+          <v-checkbox
+            v-model="agreeToTerms"
+            :label="$t('agree')"
+            class="ma-5"
+          />
 
-        <v-btn
-          class="ma-5"
-          @click="validRegister()"
-          :disabled="$v.$invalid || !agreeToTerms"
-          x-large
-          color="primary"
-        >
-          {{ $t('register') }}
-        </v-btn>
+          <v-btn
+            class="ma-5"
+            @click="validRegister()"
+            :disabled="$v.$invalid || !agreeToTerms"
+            x-large
+            color="primary"
+          >
+            {{ $t('register') }}
+          </v-btn>
 
-        <v-btn class="ma-5" @click="autofill" x-large color="primary">
-          {{ $t('autofill') }}
-        </v-btn>
-      </v-form>
+          <v-btn class="ma-5" @click="autofill" x-large color="primary">
+            {{ $t('autofill') }}
+          </v-btn>
+        </v-form>
+      </v-card-text>
     </v-card>
   </v-container>
 </template>

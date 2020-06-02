@@ -1,65 +1,68 @@
 <template>
-  <v-card>
-    <v-card-title primary-title>
-      <div class="headline">
-        {{ $t('titlea') + userProfile.username + $t('title_b') }}
-      </div>
-    </v-card-title>
-    <div>
+  <v-container fluid class="background">
+    <v-card>
+      <v-card-title primary-title>
+        <div class="headline">
+          <br />{{ $t('titlea') + userProfile.username + $t('title_b') }}
+        </div>
+      </v-card-title>
       <div>
-        <v-container>
-          <v-row>
-            <v-col cols="5">
-              <v-card
-                :hover="true"
-                v-ripple="{ class: `blue--text` }"
-                color="deep-blue lighten-5"
-              >
-                <v-img
-                  aspect-ratio="2"
-                  class="spacer blue lighten-2"
-                  no-gutters
+        <div>
+          <v-container>
+            <v-row>
+              <v-col cols="7">
+                <v-card
+                  :hover="true"
+                  v-ripple="{ class: `blue--text` }"
+                  color="deep-blue lighten-5"
                 >
-                  <v-row align="center" class="fill-height">
-                    <v-col align="center" class="pa-0" cols="12">
-                      <br />
-                      <v-avatar class="profile indigo accent-4" size="164">
-                        <v-img
-                          :src="`data:image/*;base64,${userProfile.photo}`"
-                        />
-                      </v-avatar>
-                      <v-card-subtitle>
-                        <div>
-                          <div
-                            class="headline font-weight-bold blue--text text--accent-4"
-                          >
-                            {{ userProfile.username }}
+                  <v-img
+                    aspect-ratio="2"
+                    class="spacer blue lighten-2"
+                    no-gutters
+                  >
+                    <v-row align="center" class="fill-height">
+                      <v-col align="center" class="pa-0" cols="12">
+                        <br />
+                        <v-avatar class="profile indigo accent-4" size="164">
+                          <v-img
+                            :src="`data:image/*;base64,${userProfile.photo}`"
+                          />
+                        </v-avatar>
+                        <v-card-subtitle>
+                          <div>
+                            <div
+                              class="headline font-weight-bold blue--text text--accent-4"
+                            >
+                              {{ userProfile.username }}
+                            </div>
+                            <a
+                              class="title font-italic blue--text text--accent-3"
+                            >
+                              {{ userProfile.firstName }}
+                            </a>
+                            <a
+                              class="title font-italic blue--text text--accent-3"
+                            >
+                              {{ userProfile.lastName }}
+                            </a>
+                            <div class="title blue--text text--accent-3">
+                              {{ $t('language') }} {{ userProfile.language }}
+                            </div>
                           </div>
-                          <a
-                            class="title font-italic blue--text text--accent-3"
-                          >
-                            {{ userProfile.firstName }}
-                          </a>
-                          <a
-                            class="title font-italic blue--text text--accent-3"
-                          >
-                            {{ userProfile.lastName }}
-                          </a>
-                          <div class="title blue--text text--accent-3">
-                            {{ $t('language') }} {{ userProfile.language }}
-                          </div>
-                        </div>
-                      </v-card-subtitle>
-                    </v-col>
-                  </v-row>
-                </v-img>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
+                        </v-card-subtitle>
+                      </v-col>
+                    </v-row>
+                  </v-img>
+                  <br /><br />
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </div>
       </div>
-    </div>
-  </v-card>
+    </v-card>
+  </v-container>
 </template>
 <script>
 import { mapGetters } from 'vuex'

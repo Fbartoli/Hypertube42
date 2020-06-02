@@ -53,24 +53,29 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn
-          @click="submit(username, password)"
-          x-large
-          color="blue"
-          :disabled="$v.$invalid"
-        >
-          {{ $t('login') }}
-        </v-btn>
-        <v-btn :href="links.qd" x-large color="blue">
-          <v-icon x-large>mdi-numeric-4-box</v-icon
-          ><v-icon x-large>mdi-numeric-2-box</v-icon>
-        </v-btn>
-        <v-btn :href="links.github" x-large color="blue">
-          <i class="fab fa-github fa-2x" />
-        </v-btn>
-        <v-btn :href="links.facebook" x-large color="blue">
-          <i class="fab fa-facebook fa-2x" />
-        </v-btn>
+        <v-container fluid>
+          <v-btn
+            @click="submit(username, password)"
+            x-large
+            color="blue"
+            :disabled="$v.$invalid"
+          >
+            {{ $t('login') }} </v-btn
+          >&nbsp;
+
+          <v-btn :href="links.qd" x-large color="blue">
+            <v-icon x-large>mdi-numeric-4-box</v-icon
+            ><v-icon x-large>mdi-numeric-2-box</v-icon> </v-btn
+          >&nbsp;
+
+          <v-btn :href="links.github" x-large color="blue">
+            <i class="fab fa-github fa-2x" /> </v-btn
+          >&nbsp;
+
+          <v-btn :href="links.facebook" x-large color="blue">
+            <i class="fab fa-facebook fa-2x" />
+          </v-btn>
+        </v-container>
       </v-card-actions>
     </v-card>
     <!-- <duoquadra /> -->

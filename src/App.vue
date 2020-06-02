@@ -207,7 +207,7 @@
       </v-container>
     </v-content>
 
-    <v-footer absolute app>
+    <v-footer fluid app>
       <div>
         <v-select v-model="$root.$i18n.locale" :items="langs" />
       </div>

@@ -99,6 +99,7 @@ export default {
     return {
       target: this.$route.params.username,
       valid: true,
+      isEditing: true,
       uploadPic: {
         mypic: null,
       },
@@ -110,10 +111,32 @@ export default {
       ],
     }
   },
+  // beforeMount() {
+  //   console.log(' ! ! ! beforeMount ! ! ! ')
+  //   window.addEventListener("beforeunload", this.preventNav)
+  //   this.$once("hook:beforeDestroy", () => {
+  //     window.removeEventListener("beforeunload", this.preventNav);
+  //   })
+  // },
+  // beforeRouteLeave(to, from, next) {
+  beforeRouteLeave(to, from, next) {
+    console.log(' ! ! ! beforeRouteLeave ! ! ! ')
+    console.log(' %% isAuth? %%', this.isAuth)
+    if (this.isEditing && this.storeDefaultPicture && this.isAuth) {
+      return
+      // } else if (!this.isAuth) {
+      //   next()
+      //   next({ name: 'home' })
+    } else {
+      next()
+    }
+  },
   computed: {
     ...mapGetters({
       userData: 'App/storeUser',
       currentUsername: 'App/storeUsername',
+      storeDefaultPicture: 'App/storeDefaultPicture',
+      isAuth: 'App/isAuth',
     }),
   },
   methods: {
@@ -179,6 +202,12 @@ export default {
         this.showPictures[0] = renamed[1]
       }
     },
+    // preventNav(event) {
+    //   console.log(' ! ! ! PREVENT NAV ! ! ! ')
+    //   if (!this.isEditing) return
+    //   event.preventDefault()
+    //   event.returnValue = ""
+    // },
   },
 }
 </script>

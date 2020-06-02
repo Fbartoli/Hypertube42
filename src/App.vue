@@ -78,7 +78,7 @@
               </v-icon>
             </v-btn>
             <v-btn
-              @click="resetState"
+              @click="logout()"
               class="mx-5"
               color="primary"
               v-show="userApp.auth === true"
@@ -165,7 +165,7 @@
                   </v-list-item>
                   <v-list-item v-show="userApp.auth === true">
                     <v-btn
-                      @click="resetState"
+                      @click="logout()"
                       class="mx-5"
                       color="primary"
                       :label="$t('sign out')"
@@ -230,9 +230,14 @@ export default {
   methods: {
     ...mapActions('Social', ['putSearchProfile', 'getSearchProfile']),
     ...mapActions('App', ['resetState']),
-    // logout() {
-    //   localStorage.removeItem('hypertube')
-    // },
+    logout() {
+      if (this.storeDefaultPicture && this.isAuth) {
+        this.resetState()
+        this.$router.push({ name: 'home' })
+      } else {
+        this.resetState()
+      }
+    },
     keySearchUser() {
       console.log('this.searchUsername_ ', this.searchProfile)
       // console.log('searchUsername_ ', searchProfile)
@@ -263,6 +268,8 @@ export default {
       userApp: 'App/storeUser',
       langs: 'App/storeLangs',
       appName: 'App/storeAppName',
+      storeDefaultPicture: 'App/storeDefaultPicture',
+      isAuth: 'App/isAuth',
       // searchProfile: 'Social/searchProfile',
       // currentUsername: 'App/storeUsername',
     }),

@@ -199,6 +199,7 @@ export default {
   // },
   data() {
     return {
+      src: '',
       comment: '',
       ref: this.$route.params.id,
       videoSource: undefined,

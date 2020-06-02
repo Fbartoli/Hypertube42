@@ -12,7 +12,7 @@ const apiCLient = axios.create({
 export default {
   getMovies(page) {
     return apiCLient.get(
-      `/discover/movie?api_key=7c32ac8203dada86f001cea872371ba3&page=${page}	`
+      `/discover/movie?api_key=7c32ac8203dada86f001cea872371ba3&page=${page}`
     )
   },
   getMovie(id) {

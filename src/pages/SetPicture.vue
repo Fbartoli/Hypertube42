@@ -5,106 +5,6 @@
         <div class="headline">{{ $t('title') }}</div>
       </v-card-title>
 
-      <br />
-      <v-divider></v-divider>
-      <br />
-
-      <v-container>
-        <v-form ref="PersonalInfoForm" v-model="valid" lazy-validation>
-          <v-row>
-            <v-col cols="5">
-              <v-text-field
-                v-model.trim="userData.username"
-                :rules="usernameRules"
-                :label="$t('username')"
-                counter="20"
-                required
-              />
-            </v-col>
-            <v-col cols="5"> </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="5">
-              <v-text-field
-                v-model.trim="userData.firstname"
-                :rules="nameRules"
-                :label="$t('firstname')"
-                counter="20"
-                required
-              />
-            </v-col>
-            <v-col cols="5">
-              <v-text-field
-                v-model.trim="userData.lastname"
-                :rules="nameRules"
-                :label="$t('lastname')"
-                counter="20"
-                required
-              />
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="5">
-              <v-select
-                v-model="userData.language"
-                :items="languageList"
-                :label="$t('language')"
-                required
-              />
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-btn
-                @click="validatePersonalInfo"
-                :disabled="!valid"
-                color="blue lighten-4"
-                class="mr-4"
-              >
-                Update my Personal Information
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-container>
-
-      <br />
-      <v-divider></v-divider>
-      <br />
-
-      <v-container>
-        <v-form ref="EmailForm" v-model="valid" lazy-validation>
-          <v-row>
-            <v-col cols="10">
-              <v-text-field
-                v-model.trim="userData.email"
-                :rules="emailRules"
-                :label="$t('email')"
-                counter="42"
-                required
-              />
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <v-btn
-                @click="validateEmail"
-                :disabled="!valid"
-                color="blue lighten-4"
-                class="mr-4"
-              >
-                Update my Email
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-container>
-
-      <br />
       <v-divider></v-divider>
       <br />
 
@@ -185,21 +85,6 @@
         </v-row>
       </v-container>
       <br />
-      <v-divider></v-divider>
-      <v-container>
-        <v-row class="font-italic">
-          <v-col>
-            <br />
-            <router-link :to="{ name: 'resetpasswordonline' }">
-              {{ $t('Reset password') }}<br /><br />
-            </router-link>
-          </v-col>
-        </v-row>
-        <br />
-        <v-btn @click="getUser()" color="blue lighten-4" class="mr-4">
-          GetUser_TEST
-        </v-btn>
-      </v-container>
     </v-card>
   </div>
 </template>
@@ -213,41 +98,13 @@ export default {
   data() {
     return {
       target: this.$route.params.username,
-      agreeToTerms: false,
-      // username: 'test_username',
-      // password: 'test_password',
-      // lastName: 'test_lastname',
-      // firstName: 'test_firstname',
       valid: true,
-      languageList: ['english', 'french', 'spanish'],
       uploadPic: {
         mypic: null,
       },
       showPictures: {
         '0': null,
       },
-      usernameRules: [
-        v => !!v || 'Username is required',
-        v =>
-          (v && v.length <= 15) || 'Password must be less than 15 characters',
-        v => /.{3,}/.test(v) || '3 characters minimum.',
-        v =>
-          /^[a-zA-Z0-9_.-]*$/.test(v) ||
-          'Must be alphanumeric characters [Abc123...]',
-      ],
-      nameRules: [
-        v => !!v || 'Field required',
-        v => (v && v.length <= 20) || 'Must be less than 20 characters',
-        v => /.{2,}/.test(v) || '2 characters minimum.',
-        v => /^[a-zA-Z_.-]*$/.test(v) || 'Must be letters only',
-      ],
-      emailRules: [
-        v => !!v || 'Email is required',
-        v => (v && v.length <= 42) || 'Email must be less than 42 characters',
-        v =>
-          /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) ||
-          'Must be a valid email [address@domain.com]',
-      ],
       mypicsRules: [
         // value => value.size < 10000000 || 'Picture size should be less than 10 MB!'
       ],
@@ -260,41 +117,10 @@ export default {
     }),
   },
   methods: {
-    ...mapActions('App', [
-      'getUser',
-      'updateUserInfo',
-      'updateEmail',
-      'putToken',
-    ]),
-    validateEmail() {
-      const payloadPutEmail = {
-        username: this.currentUsername,
-        email: this.userData.email,
-      }
-      // this.$v.$touch()
-      // if (!this.$v.$invalid) {
-      this.updateEmail({ payloadPutEmail })
-      // }
-    },
-    validatePersonalInfo() {
-      const payloadPutUser = {
-        currentUsername: this.currentUsername,
-        username: this.userData.username,
-        firstName: this.userData.firstname,
-        lastName: this.userData.lastname,
-        language: this.userData.language,
-      }
-      // this.$v.$touch()
-      // if (!this.$v.$invalid) {
-      this.updateUserInfo({ payloadPutUser })
-    },
+    ...mapActions('App', ['getUser', 'putToken']),
 
     validateAvatar() {
       // console.log('ROUTER', router)
-      function error(e) {
-        console.log('(= = = E R R O R_ = = =', e)
-      }
-
       if (this.$refs.AvatarForm.validate()) {
         const data = new FormData()
         const xhr = new XMLHttpRequest()
@@ -308,7 +134,8 @@ export default {
         xhr.addEventListener('readystatechange', function() {
           // 4 means the request is DONE, operation completed
           if (this.readyState === 4) {
-            if (this.status === 200 || this.status === '200') {
+            if (this.status === 200) {
+              // || this.status === '200') {
               // self.$store.dispatch('storeAction', 'Pictures updated !')
               this.showPictures = null
               const notification = {
@@ -337,8 +164,6 @@ export default {
         xhr.setRequestHeader('x-access-token', this.userData.token)
         // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
         // xhr.setRequestHeader('Connection', 'keep-alive')
-        xhr.addEventListener('error', error)
-
         xhr.send(data)
       }
     },
@@ -362,28 +187,18 @@ export default {
 <i18n>
 {
   "en": {
-    "title": "Update my profile",
+    "title": "Choose a profile picture to finalize your registration",
     "username": "Username",
     "firstname": "First Name",
     "lastname": "Last Name",
-    "language": "Subtitles language preference",
-    "email": "Email",
-    "password": "Password",
-    "preview": "Preview",
-    "Reset password": "Change my password",
-    "usernameRuleRequired": "Username is required"
+    "preview": "Preview"
   },
   "fr": {
-    "title": "Mise à jour de mon profil",
+    "title": "Choisissez une photo de profil pour finaliser votre inscription",
     "username": "Nom d'utilisateur",
     "firstname": "Prénom",
     "lastname": "Nom",
-    "language": "Langue préférée de sous-titres",
-    "email": "Email",
-    "password": "Mot de passe",
-    "preview": "Aperçu",
-    "Reset password": "Modifier mon mot de passe",
-    "usernameRuleRequired": "Le nom d'utilisateur est requis"
+    "preview": "Aperçu"
   }
 }
 </i18n>

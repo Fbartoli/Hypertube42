@@ -207,7 +207,7 @@
       </v-container>
     </v-content>
 
-    <v-footer fluid app>
+    <v-footer app max-height="60px">
       <div>
         <v-select v-model="$root.$i18n.locale" :items="langs" />
       </div>

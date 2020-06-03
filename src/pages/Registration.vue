@@ -6,8 +6,8 @@
         <h1>{{ $t('title') }}</h1>
       </v-card-title>
       <v-card-text class="mt-5">
-        <v-form ref="signUpForm"
-          ><br />
+        <v-form ref="signUpForm">
+          <br />
           <v-text-field
             v-model="$v.email.$model"
             :error-messages="emailErrors"
@@ -103,6 +103,7 @@
           </v-btn>
         </v-form>
       </v-card-text>
+      <br />
     </v-card>
   </v-container>
 </template>

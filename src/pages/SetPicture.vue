@@ -76,7 +76,7 @@
                   color="blue lighten-4"
                   class="mr-4"
                 >
-                  Update my Avatar
+                  {{ $t('updateAvatar') }}
                 </v-btn>
               </v-form>
             </v-row>
@@ -128,6 +128,10 @@ export default {
     ...mapActions('App', ['getUser', 'putToken']),
 
     validateAvatar() {
+      function error(error) {
+        this.$store.dispatch('App/setError', error)
+      }
+
       if (this.$refs.AvatarForm.validate()) {
         const data = new FormData()
         const xhr = new XMLHttpRequest()
@@ -142,8 +146,8 @@ export default {
           // 4 means the request is DONE, operation completed
           if (this.readyState === 4) {
             if (this.status === 200) {
-              // self.$store.dispatch('storeAction', 'Pictures updated !')
-              this.showPictures = null
+              // self.showPictures = null
+              self.uploadPic.mypic = null
               const notification = {
                 type: 200,
                 message: 'Profile picture updated !',
@@ -168,8 +172,11 @@ export default {
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         xhr.setRequestHeader('Access-Control-Allow-Origin', true)
         xhr.setRequestHeader('x-access-token', this.userData.token)
+        xhr.addEventListener('error', error)
+
         xhr.send(data)
       }
+      this.valid = false
     },
     displayImage(File) {
       if (!File) {
@@ -192,19 +199,16 @@ export default {
 {
   "en": {
     "title": "Choose a profile picture to finalize your registration",
-    "username": "Username",
-    "firstname": "First Name",
-    "lastname": "Last Name",
-    "preview": "Preview",
-    "profilePicture": "Profile Picture"
+
+    "profilePicture": "Profile Picture",
+    "updateAvatar": "Update avatar"
+
   },
   "fr": {
     "title": "Choisissez une photo de profil pour finaliser votre inscription",
-    "username": "Nom d'utilisateur",
-    "firstname": "Prénom",
-    "lastname": "Nom",
-    "preview": "Aperçu",
-    "profilePicture": "Photo de profil"
+
+    "profilePicture": "Photo de profil",
+    "updateAvatar": "Mettre à jour ma photo"
   }
 }
 </i18n>

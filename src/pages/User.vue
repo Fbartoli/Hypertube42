@@ -369,7 +369,6 @@ export default {
     "password": "Password",
     "Reset password": "Change my password",
 
-    "preview": "Preview",
     "profilePicture": "Profile Picture",
     "updateAvatar": "Update avatar"
   },
@@ -390,7 +389,6 @@ export default {
     "password": "Mot de passe",
     "Reset password": "Modifier mon mot de passe",
 
-    "preview": "Aperçu",
     "profilePicture": "Photo de profil",
     "updateAvatar": "Mettre à jour ma photo"
   }

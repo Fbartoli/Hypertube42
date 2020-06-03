@@ -166,8 +166,7 @@
                   counter
                   show-size
                   prepend-icon="mdi-camera"
-                  placeholder="Profile Picture"
-                  label="Profile Picture"
+                  :label="$t('profilePicture')"
                   truncate-length="42"
                 />
                 <br />
@@ -216,7 +215,7 @@ export default {
       // lastName: 'test_lastname',
       // firstName: 'test_firstname',
       valid: true,
-      languageList: ['english', 'french', 'spanish'],
+      languageList: ['english', 'french'],
       uploadPic: {
         mypic: null,
       },
@@ -305,9 +304,9 @@ export default {
         xhr.addEventListener('readystatechange', function() {
           // 4 means the request is DONE, operation completed
           if (this.readyState === 4) {
-            if (this.status === 200 || this.status === '200') {
-              // self.$store.dispatch('storeAction', 'Pictures updated !')
-              this.showPictures = null
+            if (this.status === 200) {
+              // self.showPictures = null
+              self.uploadPic.mypic = null
               const notification = {
                 type: 200,
                 message: 'Profile picture updated !',
@@ -318,9 +317,10 @@ export default {
               self.$store.dispatch('App/getUser', '', {
                 root: true,
               })
-              self.$router.push({
-                name: 'home',
-              })
+              // Make an warning in web console if the button is clicked more than once
+              // self.$router.push({
+              //   name: 'home',
+              // })
             }
           }
         })
@@ -332,8 +332,6 @@ export default {
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         xhr.setRequestHeader('Access-Control-Allow-Origin', true)
         xhr.setRequestHeader('x-access-token', this.userData.token)
-        // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
-        // xhr.setRequestHeader('Connection', 'keep-alive')
         xhr.addEventListener('error', error)
 
         xhr.send(data)
@@ -367,6 +365,7 @@ export default {
     "email": "Email",
     "password": "Password",
     "preview": "Preview",
+    "profilePicture": "Profile Picture",
     "Reset password": "Change my password",
     "usernameRuleRequired": "Username is required"
   },
@@ -379,6 +378,7 @@ export default {
     "email": "Email",
     "password": "Mot de passe",
     "preview": "Aperçu",
+    "profilePicture": "Photo de profil",
     "Reset password": "Modifier mon mot de passe",
     "usernameRuleRequired": "Le nom d'utilisateur est requis"
   }

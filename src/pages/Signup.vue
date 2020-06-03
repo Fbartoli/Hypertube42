@@ -47,7 +47,6 @@ export default {
   data() {
     return {
       email: '',
-      // signupToken: this.$route.params.signup,
     }
   },
   computed: {
@@ -71,9 +70,7 @@ export default {
   methods: {
     ...mapActions('Email', ['getActivationTokenAgain']),
     validActivationAccountAgain(activationEmail) {
-      // this.$v.$touch()
       if (!this.$v.$invalid) {
-        console.log('Signup.vue_Email Activation AGAIN_ ', activationEmail)
         this.getActivationTokenAgain(activationEmail)
       }
     },

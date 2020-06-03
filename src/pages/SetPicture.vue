@@ -66,8 +66,7 @@
                   counter
                   show-size
                   prepend-icon="mdi-camera"
-                  placeholder="Profile Picture"
-                  label="Profile Picture"
+                  :label="$t('profilePicture')"
                   truncate-length="42"
                 />
                 <br />
@@ -90,7 +89,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
 
@@ -111,22 +109,9 @@ export default {
       ],
     }
   },
-  // beforeMount() {
-  //   console.log(' ! ! ! beforeMount ! ! ! ')
-  //   window.addEventListener("beforeunload", this.preventNav)
-  //   this.$once("hook:beforeDestroy", () => {
-  //     window.removeEventListener("beforeunload", this.preventNav);
-  //   })
-  // },
-  // beforeRouteLeave(to, from, next) {
   beforeRouteLeave(to, from, next) {
-    console.log(' ! ! ! beforeRouteLeave ! ! ! ')
-    console.log(' %% isAuth? %%', this.isAuth)
     if (this.isEditing && this.storeDefaultPicture && this.isAuth) {
       return
-      // } else if (!this.isAuth) {
-      //   next()
-      //   next({ name: 'home' })
     } else {
       next()
     }
@@ -143,7 +128,6 @@ export default {
     ...mapActions('App', ['getUser', 'putToken']),
 
     validateAvatar() {
-      // console.log('ROUTER', router)
       if (this.$refs.AvatarForm.validate()) {
         const data = new FormData()
         const xhr = new XMLHttpRequest()
@@ -158,7 +142,6 @@ export default {
           // 4 means the request is DONE, operation completed
           if (this.readyState === 4) {
             if (this.status === 200) {
-              // || this.status === '200') {
               // self.$store.dispatch('storeAction', 'Pictures updated !')
               this.showPictures = null
               const notification = {
@@ -185,8 +168,6 @@ export default {
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         xhr.setRequestHeader('Access-Control-Allow-Origin', true)
         xhr.setRequestHeader('x-access-token', this.userData.token)
-        // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
-        // xhr.setRequestHeader('Connection', 'keep-alive')
         xhr.send(data)
       }
     },
@@ -202,12 +183,6 @@ export default {
         this.showPictures[0] = renamed[1]
       }
     },
-    // preventNav(event) {
-    //   console.log(' ! ! ! PREVENT NAV ! ! ! ')
-    //   if (!this.isEditing) return
-    //   event.preventDefault()
-    //   event.returnValue = ""
-    // },
   },
 }
 </script>
@@ -220,14 +195,16 @@ export default {
     "username": "Username",
     "firstname": "First Name",
     "lastname": "Last Name",
-    "preview": "Preview"
+    "preview": "Preview",
+    "profilePicture": "Profile Picture"
   },
   "fr": {
     "title": "Choisissez une photo de profil pour finaliser votre inscription",
     "username": "Nom d'utilisateur",
     "firstname": "Prénom",
     "lastname": "Nom",
-    "preview": "Aperçu"
+    "preview": "Aperçu",
+    "profilePicture": "Photo de profil"
   }
 }
 </i18n>

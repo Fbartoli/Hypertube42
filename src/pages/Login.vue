@@ -78,7 +78,6 @@
         </v-container>
       </v-card-actions>
     </v-card>
-    <!-- <duoquadra /> -->
   </v-container>
 </template>
 
@@ -90,7 +89,6 @@ import {
   maxLength,
 } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
-// import duoquadra from '../components/duoquadra.vue'
 
 export default {
   data() {
@@ -108,9 +106,6 @@ export default {
       },
     }
   },
-  // components: {
-  //   duoquadra,
-  // },
   methods: {
     ...mapActions('App', ['login']),
     submit(username, password) {

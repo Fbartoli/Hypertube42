@@ -143,6 +143,9 @@ const routes = [
     path: '/setpicture',
     name: 'setpicture',
     component: () => import('../pages/SetPicture.vue'),
+    meta: {
+      requiresAuth: true,
+    },
   },
 
   // Valid your email change by using the link in your mailbox:

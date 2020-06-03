@@ -1,58 +1,60 @@
 <template>
-  <v-card width="80%" class="mx-auto mt-5">
-    <v-card-title class="pb-0">
-      <h1>{{ $t('title') }}</h1>
-    </v-card-title>
-    <v-card-text class="mt-5">
-      <v-form>
-        <v-container>
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="password"
-                @blur="$v.password.$touch()"
-                :error-messages="passwordErrors"
-                :label="$t('password')"
-                :counter="15"
-                outlined
-                clearable
-                color="blue"
-                type="Password"
-                required
-              />
-            </v-col>
-          </v-row>
+  <v-container fluid class="background">
+    <v-card width="80%" class="mx-auto mt-5">
+      <v-card-title class="pb-0">
+        <h1>{{ $t('title') }}</h1>
+      </v-card-title>
+      <v-card-text class="mt-5">
+        <v-form>
+          <v-container>
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="password"
+                  @blur="$v.password.$touch()"
+                  :error-messages="passwordErrors"
+                  :label="$t('password')"
+                  :counter="15"
+                  outlined
+                  clearable
+                  color="blue"
+                  type="Password"
+                  required
+                />
+              </v-col>
+            </v-row>
 
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="repeatpassword"
-                @blur="$v.repeatpassword.$touch()"
-                :error-messages="repeatpasswordErrors"
-                :label="$t('repeatpassword')"
-                :counter="15"
-                outlined
-                clearable
-                color="primary"
-                type="Password"
-              />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-form>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-btn
-        @click="validDscNewPassword(password)"
-        x-large
-        color="blue"
-        :disabled="$v.$invalid"
-      >
-        {{ $t('changePassword') }}
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="repeatpassword"
+                  @blur="$v.repeatpassword.$touch()"
+                  :error-messages="repeatpasswordErrors"
+                  :label="$t('repeatpassword')"
+                  :counter="15"
+                  outlined
+                  clearable
+                  color="primary"
+                  type="Password"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-btn
+          @click="validDscNewPassword(password)"
+          x-large
+          color="blue"
+          :disabled="$v.$invalid"
+        >
+          {{ $t('changePassword') }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -126,6 +128,8 @@ export default {
       if (!this.$v.$invalid) {
         this.putDscResetPassword({ dscNewPassword })
       }
+      this.password = ''
+      this.repeatpassword = ''
     },
   },
 }
@@ -149,7 +153,7 @@ export default {
     "upperPasswordRule": "1 uppercase character minimum [ABC...]",
     "digitPasswordRule": "1 digit minimum [123...]",
     "new_password": "New Password",
-    "changePassword": "Valid my new password !"
+    "changePassword": "Valid new password !"
   },
   "fr": {
     "title": "Vous pouvez choisir un nouveau mot de passe !",
@@ -166,7 +170,7 @@ export default {
     "upperPasswordRule": "1 majuscule minimum [ABC...]",
     "digitPasswordRule": "1 chiffre minimum [123...]",
     "new_password": "Nouveau Mot de Passe",
-    "changePassword": "Valider mon nouveau mot de passe !"
+    "changePassword": "Valider !"
   }
 }
 </i18n>

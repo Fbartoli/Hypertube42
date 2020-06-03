@@ -175,36 +175,36 @@ const actions = {
       .getuser({ username: username, token: getters.storeToken })
       .then(response => {
         commit('SET_USERINFO', response.data.user)
-        const notification = {
-          type: response.data.status,
-          message: 'User info updated',
-        }
-        dispatch('Notifications/add', notification, { root: true })
+        // const notification = {
+        //   type: response.data.status,
+        //   message: 'User information updated',
+        // }
+        // dispatch('Notifications/add', notification, { root: true })
         dispatch('redirectLogin')
       })
       .catch(error => {
-        const notification = {
-          type: 'error',
-          message: 'There was a problem getting user info',
-        }
+        // const notification = {
+        //   type: 'error',
+        //   message: 'There was a problem getting user info',
+        // }
         if (error.response) {
           if (error.response.status === 404) {
-            dispatch('Notifications/add', notification, {
-              root: true,
-            })
+            // dispatch('Notifications/add', notification, {
+            //   root: true,
+            // })
             router.push({
               name: '404',
               params: { resource: 'getting user info' },
             })
           } else if (error.response.status === 403) {
-            dispatch('Notifications/add', notification, {
-              root: true,
-            })
+            // dispatch('Notifications/add', notification, {
+            //   root: true,
+            // })
           }
         } else {
-          dispatch('Notifications/add', notification, {
-            root: true,
-          })
+          // dispatch('Notifications/add', notification, {
+          //   root: true,
+          // })
         }
       })
   },

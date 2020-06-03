@@ -15,7 +15,7 @@ const actions = {
       .then(response => {
         const notification = {
           type: response.data.status,
-          message: 'User registered check your email',
+          message: 'Check your email !',
         }
         dispatch('Notifications/add', notification, { root: true })
         router.push({ name: 'home' })
@@ -23,7 +23,7 @@ const actions = {
       .catch(error => {
         const notification = {
           type: 'error',
-          message: 'Error on the registration request, please try again',
+          message: 'Error on registration, please try again !',
         }
         if (error.response) {
           if (error.response.status === 404) {

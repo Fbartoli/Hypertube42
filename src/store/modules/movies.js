@@ -52,26 +52,26 @@ const mutations = {
 const actions = {
   // A) Movies API:
   // A.1.a) GET movies from YTS with standard search paramaters
-  fetchMovies({ commit, dispatch, state }, page) {
+  fetchMovies({ commit, state }, page) {
     return movieService
       .getMovies(state.perPage, page)
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
         commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
-        const notification = {
-          type: 'success',
-          message: 'Movies fetched successfully',
-        }
-        dispatch('Notifications/add', notification, { root: true })
+        // const notification = {
+        //   type: 'success',
+        //   message: 'Movies fetched successfully',
+        // }
+        // dispatch('Notifications/add', notification, { root: true })
         return response.data.data.movies
       })
       .catch(error => {
         if (error.message) {
-          const notification = {
-            type: 'error',
-            message: 'There was a problem fetching movies: ' + error.message,
-          }
-          dispatch('Notifications/add', notification, { root: true })
+          // const notification = {
+          //   type: 'error',
+          //   message: 'There was a problem fetching movies: ' + error.message,
+          // }
+          // dispatch('Notifications/add', notification, { root: true })
         }
       })
   },
@@ -94,26 +94,26 @@ const actions = {
   },
 
   // A.2.a) get movies from YTS with standard search paramaters
-  filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
+  filteredFetchMovies({ commit, state }, { page, filter, order }) {
     return movieService
       .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
         commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
-        const notification = {
-          type: 'success',
-          message: 'Movies fetched successfully',
-        }
-        dispatch('Notifications/add', notification, { root: true })
+        // const notification = {
+        //   type: 'success',
+        //   message: 'Movies fetched successfully',
+        // }
+        // dispatch('Notifications/add', notification, { root: true })
         return response.data.data.movies
       })
       .catch(error => {
         if (error.message) {
-          const notification = {
-            type: 'error',
-            message: 'There was a problem fetching movies: ' + error.message,
-          }
-          dispatch('Notifications/add', notification, { root: true })
+          // const notification = {
+          //   type: 'error',
+          //   message: 'There was a problem fetching movies: ' + error.message,
+          // }
+          // dispatch('Notifications/add', notification, { root: true })
         }
       })
   },
@@ -131,26 +131,26 @@ const actions = {
   },
 
   // A.3.a) get movies from YTS with specific search paramaters
-  searchFetchMovies({ commit, dispatch }, { findMovieField }) {
+  searchFetchMovies({ commit }, { findMovieField }) {
     return movieService
       .getMoviesSearch({ findMovieField })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
         commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
-        const notification = {
-          type: 'success',
-          message: 'Movies fetched successfully',
-        }
-        dispatch('Notifications/add', notification, { root: true })
+        // const notification = {
+        //   type: 'success',
+        //   message: 'Movies fetched successfully',
+        // }
+        // dispatch('Notifications/add', notification, { root: true })
         return response.data.data.movies
       })
       .catch(error => {
         if (error.message) {
-          const notification = {
-            type: 'error',
-            message: 'There was a problem fetching movies: ' + error.message,
-          }
-          dispatch('Notifications/add', notification, { root: true })
+          // const notification = {
+          //   type: 'error',
+          //   message: 'There was a problem fetching movies: ' + error.message,
+          // }
+          // dispatch('Notifications/add', notification, { root: true })
         }
       })
   },
@@ -216,11 +216,11 @@ const actions = {
       .getcomment(ref)
       .then(response => {
         commit('PUT_COMMENTS', response.data.comments)
-        const notification = {
-          type: response.data.status,
-          message: 'TEST ONLY_Comments loaded',
-        }
-        dispatch('Notifications/add', notification, { root: true })
+        // const notification = {
+        //   type: response.data.status,
+        //   message: 'TEST ONLY_Comments loaded',
+        // }
+        // dispatch('Notifications/add', notification, { root: true })
       })
       .catch(error => {
         const notification = {
@@ -290,11 +290,11 @@ const actions = {
       .getview()
       .then(response => {
         commit('PUT_VIEWS', response.data.views)
-        const notification = {
-          type: response.data.status,
-          message: 'TEST ONLY_Views loaded',
-        }
-        dispatch('Notifications/add', notification, { root: true })
+        // const notification = {
+        //   type: response.data.status,
+        //   message: 'TEST ONLY_Views loaded',
+        // }
+        // dispatch('Notifications/add', notification, { root: true })
       })
       .catch(error => {
         const notification = {

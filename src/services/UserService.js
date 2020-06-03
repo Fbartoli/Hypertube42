@@ -43,7 +43,6 @@ export default {
 
   // PUT user password
   putonlinepass({ onlineNewPassword }) {
-    console.log('TEST_putonlinepass ', onlineNewPassword)
     return apiClient.put(`users/user/${onlineNewPassword.username}/password`, {
       password: onlineNewPassword.password,
       new_password: onlineNewPassword.new_password,

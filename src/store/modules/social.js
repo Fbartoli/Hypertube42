@@ -24,10 +24,6 @@ const actions = {
     commit('PUT_SEARCH_PROFILE', searchProfile)
   },
   getSearchProfile({ getters, dispatch, commit }) {
-    console.log(
-      'social.js_getters.storeSearchProfile_ ',
-      getters.storeSearchProfile
-    )
     const userSearched = getters.storeSearchProfile
 
     userService
@@ -78,7 +74,6 @@ const getters = {
   },
   // storeSearchProfile(state) {
   //   const copyStr = Object.assign('', state.searchProfile)
-  //   console.log('COPYSTR_searchProfile', copyStr)
   //   return copyStr
   // },
 }

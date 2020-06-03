@@ -24,7 +24,6 @@ export default {
     )
   },
   getMoviesSearch({ findMovieField }) {
-    console.log('findMovieField_', findMovieField)
     return apiCLient.get(
       `/list_movies.json?limit=50&sort_by=title&query_term=${findMovieField}`
     )

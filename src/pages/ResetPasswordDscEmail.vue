@@ -77,10 +77,8 @@ export default {
   methods: {
     ...mapActions('Email', ['sendResetPassLink']),
     validDscNewPassword(emailResetPassword) {
-      console.log('validDscNewPassword_ ', emailResetPassword)
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        console.log('validDscNewPassword_2 ', emailResetPassword)
         this.sendResetPassLink(emailResetPassword)
       }
     },

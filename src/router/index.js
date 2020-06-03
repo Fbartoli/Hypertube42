@@ -18,7 +18,6 @@ const routes = [
         let info = code.split('.')
         let userInfo = JSON.parse(atob(info[1]))
         let exp = userInfo.exp
-        console.log('Home router_userInfo.data_ ', userInfo.data)
         // store.commit('App/PUT_USERNAME', userInfo.data.username)
         localStorage.setItem('hypertube', JSON.stringify({ code, exp }))
         store.commit(
@@ -63,7 +62,6 @@ const routes = [
       requiresAuth: true,
     },
     // beforeEnter(routeTo, routeFrom, next) {
-    //   console.log('TEST_username: ', routeTo.params.username)
     //   store
     //     .dispatch('App/getUser', routeTo.params.username)
     //     .then(data => {
@@ -238,7 +236,6 @@ router.afterEach(() => {
 
 // in test
 router.onError(error => {
-  console.log('< < < routing error_index.js > > >', error)
   store.commit('App/setError', error)
 })
 

@@ -100,7 +100,6 @@ import {
   minLength,
   maxLength,
 } from 'vuelidate/lib/validators'
-// import MovieComment from '../components/MovieComment'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -125,9 +124,6 @@ export default {
   methods: {
     ...mapActions('Movies', ['sendComment']),
     validComment() {
-      // console.log('this.ref_', this.ref)
-      // console.log('this.comment_', this.comment)
-      // this.$v.$touch()
       if (!this.$v.$invalid) {
         this.sendComment({ ref: this.ref, text: this.comment })
       }

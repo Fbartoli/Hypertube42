@@ -239,13 +239,8 @@ export default {
       }
     },
     keySearchUser() {
-      console.log('this.searchUsername_ ', this.searchProfile)
-      // console.log('searchUsername_ ', searchProfile)
-      // console.log('this.searchBox_ ', this.searchBox)
-      // this.putSearchProfile(this.searchBox)
       this.putSearchProfile(this.searchProfile)
       this.getSearchProfile()
-      // this.$router.push('/profile/' + `${this.searchBox}`)
     },
   },
   computed: {
@@ -270,8 +265,6 @@ export default {
       appName: 'App/storeAppName',
       storeDefaultPicture: 'App/storeDefaultPicture',
       isAuth: 'App/isAuth',
-      // searchProfile: 'Social/searchProfile',
-      // currentUsername: 'App/storeUsername',
     }),
     fullName: {
       // getter

@@ -122,7 +122,6 @@ export default {
         token: this.passToken,
         new_password: password,
       }
-      console.log('Page_obj_dscNewPassword ', dscNewPassword)
       this.$v.$touch()
       if (!this.$v.$invalid) {
         this.putDscResetPassword({ dscNewPassword })

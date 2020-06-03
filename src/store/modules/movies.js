@@ -16,13 +16,9 @@ const state = {
 // mutations
 const mutations = {
   FETCH_MOVIES(state, movies) {
-    // console.log('*** FETCH_MOVIES ***')
     for (let i = 0; i < parseInt(movies.length); i++) {
-      // console.log('** movies **', movies[i].id)
       for (let j = 0; j < parseInt(state.views.length); j++) {
-        // console.log('* views *', state.views[j].filmRef)
         if (movies[i].id == state.views[j].filmRef) {
-          console.log('* * * OH YEAH ! * * *', movies[i].id)
           movies[i].view = true
         }
       }
@@ -49,7 +45,6 @@ const mutations = {
     //     }
     //   }
     // }
-    console.log('VIEWS', views)
     state.views = views
   },
 }
@@ -82,7 +77,6 @@ const actions = {
   },
   // A.1.b) Follow up action of 'fetchMovies' (1.a) to GET the next page of movies
   addMovies({ commit, state }, { page }) {
-    console.log('/// addMovies ///')
     nProgress.start()
     return movieService.getMovies(state.perPage, page).then(response => {
       response.data.data.movies.shift()
@@ -93,7 +87,6 @@ const actions = {
   },
   // A.1.c) GET the specific movie details from the api YTS
   fetchMovie({ commit }, id) {
-    console.log('/// fetchMovies ///')
     return movieService.getMovie(id).then(response => {
       commit('FETCH_MOVIE', response.data.data.movie)
       return response.data.data.movie
@@ -102,7 +95,6 @@ const actions = {
 
   // A.2.a) get movies from YTS with standard search paramaters
   filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
-    console.log('/// filteredFetchMovies ///')
     return movieService
       .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
       .then(response => {
@@ -128,7 +120,6 @@ const actions = {
   // A.2.b) Follow up action of 'filteredFetchMovies' (2.a) to GET the next page of movies
   // It is the equivalent to 'addMovies' (1.b) but filtered
   filteredAddMovies({ commit, state }, { page, filter, order }) {
-    console.log('/// filteredAddMovies ///')
     nProgress.start()
     return movieService
       .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
@@ -141,7 +132,6 @@ const actions = {
 
   // A.3.a) get movies from YTS with specific search paramaters
   searchFetchMovies({ commit, dispatch }, { findMovieField }) {
-    console.log('/// searchFetchMovies ///')
     return movieService
       .getMoviesSearch({ findMovieField })
       .then(response => {
@@ -167,7 +157,6 @@ const actions = {
   // A.3.b) Follow up action of 'searchFetchMovies' (3.a) to GET the next page of movies
   // It is the equivalent to 'addMovies' (1.b) but for a search
   // searchAddMovies({ commit, state }, { page, findMovieField }) {
-  //   console.log('/// searchAddMovies ///')
   //   nProgress.start()
   //   return movieService
   //     .getMoviesSearch({ perPage: state.perPage, page, findMovieField })
@@ -181,8 +170,6 @@ const actions = {
   // B) Comments:
   // B.1) POST movie comment
   sendComment: ({ dispatch }, { ref, text }) => {
-    // console.log('POST comments_app.js_REF_', ref)
-    // console.log('app.js_TEXT_', text)
     userService
       .postcomment({ ref, text })
       .then(response => {
@@ -198,7 +185,6 @@ const actions = {
         // })
       })
       .catch(error => {
-        console.log('STORE movies.js_sendComment_error_', error)
         const notification = {
           type: 'error',
           message: 'There was an issue while sending your comment',
@@ -226,11 +212,9 @@ const actions = {
   },
   // B.2) GET movie comments
   getComments: ({ dispatch, commit }, ref) => {
-    console.log('GET comments_app.js_REF', ref)
     userService
       .getcomment(ref)
       .then(response => {
-        console.log('RESPONSE', response.data.comments)
         commit('PUT_COMMENTS', response.data.comments)
         const notification = {
           type: response.data.status,
@@ -268,7 +252,6 @@ const actions = {
   // C) Views:
   // C.1) POST movie view
   sendView: ({ dispatch }, filmRef) => {
-    console.log('POST view_app.js_REF_', filmRef)
     userService
       .postview(filmRef)
       .then(response => {
@@ -279,7 +262,6 @@ const actions = {
         dispatch('Notifications/add', notification, { root: true })
       })
       .catch(error => {
-        console.log('STORE movies.js_sendView_error_', error)
         const notification = {
           type: 'error',
           message: 'Error from Movie view',

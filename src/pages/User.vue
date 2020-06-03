@@ -64,7 +64,7 @@
                 color="blue lighten-4"
                 class="mr-4"
               >
-                Update my Personal Information
+                {{ $t('updateUserInfo') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -97,7 +97,7 @@
                 color="blue lighten-4"
                 class="mr-4"
               >
-                Update my Email
+                {{ $t('updateEmail') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -176,7 +176,7 @@
                   color="blue lighten-4"
                   class="mr-4"
                 >
-                  Update my Avatar
+                  {{ $t('updateAvatar') }}
                 </v-btn>
               </v-form>
             </v-row>
@@ -267,10 +267,8 @@ export default {
         username: this.currentUsername,
         email: this.userData.email,
       }
-      // this.$v.$touch()
-      // if (!this.$v.$invalid) {
       this.updateEmail({ payloadPutEmail })
-      // }
+      this.valid = false
     },
     validatePersonalInfo() {
       const payloadPutUser = {
@@ -280,15 +278,13 @@ export default {
         lastName: this.userData.lastname,
         language: this.userData.language,
       }
-      // this.$v.$touch()
-      // if (!this.$v.$invalid) {
       this.updateUserInfo({ payloadPutUser })
+      this.valid = false
     },
 
     validateAvatar() {
-      // console.log('ROUTER', router)
-      function error(e) {
-        console.log('(= = = E R R O R_ = = =', e)
+      function error(error) {
+        this.$store.dispatch('App/setError', error)
       }
 
       if (this.$refs.AvatarForm.validate()) {
@@ -317,10 +313,9 @@ export default {
               self.$store.dispatch('App/getUser', '', {
                 root: true,
               })
-              // Make an warning in web console if the button is clicked more than once
-              // self.$router.push({
-              //   name: 'home',
-              // })
+              self.$router.push({
+                name: 'home',
+              })
             }
           }
         })
@@ -336,6 +331,7 @@ export default {
 
         xhr.send(data)
       }
+      this.valid = false
     },
     displayImage(File) {
       if (!File) {
@@ -358,29 +354,45 @@ export default {
 {
   "en": {
     "title": "Update my profile",
+
     "username": "Username",
+    "usernameRuleRequired": "Username is required",
+
     "firstname": "First Name",
     "lastname": "Last Name",
     "language": "Subtitles language preference",
+    "updateUserInfo": "Update my personal information",
+
     "email": "Email",
+    "updateEmail": "Update my email",
+
     "password": "Password",
+    "Reset password": "Change my password",
+
     "preview": "Preview",
     "profilePicture": "Profile Picture",
-    "Reset password": "Change my password",
-    "usernameRuleRequired": "Username is required"
+    "updateAvatar": "Update avatar"
   },
   "fr": {
     "title": "Mise à jour de mon profil",
+
     "username": "Nom d'utilisateur",
+    "usernameRuleRequired": "Le nom d'utilisateur est requis",
+
     "firstname": "Prénom",
     "lastname": "Nom",
     "language": "Langue préférée de sous-titres",
+    "updateUserInfo": "Mettre à jour mes informations",
+
     "email": "Email",
+    "updateEmail": "Mettre à jour mon email",
+
     "password": "Mot de passe",
+    "Reset password": "Modifier mon mot de passe",
+
     "preview": "Aperçu",
     "profilePicture": "Photo de profil",
-    "Reset password": "Modifier mon mot de passe",
-    "usernameRuleRequired": "Le nom d'utilisateur est requis"
+    "updateAvatar": "Mettre à jour ma photo"
   }
 }
 </i18n>

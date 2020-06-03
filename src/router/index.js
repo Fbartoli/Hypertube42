@@ -30,7 +30,11 @@ const routes = [
         // store.dispatch('App/getUserAuth')
         store.dispatch('App/getUser', '')
       }
-      next()
+      if (routeFrom.name === 'home') {
+        next(false)
+      } else {
+        next()
+      }
     },
   },
   {
@@ -230,6 +234,12 @@ router.beforeEach((routeTo, routeFrom, next) => {
 
 router.afterEach(() => {
   nprogress.done()
+})
+
+// in test
+router.onError(error => {
+  console.log('< < < routing error_index.js > > >', error)
+  store.commit('App/setError', error)
 })
 
 export default router

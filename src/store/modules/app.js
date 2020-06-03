@@ -9,6 +9,7 @@ const getDefaultState = () => {
     appName: 'Hypertube',
     Loading: false,
     langs: ['fr', 'en'],
+    error: null,
     userInfo: {
       token: '',
       exp: '',
@@ -28,6 +29,7 @@ const state = {
   appName: 'Hypertube',
   Loading: false,
   langs: ['fr', 'en'],
+  error: null,
   userInfo: {
     token: '',
     exp: '',
@@ -55,7 +57,6 @@ const mutations = {
     state.userInfo.auth = bool
   },
   SET_USERINFO: (state, data) => {
-    // console.log('TEST_app_js_SET_USERINFO', data)
     state.userInfo.username = data.username
     state.userInfo.email = data.email
     state.userInfo.firstname = data.firstName
@@ -64,18 +65,15 @@ const mutations = {
     state.userInfo.avatar = data.photo
   },
   PUT_USERINFO: (state, newUserInfo) => {
-    console.log('TEST_app_js_PUT_USERINFO', newUserInfo)
     state.userInfo.username = newUserInfo.username
     state.userInfo.firstname = newUserInfo.firstname
     state.userInfo.lastname = newUserInfo.lastname
     state.userInfo.language = newUserInfo.language
   },
   PUT_DEFAULT_PICTURE: (state, boolean) => {
-    console.log('TEST_app_js_PUT_DEFAULT_PICTURE', boolean)
     state.userInfo.defaultPicture = boolean
   },
   PUT_USERNAME: (state, username) => {
-    console.log('TEST_app_js_PUT_USERNAME', username)
     state.userInfo.username = username
   },
   RESET_LOCALSTORAGE_USERNAME: (state, username, exp) => {
@@ -83,17 +81,17 @@ const mutations = {
     state.userInfo.exp = exp
   },
   PUT_EMAIL: (state, newEmail) => {
-    console.log('TEST_app_js_PUT_EMAIL', newEmail)
     state.userInfo.email = newEmail
   },
   PUT_TOKEN: (state, newToken) => {
-    console.log('TEST_app_js_PUT_TOKEN: ', newToken)
     state.userInfo.token = newToken.code
     state.userInfo.exp = newToken.exp
   },
-  // Code review to do
   TOKEN: (state, token) => {
     state.userInfo.token = token
+  },
+  SET_ERROR: (state, error) => {
+    state.error = error
   },
   RESET_STATE(state) {
     Object.assign(state, getDefaultState())
@@ -122,10 +120,12 @@ const actions = {
   token: ({ commit }, token) => {
     commit('TOKEN', token)
   },
+  setError: ({ commit }, error) => {
+    commit('SET_ERROR', error)
+  },
 
   // Called by the user in ../pages/Login.vue to sign in
   login: ({ dispatch, commit }, { username, password }) => {
-    console.log('CHECK_IN_Login Bro', { username, password })
     userService
       .login({ username, password })
       .then(response => {
@@ -141,10 +141,6 @@ const actions = {
           message: 'Login successful',
         }
         dispatch('Notifications/add', notification, { root: true })
-        // if (getters.storePhoto) {
-        //   console.log('Choose a profile pic at login ?', getters.storePhoto)
-        // }
-        // router.push({ name: 'setpicture' })
       })
       .catch(error => {
         const notification = {
@@ -175,7 +171,6 @@ const actions = {
     if (username === '') {
       username = getters.storeUsername
     }
-    console.log('payloadGetUser', username)
     userService
       .getuser({ username: username, token: getters.storeToken })
       .then(response => {
@@ -228,25 +223,19 @@ const actions = {
 
   // Called by the user in ../pages/User.vue to modify user data
   updateUserInfo: ({ commit, dispatch }, { payloadPutUser }) => {
-    console.log('payloadPutUser', payloadPutUser)
     userService
       .putuser({ payloadPutUser })
       .then(response => {
-        console.log('TEST_validatePersonalInfo_User.vue', response)
         commit('PUT_TOKEN', response.data.token)
         dispatch('getUser', '')
-        console.log('*** tracker ***')
         const notification = {
           type: response.data.status,
           message: 'Personal information updated !',
         }
         dispatch('Notifications/add', notification, { root: true })
-        // router.push({ name: '/' })
-        console.log('router ??', router)
         router.push({ name: 'home' })
       })
       .catch(error => {
-        // console.log('updateUserInfo_error.response', error.response)
         const notification = {
           type: 'error',
           message: 'Issue occured while updating your personal information',
@@ -279,8 +268,6 @@ const actions = {
     userService
       .putemail(payloadPutEmail)
       .then(response => {
-        console.log('RESPONSE changeEmail app.js', response)
-        // dispatch('Email/setChecker', 'OK', { root: true })
         const notification = {
           type: response.data.status,
           message: 'Please, valid the message sent to your new email address',
@@ -295,7 +282,6 @@ const actions = {
           message: 'Issue occured while changing your email',
         }
         if (error.response) {
-          console.log('OBSERVE_ ', error)
           if (error.response.status === 404) {
             dispatch('Notifications/add', notification, {
               root: true,
@@ -321,7 +307,6 @@ const actions = {
     userService
       .putonlinepass({ onlineNewPassword })
       .then(response => {
-        console.log('RESPONSE onlineNewPassword app.js', response)
         const notification = {
           type: response.data.status,
           message: 'Your new password is set !',

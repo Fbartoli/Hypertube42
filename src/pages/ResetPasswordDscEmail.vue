@@ -1,41 +1,43 @@
 <template>
-  <v-card width="80%" class="mx-auto mt-5">
-    <v-card-title class="pb-0">
-      <h1>{{ $t('title') }}</h1>
-    </v-card-title>
-    <v-card-text class="mt-5">
-      <v-form>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="email"
-                :error-messages="emailErrors"
-                :label="$t('email')"
-                @input="$v.email.$touch()"
-                @blur="$v.email.$touch()"
-                outlined
-                clearable
-                color="blue"
-                type="Email"
-              />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-form>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-btn
-        @click="validDscNewPassword(email)"
-        x-large
-        color="blue"
-        :disabled="$v.$invalid"
-      >
-        {{ $t('askResetPassword') }}
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+  <v-container fluid class="background">
+    <v-card width="80%" class="mx-auto mt-5">
+      <v-card-title primary-title>
+        <h1>{{ $t('title') }}</h1>
+      </v-card-title>
+      <v-card-text class="mt-5">
+        <v-form>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="email"
+                  :error-messages="emailErrors"
+                  :label="$t('email')"
+                  @input="$v.email.$touch()"
+                  @blur="$v.email.$touch()"
+                  outlined
+                  clearable
+                  color="blue"
+                  type="Email"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-btn
+          @click="validDscNewPassword(email)"
+          x-large
+          color="blue"
+          :disabled="$v.$invalid"
+        >
+          {{ $t('askResetPassword') }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -81,6 +83,7 @@ export default {
       if (!this.$v.$invalid) {
         this.sendResetPassLink(emailResetPassword)
       }
+      this.email = ''
     },
   },
 }

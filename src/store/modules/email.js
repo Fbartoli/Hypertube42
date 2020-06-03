@@ -187,9 +187,42 @@ const actions = {
   },
 
   // Reset password while disconnected with a link sent to the user mailbox
-  sendResetPassLink({ commit }, emailResetPassword) {
+  sendResetPassLink({ dispatch, commit }, emailResetPassword) {
     commit('PUT_PASSWORD_TOKEN', '')
-    emailService.postresetpassword(emailResetPassword)
+    emailService
+      .postresetpassword(emailResetPassword)
+      .then(response => {
+        if (response.status === 200) {
+          const notification = {
+            type: response.data.status,
+            message: 'Email sent to you !',
+          }
+          dispatch('Notifications/add', notification, { root: true })
+          router.push({
+            name: 'home',
+          })
+        }
+      })
+      .catch(error => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            router.push({
+              name: '404',
+              params: { resource: 'Send email reset password link' },
+            })
+          } else if (error.response.status === 400) {
+            const notification = {
+              type: error.response.status,
+              message: 'This email does not exist',
+            }
+            dispatch('Notifications/add', notification, { root: true })
+            return
+          }
+        }
+        router.push({
+          name: 'home',
+        })
+      })
   },
   // Change email with new email address validation
   setPasswordToken({ commit }, passwordToken) {

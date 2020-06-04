@@ -70,6 +70,7 @@
       </video-player>
       User Language: {{ language }}
     </div>-->
+    BUTTONS:
     <div>
       <v-btn
         v-if="this.storeMovieMeta.torrents[0]"
@@ -304,6 +305,7 @@ export default {
       this.playerFormat = this.storeFormats[0]
       const startPlayer = this
       this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      this.$store.dispatch('Movies/sendView', this.ref)
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
         // console.log('=== [0] OK ===')
@@ -319,9 +321,9 @@ export default {
       this.playerFormat = this.storeFormats[1]
       const startPlayer = this
       this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      this.$store.dispatch('Movies/sendView', this.ref)
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
-        // console.log('=== [1] OK ===')
       }, 1000)
     },
     twoStream() {
@@ -329,9 +331,9 @@ export default {
       this.playerFormat = this.storeFormats[2]
       const startPlayer = this
       this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      this.$store.dispatch('Movies/sendView', this.ref)
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
-        // console.log('=== [2] OK ===')
       }, 1000)
     },
     threeStream() {
@@ -339,19 +341,11 @@ export default {
       this.playerFormat = this.storeFormats[3]
       const startPlayer = this
       this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      this.$store.dispatch('Movies/sendView', this.ref)
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
-        // console.log('=== test [3] OK ===')
       }, 1000)
     },
-    // fourStream() {
-    //   this.playerHash = this.storeMovieMeta.torrents[4].hash
-    //   const startPlayer = this
-    //   setTimeout(function() {
-    //     startPlayer.playerShow = 'OK'
-    //     // console.log('=== test [3] OK ===')
-    //   }, 1000)
-    // },
   },
   computed: {
     ...mapGetters({

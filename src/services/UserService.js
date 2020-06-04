@@ -9,13 +9,6 @@ const apiClient = axios.create({
   timeout: 8000,
 })
 
-console.log('_ _ _ & & & backend & & & _ _ _', process.env.VUE_APP_BACKEND_URL)
-console.log('_ _ _ & & & front & & & _ _ _', process.env.VUE_APP_BASE_URL)
-console.log(
-  '_ _ _ & & & front2 & & & _ _ _',
-  `${process.env.VUE_APP_BACKEND_URL}`
-)
-
 export default {
   // querries when the user is connected on its account
   // (or connecting, for 'login')

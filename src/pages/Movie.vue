@@ -199,7 +199,6 @@ export default {
   // },
   data() {
     return {
-      src: '',
       comment: '',
       src: '',
       ref: this.$route.params.id,

@@ -71,7 +71,7 @@ const mutations = {
 // actions
 const actions = {
   // A) Movies API:
-  // A.1.a) GET movies from YTS with standard search paramaters
+  // A.1.a) GET movies with standard search paramaters
   fetchMovies({ commit, dispatch, state }, page) {
     movieService
       .getMovies(state.perPage, page)
@@ -123,7 +123,7 @@ const actions = {
       return response.data.data.movies
     })
   },
-  // A.1.c) GET the specific movie details from the api YTS
+  // A.1.c) GET the specific movie details from the api
   fetchMovie({ commit }, id) {
     console.log('/// fetchMovies ///')
     return movieService.getMovie(id).then(response => {
@@ -132,7 +132,7 @@ const actions = {
     })
   },
 
-  // A.2.a) get movies from YTS with standard search paramaters
+  // A.2.a) get movies with standard search paramaters
   filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
     console.log('/// filteredFetchMovies ///')
     movieService
@@ -188,7 +188,7 @@ const actions = {
       })
   },
 
-  // A.3.a) get movies from YTS with specific search paramaters
+  // A.3.a) get movies with specific search paramaters
   searchFetchMovies({ commit, dispatch }, { findMovieField }) {
     console.log('/// searchFetchMovies ///')
     movieService

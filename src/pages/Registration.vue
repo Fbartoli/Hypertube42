@@ -97,10 +97,6 @@
           >
             {{ $t('register') }}
           </v-btn>
-
-          <v-btn class="ma-5" @click="autofill" x-large color="primary">
-            {{ $t('autofill') }}
-          </v-btn>
         </v-form>
       </v-card-text>
       <br />
@@ -139,16 +135,16 @@ export default {
   },
   methods: {
     ...mapActions('Registration', ['register']),
-    autofill() {
-      ;(this.agreeToTerms = true),
-        (this.$v.email.$model = 'chroniclesofselene@gmail.com'),
-        (this.$v.username.$model = 'test9'),
-        (this.$v.lastName.$model = 'Duoquadra'),
-        (this.$v.password.$model = '1Qqwerty'),
-        (this.$v.repeatpassword.$model = '1Qqwerty')(
-          (this.$v.firstName.$model = 'Student')
-        )
-    },
+    // autofill() {
+    //   ;(this.agreeToTerms = true),
+    //     (this.$v.email.$model = 'chroniclesofselene@gmail.com'),
+    //     (this.$v.username.$model = 'test9'),
+    //     (this.$v.lastName.$model = 'Duoquadra'),
+    //     (this.$v.password.$model = '1Qqwerty'),
+    //     (this.$v.repeatpassword.$model = '1Qqwerty')(
+    //       (this.$v.firstName.$model = 'Student')
+    //     )
+    // },
     validRegister() {
       const object = {
         email: this.$v.email.$model,
@@ -158,6 +154,11 @@ export default {
         password: this.$v.password.$model,
       }
       this.register(object)
+      ;(this.$v.email.$model = ''),
+        (this.$v.username.$model = ''),
+        (this.$v.firstName.$model = ''),
+        (this.$v.lastName.$model = ''),
+        (this.$v.password.$model = '')
     },
   },
   computed: {

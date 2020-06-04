@@ -116,7 +116,7 @@ const routes = [
           }
           routeTo.params.movie = movie
           store.dispatch('Movies/getComments', routeTo.params.id)
-          store.dispatch('Movies/sendView', routeTo.params.id)
+          // store.dispatch('Movies/sendView', routeTo.params.id)
           next()
         })
         .catch(error => {
@@ -236,7 +236,7 @@ router.afterEach(() => {
 
 // in test
 router.onError(error => {
-  store.commit('App/setError', error)
+  store.dispatch('App/setError', error)
 })
 
 export default router

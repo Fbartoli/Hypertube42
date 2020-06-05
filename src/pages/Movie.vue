@@ -6,7 +6,15 @@
 
     <v-card-text>
       <v-row align="center" class="mx-0">
-        <v-rating></v-rating>
+        <v-rating
+          length="10"
+          :value="movie.rating"
+          color="amber"
+          dense
+          half-increments
+          readonly
+          size="14"
+        ></v-rating>
 
         <div class="grey--text ml-4">{{ movie.rating }}</div>
       </v-row>
@@ -22,11 +30,15 @@
     <v-divider class="mx-4"></v-divider>
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
     <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
+    <br /><br />TEST_{{ storeLanguage }} <br /><br />TEST2_{{
+      this.storeLanguage
+    }}
 
     <div class="player" v-if="playerShow !== ''">
       <video controls autoplay crossorigin="anonymous">
         <source :src="src" :type="playerFormat" />
         <track
+          v-if="storeLanguage === 'english'"
           :src="storeSubtitles.en"
           kind="subtitles"
           srclang="en"
@@ -34,43 +46,30 @@
           default
         />
         <track
+          v-else
+          :src="storeSubtitles.en"
+          kind="subtitles"
+          srclang="fr"
+          label="fr"
+          default
+        />
+        <track
+          v-if="storeLanguage === 'english'"
           :src="storeSubtitles.fr"
           kind="subtitles"
           srclang="fr"
           label="fr"
         />
+        <track
+          v-else
+          :src="storeSubtitles.fr"
+          kind="subtitles"
+          srclang="en"
+          label="en"
+        />
       </video>
     </div>
 
-    <!-- <div class="player" v-if="playerShow !== ''">
-      <video-player
-        ref="videoPlayer"
-        class="video-player-box"
-        :options="playerOptions"
-        :playsinline="true"
-        @play="onPlayerPlay($event)"
-        @pause="onPlayerPause($event)"
-        @ended="onPlayerEnded($event)"
-        @waiting="onPlayerWaiting($event)"
-        @playing="onPlayerPlaying($event)"
-        @loadeddata="onPlayerLoadeddata($event)"
-        @timeupdate="onPlayerTimeupdate($event)"
-        @canplay="onPlayerCanplay($event)"
-        @canplaythrough="onPlayerCanplaythrough($event)"
-        @statechanged="playerStateChanged($event)"
-        @ready="playerReadied"
-      >
-        <track
-          kind="subtitles"
-          src="../assets/abc.vtt"
-          srclang="trackLanguage"
-          label="language"
-          default
-        />
-      </video-player>
-      User Language: {{ language }}
-    </div>-->
-    BUTTONS:
     <div>
       <v-btn
         v-if="this.storeMovieMeta.torrents[0]"
@@ -253,51 +252,6 @@ export default {
       // this.comment = ''
       // this.componentKey += 1
     },
-    // listen event
-    onPlayerPlay(player) {
-      console.log('player play!', player)
-    },
-    onPlayerPause(player) {
-      console.log('player pause!', player)
-    },
-    // ...player event
-
-    // or listen state event
-
-    onPlayerEnded(player) {
-      console.log('player ended!', player)
-    },
-    onPlayerWaiting(player) {
-      console.log('player waiting!', player)
-    },
-    onPlayerPlaying(player) {
-      console.log('player playing!', player)
-    },
-    onPlayerLoadeddata(player) {
-      console.log('player Loadeddata!', player)
-    },
-    onPlayerTimeupdate(player) {
-      console.log('player Timeupdate!', player)
-    },
-    onPlayerCanplay(player) {
-      console.log('player Canplay!', player)
-    },
-    onPlayerCanplaythrough(player) {
-      console.log('player Canplaythrough!', player)
-    },
-    playerStateChanged(playerCurrentState) {
-      console.log('player current update state', playerCurrentState)
-    },
-
-    // player is ready
-    playerReadied(player) {
-      console.log('the player is readied', player)
-      // you can use it to do something...
-      // player.[methods]
-    },
-    // resetPlayer() {
-    //   this.componentKey += 1
-    // },
     zeroStream() {
       this.playerHash = this.storeMovieMeta.torrents[0].hash
       this.playerFormat = this.storeFormats[0]
@@ -306,7 +260,6 @@ export default {
       this.$store.dispatch('Movies/sendView', this.ref)
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
-        // console.log('=== [0] OK ===')
       }, 1000)
       // return this.getStream({
       //   magnetHash: this.storeMovieMeta.torrents[0].hash,
@@ -353,6 +306,7 @@ export default {
       storeComments: 'Movies/storeComments',
       storeFormats: 'Movies/storeFormats',
       storeSubtitles: 'Movies/storeSubtitles',
+      storeLanguage: 'App/storeLanguage',
     }),
     player() {
       return this.$refs.videoPlayer.player
@@ -370,7 +324,6 @@ export default {
       return this.$store.getters['interact/serverMessage']
     },
     playerOptions() {
-      console.log('$ $ $', this.playerFormat)
       return {
         autoplay: true,
         controls: true,
@@ -380,9 +333,7 @@ export default {
         sources: [
           {
             type: `${this.playerFormat}`,
-            // src: this.videoSource
             src: `${process.env.VUE_APP_BACKEND_URL}/torrent/${this.playerHash}?id=${this.ref}`,
-            // src: `http://localhost:3000/torrent/02767050E0BE2FD4DB9A2AD6C12416AC806ED6ED?id=7783`,
           },
         ],
       }

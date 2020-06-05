@@ -11,11 +11,10 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import 'nprogress/nprogress.css'
 // import VueCoreVideoPlayer from 'vue-core-video-player'
-import VueVideoPlayer from 'vue-video-player'
-import 'video.js/dist/video-js.css'
+// import VueVideoPlayer from 'vue-video-player'
+// import 'video.js/dist/video-js.css'
 
 import './assets/css/background.css'
-
 
 const requireComponent = require.context(
   './components',
@@ -35,12 +34,12 @@ requireComponent.keys().forEach(fileName => {
 
 Vue.use(vuelidate)
 
-Vue.use(
-  VueVideoPlayer /* {
-  options: global default options,
-  events: global videojs events
-} */
-)
+// Vue.use(
+//   VueVideoPlayer /* {
+//   options: global default options,
+//   events: global videojs events
+// } */
+// )
 
 // const custom = {
 //   "dashboard": {

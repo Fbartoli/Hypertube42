@@ -111,7 +111,6 @@ const routes = [
       store
         .dispatch('Movies/fetchMovie', routeTo.params.id)
         .then(movie => {
-          console.log('*** ALLO ***', movie)
           if (parseInt(movie.id) === 0) {
             next({ name: '404', params: { resource: 'movie' } })
           }
@@ -128,7 +127,6 @@ const routes = [
             imdbid: movie.imdb_code,
             language: 'fr',
           })
-          console.log('T Y P E O F_ ', typeof movie.torrents.length)
           for (let i = 0; i < parseInt(movie.torrents.length); i++) {
             store.dispatch('Movies/getStreamFormat', {
               magnetHash: movie.torrents[i].hash,

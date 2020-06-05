@@ -30,8 +30,6 @@
     <v-divider class="mx-4"></v-divider>
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
     <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
-    <br /><br />TEST_{{ storeLanguage }} <br /><br />TEST2_{{
-      this.storeLanguage
     }}
 
     <div class="player" v-if="playerShow !== ''">
@@ -46,26 +44,11 @@
           default
         />
         <track
-          v-else
-          :src="storeSubtitles.en"
-          kind="subtitles"
-          srclang="fr"
-          label="fr"
-          default
-        />
-        <track
           v-if="storeLanguage === 'english'"
           :src="storeSubtitles.fr"
           kind="subtitles"
           srclang="fr"
           label="fr"
-        />
-        <track
-          v-else
-          :src="storeSubtitles.fr"
-          kind="subtitles"
-          srclang="en"
-          label="en"
         />
       </video>
     </div>

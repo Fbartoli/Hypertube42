@@ -104,7 +104,7 @@ const actions = {
       })
       .catch(error => {
         if (error.code) {
-          console.log(error)
+          dispatch('App/setError', error.code)
         }
       })
   },
@@ -128,7 +128,6 @@ const actions = {
 
   // A.2.a) get movies with standard search paramaters
   filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
-    console.log('/// filteredFetchMovies ///')
     movieService
 
       .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
@@ -165,7 +164,7 @@ const actions = {
       })
       .catch(error => {
         if (error.code) {
-          console.log(error)
+          dispatch('App/setError', error.code)
         }
       })
   },
@@ -184,7 +183,6 @@ const actions = {
 
   // A.3.a) get movies with specific search paramaters
   searchFetchMovies({ commit, dispatch }, { findMovieField }) {
-    console.log('/// searchFetchMovies ///')
     movieService
 
       .getMoviesSearch({ findMovieField })
@@ -221,7 +219,7 @@ const actions = {
       })
       .catch(error => {
         if (error.code) {
-          console.log(error)
+          dispatch('App/setError', error.code)
         }
       })
   },
@@ -397,8 +395,6 @@ const actions = {
     streamService
       .getstream({ magnetHash, id })
       .then(response => {
-        console.log(' *** Stream, response_', response)
-        console.log(' *** Stream, response_', response.data)
         commit('PUT_STREAM', response.data)
         const notification = {
           type: response.data.status,
@@ -431,14 +427,9 @@ const actions = {
   },
   // D.2) GET stream formats
   getStreamFormat: ({ dispatch, commit }, { magnetHash, id, indice }) => {
-    console.log('&& hash &&', magnetHash)
-    console.log('&& id &&', id)
-    console.log('&& indice &&', indice)
     streamService
       .getstreamformats({ magnetHash, id })
       .then(response => {
-        console.log(' *** Format, response_', response)
-        console.log(' *** Format, response_', response.data)
         commit('PUT_STREAM_FORMAT', {
           format: response.data.mimetype,
           indice: indice,
@@ -474,13 +465,9 @@ const actions = {
   },
   // D.3) GET subtitles
   getSubtitles: ({ dispatch, commit }, { imdbid, language }) => {
-    console.log(' * imdbid * ', imdbid)
-    console.log(' * language subtitles * ', language)
     userService
       .getsubs({ imdbid, language })
       .then(response => {
-        console.log(' *** Subtitles, response_', response)
-        console.log(' *** Stream, response_', response.data.file)
         commit('PUT_SUBTITLES', { url: response.data.file, language: language })
         const notification = {
           type: response.data.status,

@@ -119,7 +119,7 @@ const routes = [
           routeTo.params.language = store.getters['App/storeLanguage']
           store.dispatch('Movies/getComments', routeTo.params.id)
 
-          store.dispatch('Movies/sendView', routeTo.params.id)
+          // store.dispatch('Movies/sendView', routeTo.params.id)
           store.dispatch('Movies/getSubtitles', {
             imdbid: movie.imdb_code,
             language: 'en',

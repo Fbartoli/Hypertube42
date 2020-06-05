@@ -2,31 +2,105 @@
   <v-card class="mx-auto my-12" width="80%">
     <v-img max-height="auto" :src="movie.large_cover_image"></v-img>
 
-    <v-card-title>{{ movie.title }} </v-card-title>
+    <v-card-title>{{ movie.title }}</v-card-title>
 
     <v-card-text>
       <v-row align="center" class="mx-0">
-        <v-rating
-          length="10"
-          :value="movie.rating"
-          color="amber"
-          dense
-          half-increments
-          readonly
-          size="14"
-        ></v-rating>
+        <v-rating></v-rating>
 
         <div class="grey--text ml-4">{{ movie.rating }}</div>
       </v-row>
 
       <div class="my-4 subtitle-1">
-        {{ movie.year }} • {{ movie.genres[0] }}
+        {{ movie.year }} • {{ movie.genres[0] }} {{ movie.genres[1] }}
+        {{ movie.genres[2] }}
       </div>
 
-      <div>
-        {{ movie.description_full }}
-      </div>
+      <div>{{ movie.description_full }}</div>
     </v-card-text>
+
+    <v-divider class="mx-4"></v-divider>
+    <v-card-title>{{ $t('playerTitle') }}</v-card-title>
+    <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
+
+    <div class="player" v-if="playerShow !== ''">
+      <video controls autoplay crossorigin="anonymous">
+        <source :src="src" :type="playerFormat" />
+        <track
+          :src="storeSubtitles.en"
+          kind="subtitles"
+          srclang="en"
+          label="en"
+          default
+        />
+        <track
+          :src="storeSubtitles.fr"
+          kind="subtitles"
+          srclang="fr"
+          label="fr"
+        />
+      </video>
+    </div>
+
+    <!-- <div class="player" v-if="playerShow !== ''">
+      <video-player
+        ref="videoPlayer"
+        class="video-player-box"
+        :options="playerOptions"
+        :playsinline="true"
+        @play="onPlayerPlay($event)"
+        @pause="onPlayerPause($event)"
+        @ended="onPlayerEnded($event)"
+        @waiting="onPlayerWaiting($event)"
+        @playing="onPlayerPlaying($event)"
+        @loadeddata="onPlayerLoadeddata($event)"
+        @timeupdate="onPlayerTimeupdate($event)"
+        @canplay="onPlayerCanplay($event)"
+        @canplaythrough="onPlayerCanplaythrough($event)"
+        @statechanged="playerStateChanged($event)"
+        @ready="playerReadied"
+      >
+        <track
+          kind="subtitles"
+          src="../assets/abc.vtt"
+          srclang="trackLanguage"
+          label="language"
+          default
+        />
+      </video-player>
+      User Language: {{ language }}
+    </div>-->
+    BUTTONS:
+    <div>
+      <v-btn
+        v-if="this.storeMovieMeta.torrents[0]"
+        class="ma-5"
+        @click="zeroStream()"
+        color="primary"
+        >{{ this.storeMovieMeta.torrents[0].quality }}</v-btn
+      >
+      <v-btn
+        v-if="this.storeMovieMeta.torrents[1]"
+        class="ma-5"
+        @click="oneStream()"
+        color="primary"
+        >{{ this.storeMovieMeta.torrents[1].quality }}</v-btn
+      >
+      <v-btn
+        v-if="this.storeMovieMeta.torrents[2]"
+        class="ma-5"
+        @click="twoStream()"
+        color="primary"
+        >{{ this.storeMovieMeta.torrents[2].quality }}</v-btn
+      >
+      <v-btn
+        v-if="this.storeMovieMeta.torrents[3]"
+        class="ma-5"
+        @click="threeStream()"
+        color="primary"
+        >{{ this.storeMovieMeta.torrents[3].quality }}</v-btn
+      >
+    </div>
     <v-divider class="mx-4"></v-divider>
 
     <v-card-title>{{ $t('commentTitle') }}</v-card-title>
@@ -61,7 +135,8 @@
         <v-row>
           <v-col cols="12">
             <v-list-item-subtitle class="ma-1 subtitle-1">
-              {{ storeUsername }}:<br />
+              {{ storeUsername }}:
+              <br />
             </v-list-item-subtitle>
             <v-text-field
               v-model.lazy="comment"
@@ -85,44 +160,91 @@
           x-large
           color="blue"
           :disabled="$v.$invalid"
+          >{{ $t('postComment') }}</v-btn
         >
-          {{ $t('postComment') }}
-        </v-btn>
       </v-card-actions>
     </v-form>
   </v-card>
 </template>
 
+//
 <script>
+// // Get all text tracks for the current player.
+// var tracks = player.textTracks();
+
+// for (var i = 0; i < tracks.length; i++) {
+//   var track = tracks[i];
+
+//   // Find the English captions track and mark it as "showing".
+//   if (track.kind === 'captions' && track.language === 'en') {
+//     track.mode = 'showing';
+//   }
+// }
+
 import {
   required,
   // alphaNum,
   minLength,
   maxLength,
 } from 'vuelidate/lib/validators'
+// import Vue from 'vue'
+// import VueCoreVideoPlayer from 'vue-core-video-player'
+// import VideoPlayer from "@/components/VideoPlayer.vue"
+
 import { mapGetters, mapActions } from 'vuex'
+// import subtitlestotest from src/assets/subtitlestotest.srt
 
 export default {
+  name: 'VideoHypertube',
+  // components: {
+  //   VideoPlayer
+  // },
   data() {
     return {
       comment: '',
+      src: '',
       ref: this.$route.params.id,
+      videoSource: undefined,
+      trackSource: undefined,
+      trackLanguage: 'en',
+      trackLanguageList: ['en', 'fr', 'es'],
+      playerShow: '',
       // componentKey: 0,
+      playerHash: '',
+      playerFormat: '',
+      // playerOptions: {
+      //   autoplay: true,
+      //   controls: true,
+      //   language: 'en',
+      //   playbackRates: [0.7, 1.0, 1.5, 2.0],
+      //   aspectRatio: '16:9',
+      //   sources: [{
+      //     type: 'video/webm',
+      //     // src: 'http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
+      //     // src: this.videoSource
+      //     src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`
+      //   }],
+      // },
+      // src: 'http://vjs.zencdn.net/v/oceans.mp4',
+      // src: this.getStream({ magnetHash: 'OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V', id: this.ref })
     }
   },
-  // components: { MovieComment },
   props: {
+    language: {
+      type: String,
+      required: false,
+    },
     movie: {
       type: Object,
       required: true,
     },
-    comments: {
-      type: Object,
-      required: false,
-    },
+    // comments: {
+    //   type: Object,
+    //   required: false,
+    // },
   },
   methods: {
-    ...mapActions('Movies', ['sendComment']),
+    ...mapActions('Movies', ['sendComment', 'getStream']),
     validComment() {
       if (!this.$v.$invalid) {
         this.sendComment({ ref: this.ref, text: this.comment })
@@ -131,13 +253,110 @@ export default {
       // this.comment = ''
       // this.componentKey += 1
     },
+    // listen event
+    onPlayerPlay(player) {
+      console.log('player play!', player)
+    },
+    onPlayerPause(player) {
+      console.log('player pause!', player)
+    },
+    // ...player event
+
+    // or listen state event
+
+    onPlayerEnded(player) {
+      console.log('player ended!', player)
+    },
+    onPlayerWaiting(player) {
+      console.log('player waiting!', player)
+    },
+    onPlayerPlaying(player) {
+      console.log('player playing!', player)
+    },
+    onPlayerLoadeddata(player) {
+      console.log('player Loadeddata!', player)
+    },
+    onPlayerTimeupdate(player) {
+      console.log('player Timeupdate!', player)
+    },
+    onPlayerCanplay(player) {
+      console.log('player Canplay!', player)
+    },
+    onPlayerCanplaythrough(player) {
+      console.log('player Canplaythrough!', player)
+    },
+    playerStateChanged(playerCurrentState) {
+      console.log('player current update state', playerCurrentState)
+    },
+
+    // player is ready
+    playerReadied(player) {
+      console.log('the player is readied', player)
+      // you can use it to do something...
+      // player.[methods]
+    },
+    // resetPlayer() {
+    //   this.componentKey += 1
+    // },
+    zeroStream() {
+      this.playerHash = this.storeMovieMeta.torrents[0].hash
+      this.playerFormat = this.storeFormats[0]
+      const startPlayer = this
+      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      this.$store.dispatch('Movies/sendView', this.ref)
+      setTimeout(function() {
+        startPlayer.playerShow = 'OK'
+        // console.log('=== [0] OK ===')
+      }, 1000)
+      // return this.getStream({
+      //   magnetHash: this.storeMovieMeta.torrents[0].hash,
+      //   id: this.ref,
+      // })
+      // this.playerOptions.sources[0].src = this.storeMovieMeta.torrents[0].url
+    },
+    oneStream() {
+      this.playerHash = this.storeMovieMeta.torrents[1].hash
+      this.playerFormat = this.storeFormats[1]
+      const startPlayer = this
+      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      this.$store.dispatch('Movies/sendView', this.ref)
+      setTimeout(function() {
+        startPlayer.playerShow = 'OK'
+      }, 1000)
+    },
+    twoStream() {
+      this.playerHash = this.storeMovieMeta.torrents[2].hash
+      this.playerFormat = this.storeFormats[2]
+      const startPlayer = this
+      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      this.$store.dispatch('Movies/sendView', this.ref)
+      setTimeout(function() {
+        startPlayer.playerShow = 'OK'
+      }, 1000)
+    },
+    threeStream() {
+      this.playerHash = this.storeMovieMeta.torrents[3].hash
+      this.playerFormat = this.storeFormats[3]
+      const startPlayer = this
+      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      this.$store.dispatch('Movies/sendView', this.ref)
+      setTimeout(function() {
+        startPlayer.playerShow = 'OK'
+      }, 1000)
+    },
   },
   computed: {
     ...mapGetters({
       storeToken: 'App/storeToken',
+      storeMovieMeta: 'Movies/storeMovieMeta',
       storeUsername: 'App/storeUsername',
       storeComments: 'Movies/storeComments',
+      storeFormats: 'Movies/storeFormats',
+      storeSubtitles: 'Movies/storeSubtitles',
     }),
+    player() {
+      return this.$refs.videoPlayer.player
+    },
     commentErrors() {
       const errors = []
       if (!this.$v.comment.$dirty) return errors
@@ -146,6 +365,27 @@ export default {
       !this.$v.comment.minLength && errors.push(this.$t('commentRuleMin'))
       !this.$v.comment.maxLength && errors.push(this.$t('commentRuleMax'))
       return errors
+    },
+    serverMessage() {
+      return this.$store.getters['interact/serverMessage']
+    },
+    playerOptions() {
+      console.log('$ $ $', this.playerFormat)
+      return {
+        autoplay: true,
+        controls: true,
+        language: 'en',
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        aspectRatio: '16:9',
+        sources: [
+          {
+            type: `${this.playerFormat}`,
+            // src: this.videoSource
+            src: `${process.env.VUE_APP_BACKEND_URL}/torrent/${this.playerHash}?id=${this.ref}`,
+            // src: `http://localhost:3000/torrent/02767050E0BE2FD4DB9A2AD6C12416AC806ED6ED?id=7783`,
+          },
+        ],
+      }
     },
   },
   validations: {
@@ -170,7 +410,8 @@ export default {
     "commentRuleMax": "Comment must be at most 142 characters long",
     "commentRuleRequired": "Comment required",
     "commentTitle": "Comments: ",
-    "postComment": "Share !"
+    "postComment": "Share !",
+    "playerTitle": "Video: "
   },
   "fr": {
     "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
@@ -180,7 +421,8 @@ export default {
     "commentRuleMax": "Le commentaire doit avoir 142 caractères maximum",
     "commentRuleRequired": "Un commentaire est requis",
     "commentTitle": "Commentaires: ",
-    "postComment": "Partager !"
+    "postComment": "Partager !",
+    "playerTitle": "Film: "
   }
 }
 </i18n>

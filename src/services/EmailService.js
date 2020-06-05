@@ -1,7 +1,9 @@
 import axios from 'axios'
 
 const apiClientEmail = axios.create({
-  baseURL: 'https://hypertube42.herokuapp.com/users',
+  baseURL: `${process.env.VUE_APP_BACKEND_URL}users`,
+  // baseURL: 'https://hypertube42.herokuapp.com/',
+  // baseURL: 'http://localhost:3000',
   withCredentials: false, // default value
   timeout: 5000,
 })

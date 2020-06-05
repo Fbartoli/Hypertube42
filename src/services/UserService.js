@@ -1,7 +1,10 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: 'https://hypertube42.herokuapp.com/',
+  // baseURL: `${process.env.VUE_APP_BACKEND_URL}`,
+  baseURL: `${process.env.VUE_APP_BACKEND_URL}`,
+  // baseURL: 'https://hypertube42.herokuapp.com/',
+  // baseURL: 'http://localhost:3000',
   withCredentials: false, // default value
   timeout: 8000,
 })
@@ -65,5 +68,11 @@ export default {
   // GET views on all movies
   getview() {
     return apiClient.get(`films/view`)
+  },
+
+  // GET subtitles on a specific movie
+  getsubs({ imdbid, language }) {
+    console.log('UserService.js_GETview_OK')
+    return apiClient.get(`films/subs/${imdbid}?language=${language}`)
   },
 }

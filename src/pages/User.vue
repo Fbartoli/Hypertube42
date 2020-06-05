@@ -321,7 +321,7 @@ export default {
         })
         xhr.open(
           'PATCH',
-          `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}/avatar`
+          `${process.env.VUE_APP_BACKEND_URL}users/user/${this.currentUsername}/avatar`
         )
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')

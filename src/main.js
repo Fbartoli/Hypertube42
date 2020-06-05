@@ -10,7 +10,12 @@ import vuelidate from 'vuelidate'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import 'nprogress/nprogress.css'
+// import VueCoreVideoPlayer from 'vue-core-video-player'
+import VueVideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+
 import './assets/css/background.css'
+
 
 const requireComponent = require.context(
   './components',
@@ -29,6 +34,29 @@ requireComponent.keys().forEach(fileName => {
 })
 
 Vue.use(vuelidate)
+
+Vue.use(
+  VueVideoPlayer /* {
+  options: global default options,
+  events: global videojs events
+} */
+)
+
+// const custom = {
+//   "dashboard": {
+//     "btn": {
+//       "pause": "일시적인",
+//       "fullscreen": "전체화면",
+//       "exitFullscreen": "전체 화면 종료",
+//       "last": "test"
+//     }
+//   }
+// }
+// const en = JSON.stringify(custom)
+
+// Vue.use(VueCoreVideoPlayer, {
+//   lang: en
+// })
 
 Vue.config.productionTip = false
 

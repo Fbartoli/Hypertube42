@@ -18,6 +18,8 @@ pages/README.txt
 
 --- When the user is connected on his account ---
 
+> SetPicture: Upload a profile picture to finalize registration
+
 > ResetPasswordOnline: Change password
 
 > User: Settings

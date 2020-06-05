@@ -12,7 +12,7 @@ const apiCLient = axios.create({
 export default {
   getMovies(perPage, page) {
     return apiCLient.get(
-      `/list_movies.json?limit=${perPage}&page=${page}&sort_by=title`
+      `/list_movies.json?limit=${perPage}&page=${page}&sort_by=download_count`
     )
   },
   getMovie(id) {

@@ -1,5 +1,7 @@
 import movieService from '../../services/MovieService.js'
+import popcornService from '../../services/popcornService.js'
 import userService from '../../services/UserService'
+import streamService from '../../services/StreamService'
 import router from '../../router/index'
 import nProgress from 'nprogress'
 
@@ -11,6 +13,9 @@ const state = {
   movieTotal: 0,
   comments: {},
   views: {},
+  stream: {},
+  formats: [],
+  subtitles: {},
 }
 
 // mutations
@@ -47,13 +52,24 @@ const mutations = {
     // }
     state.views = views
   },
+  PUT_STREAM(state, stream) {
+    state.stream = stream
+  },
+  PUT_STREAM_FORMAT(state, { format, indice }) {
+    state.formats[indice] = format
+  },
+  PUT_SUBTITLES(state, { url, language }) {
+    if (language === 'en') state.subtitles.en = url
+    if (language === 'fr') state.subtitles.fr = url
+  },
 }
 // actions
 const actions = {
   // A) Movies API:
-  // A.1.a) GET movies from YTS with standard search paramaters
-  fetchMovies({ commit, state }, page) {
-    return movieService
+  // A.1.a) GET movies with standard search paramaters
+  fetchMovies({ commit, dispatch, state }, page) {
+    movieService
+
       .getMovies(state.perPage, page)
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
@@ -74,6 +90,23 @@ const actions = {
           // dispatch('Notifications/add', notification, { root: true })
         }
       })
+    return popcornService
+      .getMovies(state.perPage, page)
+      .then(response => {
+        commit('FETCH_MOVIES')
+        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
+        const notification = {
+          type: 'success',
+          message: 'Movies fetched successfully',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        return response.data.data.movies
+      })
+      .catch(error => {
+        if (error.code) {
+          console.log(error)
+        }
+      })
   },
   // A.1.b) Follow up action of 'fetchMovies' (1.a) to GET the next page of movies
   addMovies({ commit, state }, { page }) {
@@ -85,7 +118,7 @@ const actions = {
       return response.data.data.movies
     })
   },
-  // A.1.c) GET the specific movie details from the api YTS
+  // A.1.c) GET the specific movie details from the api
   fetchMovie({ commit }, id) {
     return movieService.getMovie(id).then(response => {
       commit('FETCH_MOVIE', response.data.data.movie)
@@ -93,9 +126,11 @@ const actions = {
     })
   },
 
-  // A.2.a) get movies from YTS with standard search paramaters
-  filteredFetchMovies({ commit, state }, { page, filter, order }) {
-    return movieService
+  // A.2.a) get movies with standard search paramaters
+  filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
+    console.log('/// filteredFetchMovies ///')
+    movieService
+
       .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
@@ -116,6 +151,23 @@ const actions = {
           // dispatch('Notifications/add', notification, { root: true })
         }
       })
+    return popcornService
+      .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
+      .then(response => {
+        commit('FETCH_MOVIES', response.data.data.movies)
+        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
+        const notification = {
+          type: 'success',
+          message: 'Movies fetched successfully',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        return response.data.data.movies
+      })
+      .catch(error => {
+        if (error.code) {
+          console.log(error)
+        }
+      })
   },
   // A.2.b) Follow up action of 'filteredFetchMovies' (2.a) to GET the next page of movies
   // It is the equivalent to 'addMovies' (1.b) but filtered
@@ -130,9 +182,11 @@ const actions = {
       })
   },
 
-  // A.3.a) get movies from YTS with specific search paramaters
-  searchFetchMovies({ commit }, { findMovieField }) {
-    return movieService
+  // A.3.a) get movies with specific search paramaters
+  searchFetchMovies({ commit, dispatch }, { findMovieField }) {
+    console.log('/// searchFetchMovies ///')
+    movieService
+
       .getMoviesSearch({ findMovieField })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
@@ -151,6 +205,23 @@ const actions = {
           //   message: 'There was a problem fetching movies: ' + error.message,
           // }
           // dispatch('Notifications/add', notification, { root: true })
+        }
+      })
+    return popcornService
+      .getMoviesSearch({ findMovieField })
+      .then(response => {
+        commit('FETCH_MOVIES', response.data.data.movies)
+        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
+        const notification = {
+          type: 'success',
+          message: 'Movies fetched successfully',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+        return response.data.data.movies
+      })
+      .catch(error => {
+        if (error.code) {
+          console.log(error)
         }
       })
   },
@@ -319,6 +390,127 @@ const actions = {
         }
       })
   },
+
+  // D) Streaming:
+  // D.1) GET video and sound stream
+  getStream: ({ dispatch, commit }, { magnetHash, id }) => {
+    streamService
+      .getstream({ magnetHash, id })
+      .then(response => {
+        console.log(' *** Stream, response_', response)
+        console.log(' *** Stream, response_', response.data)
+        commit('PUT_STREAM', response.data)
+        const notification = {
+          type: response.data.status,
+          message: 'Streaming...',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'There was an issue while loading the stream',
+        }
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+            router.push({ name: '404', params: { resource: 'getting stream' } })
+            // } else if (error.response.status === 403) {
+            //   dispatch('Notifications/add', notification, {
+            //     root: true,
+            //   })
+          }
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+  // D.2) GET stream formats
+  getStreamFormat: ({ dispatch, commit }, { magnetHash, id, indice }) => {
+    console.log('&& hash &&', magnetHash)
+    console.log('&& id &&', id)
+    console.log('&& indice &&', indice)
+    streamService
+      .getstreamformats({ magnetHash, id })
+      .then(response => {
+        console.log(' *** Format, response_', response)
+        console.log(' *** Format, response_', response.data)
+        commit('PUT_STREAM_FORMAT', {
+          format: response.data.mimetype,
+          indice: indice,
+        })
+        const notification = {
+          type: response.data.status,
+          message: 'Stream format received',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'There was an issue detecting stream format',
+        }
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+            router.push({ name: '404', params: { resource: 'getting stream' } })
+            // } else if (error.response.status === 403) {
+            //   dispatch('Notifications/add', notification, {
+            //     root: true,
+            //   })
+          }
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
+  // D.3) GET subtitles
+  getSubtitles: ({ dispatch, commit }, { imdbid, language }) => {
+    console.log(' * imdbid * ', imdbid)
+    console.log(' * language subtitles * ', language)
+    userService
+      .getsubs({ imdbid, language })
+      .then(response => {
+        console.log(' *** Subtitles, response_', response)
+        console.log(' *** Stream, response_', response.data.file)
+        commit('PUT_SUBTITLES', { url: response.data.file, language: language })
+        const notification = {
+          type: response.data.status,
+          message: 'Subtitles ready',
+        }
+        dispatch('Notifications/add', notification, { root: true })
+      })
+      .catch(error => {
+        const notification = {
+          type: 'error',
+          message: 'No subtitles available',
+        }
+        if (error.response) {
+          if (error.response.status === 404) {
+            dispatch('Notifications/add', notification, {
+              root: true,
+            })
+            router.push({ name: '404', params: { resource: 'getting stream' } })
+            // } else if (error.response.status === 403) {
+            //   dispatch('Notifications/add', notification, {
+            //     root: true,
+            //   })
+          }
+        } else {
+          dispatch('Notifications/add', notification, {
+            root: true,
+          })
+        }
+      })
+  },
 }
 
 // getters
@@ -328,6 +520,15 @@ const getters = {
   },
   storeMovies: state => {
     return state.movies
+  },
+  storeMovieMeta: state => {
+    return state.movie
+  },
+  storeFormats: state => {
+    return state.formats
+  },
+  storeSubtitles: state => {
+    return state.subtitles
   },
 }
 

@@ -136,7 +136,11 @@ export default {
         const data = new FormData()
         const xhr = new XMLHttpRequest()
         const self = this
-
+        //> 10 mb
+        if (this.uploadPic.mypic.size > 1024 * 1024 * 10) {
+          error('The file is too large (more than 10 MB)')
+          return
+        }
         if (this.uploadPic.mypic) {
           data.append('avatar', this.uploadPic.mypic)
         }

@@ -141,6 +141,10 @@ export default {
           error('The file is too large (more than 10 MB)')
           return
         }
+        if (this.uploadPic.mypic.size < 1024) {
+          error('The file is too small (more than 1 KB)')
+          return
+        }
         if (this.uploadPic.mypic) {
           data.append('avatar', this.uploadPic.mypic)
         }

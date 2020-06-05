@@ -98,7 +98,7 @@ export default {
       token: '',
       links: {
         github: `https://github.com/login/oauth/authorize?client_id=d2c25f95cfaddbb9f2a7&redirect_uri=${process.env.VUE_APP_BACKEND_URL}oauth/gh`,
-        qd: `https://api.intra.42.fr/oauth/authorize?client_id=a403255ef57b13e9a31155d4aa015ced40fab62d5617749dbf9f36f518fbee06&redirect_uri=http%3A%2F%2F${process.env.VUE_APP_BACKEND_URL_BIS}%2Foauth%2F42&response_type=code`,
+        qd: `https://api.intra.42.fr/oauth/authorize?client_id=a403255ef57b13e9a31155d4aa015ced40fab62d5617749dbf9f36f518fbee06&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Foauth%2F42&response_type=code`,
         facebook: `https://www.facebook.com/v6.0/dialog/oauth?client_id=1245062255689643&redirect_uri=${process.env.VUE_APP_BACKEND_URL}oauth/fb&response_type=code`,
       },
     }

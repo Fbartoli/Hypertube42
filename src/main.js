@@ -14,6 +14,9 @@ import 'nprogress/nprogress.css'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 
+import './assets/css/background.css'
+
+
 const requireComponent = require.context(
   './components',
   false,

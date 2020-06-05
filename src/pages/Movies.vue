@@ -130,7 +130,6 @@ export default {
   },
   methods: {
     addMovies() {
-      // console.log('--- loading more movies ---')
       this.pageData += 1
       if (this.findMovieField !== '') {
         // store.dispatch('Movies/searchAddMovies', {
@@ -170,8 +169,6 @@ export default {
   watch: {
     bottom(bottom) {
       if (bottom) {
-        console.log('--- infinite scrolling ! ---')
-        // console.log(this.addMovies())
         this.addMovies()
       }
     },

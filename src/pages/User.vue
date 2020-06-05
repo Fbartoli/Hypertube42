@@ -64,7 +64,7 @@
                 color="blue lighten-4"
                 class="mr-4"
               >
-                Update my Personal Information
+                {{ $t('updateUserInfo') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -97,7 +97,7 @@
                 color="blue lighten-4"
                 class="mr-4"
               >
-                Update my Email
+                {{ $t('updateEmail') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -166,8 +166,7 @@
                   counter
                   show-size
                   prepend-icon="mdi-camera"
-                  placeholder="Profile Picture"
-                  label="Profile Picture"
+                  :label="$t('profilePicture')"
                   truncate-length="42"
                 />
                 <br />
@@ -177,7 +176,7 @@
                   color="blue lighten-4"
                   class="mr-4"
                 >
-                  Update my Avatar
+                  {{ $t('updateAvatar') }}
                 </v-btn>
               </v-form>
             </v-row>
@@ -196,9 +195,6 @@
           </v-col>
         </v-row>
         <br />
-        <v-btn @click="getUser()" color="blue lighten-4" class="mr-4">
-          GetUser_TEST
-        </v-btn>
       </v-container>
     </v-card>
   </div>
@@ -219,7 +215,7 @@ export default {
       // lastName: 'test_lastname',
       // firstName: 'test_firstname',
       valid: true,
-      languageList: ['english', 'french', 'spanish'],
+      languageList: ['english', 'french'],
       uploadPic: {
         mypic: null,
       },
@@ -271,10 +267,8 @@ export default {
         username: this.currentUsername,
         email: this.userData.email,
       }
-      // this.$v.$touch()
-      // if (!this.$v.$invalid) {
       this.updateEmail({ payloadPutEmail })
-      // }
+      this.valid = false
     },
     validatePersonalInfo() {
       const payloadPutUser = {
@@ -284,52 +278,15 @@ export default {
         lastName: this.userData.lastname,
         language: this.userData.language,
       }
-      // this.$v.$touch()
-      // if (!this.$v.$invalid) {
       this.updateUserInfo({ payloadPutUser })
+      this.valid = false
     },
 
-    // validatePersonalInfo2() {
-    //   const options = {
-    //     method: 'put',
-    //     url: `https://hypertube42.herokuapp.com/users/user/${this.currentUsername}`,
-    //     data: {
-    //       username: this.userData.username,
-    //       firstName: this.userData.firstname,
-    //       lastName: this.userData.lastname,
-    //       language: this.userData.language,
-    //     },
-    //     headers: {
-    //       'x-access-token': this.userData.token,
-    //     },
-    //   }
-    //   if (this.$refs.PersonalInfoForm.validate()) {
-    //     axios(options)
-    //       .then(response => {
-    //         console.log('TEST_validatePersonalInfo_User.vue', response)
-    //         if (response.status === 200 || response.status === '200') {
-    //           this.$store.dispatch('App/putToken', response.data.token)
-    //           // WHY DOES IT STOP THERE ?
-    //           console.log('HELP1')
-    //           // this.$store.dispatch('App/putUserInfo', {
-    //           //   username: this.userData.username,
-    //           //   firstName: this.userData.firstname,
-    //           //   lastName: this.userData.lastname,
-    //           //   language: this.userData.language,
-    //           // })
-    //           console.log('HELP2')
-    //         }
-    //         // this.$store.dispatch('interact/setMessage', 'Personal information updated !')
-    //         // this.$router.push('/')
-    //       })
-    //       // eslint-disable-next-line
-    //       .catch(error => {})
-    //     // this.$router.push('/')
-    //   }
-    // },
-
     validateAvatar() {
-      // console.log('ROUTER', router)
+      function error(error) {
+        this.$store.dispatch('App/setError', error)
+      }
+
       if (this.$refs.AvatarForm.validate()) {
         const data = new FormData()
         const xhr = new XMLHttpRequest()
@@ -343,9 +300,9 @@ export default {
         xhr.addEventListener('readystatechange', function() {
           // 4 means the request is DONE, operation completed
           if (this.readyState === 4) {
-            if (this.status === 200 || this.status === '200') {
-              // self.$store.dispatch('storeAction', 'Pictures updated !')
-              this.showPictures = null
+            if (this.status === 200) {
+              // self.showPictures = null
+              self.uploadPic.mypic = null
               const notification = {
                 type: 200,
                 message: 'Profile picture updated !',
@@ -370,10 +327,11 @@ export default {
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         xhr.setRequestHeader('Access-Control-Allow-Origin', true)
         xhr.setRequestHeader('x-access-token', this.userData.token)
-        // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
-        // xhr.setRequestHeader('Connection', 'keep-alive')
+        xhr.addEventListener('error', error)
+
         xhr.send(data)
       }
+      this.valid = false
     },
     displayImage(File) {
       if (!File) {
@@ -396,27 +354,43 @@ export default {
 {
   "en": {
     "title": "Update my profile",
+
     "username": "Username",
+    "usernameRuleRequired": "Username is required",
+
     "firstname": "First Name",
     "lastname": "Last Name",
     "language": "Subtitles language preference",
+    "updateUserInfo": "Update my personal information",
+
     "email": "Email",
+    "updateEmail": "Update my email",
+
     "password": "Password",
-    "preview": "Preview",
     "Reset password": "Change my password",
-    "usernameRuleRequired": "Username is required"
+
+    "profilePicture": "Profile Picture",
+    "updateAvatar": "Update avatar"
   },
   "fr": {
     "title": "Mise à jour de mon profil",
+
     "username": "Nom d'utilisateur",
+    "usernameRuleRequired": "Le nom d'utilisateur est requis",
+
     "firstname": "Prénom",
     "lastname": "Nom",
     "language": "Langue préférée de sous-titres",
+    "updateUserInfo": "Mettre à jour mes informations",
+
     "email": "Email",
+    "updateEmail": "Mettre à jour mon email",
+
     "password": "Mot de passe",
-    "preview": "Aperçu",
     "Reset password": "Modifier mon mot de passe",
-    "usernameRuleRequired": "Le nom d'utilisateur est requis"
+
+    "profilePicture": "Photo de profil",
+    "updateAvatar": "Mettre à jour ma photo"
   }
 }
 </i18n>

@@ -190,6 +190,7 @@ import {
 // import Vue from 'vue'
 // import VueCoreVideoPlayer from 'vue-core-video-player'
 // import VideoPlayer from "@/components/VideoPlayer.vue"
+
 import { mapGetters, mapActions } from 'vuex'
 // import subtitlestotest from src/assets/subtitlestotest.srt
 
@@ -245,9 +246,6 @@ export default {
   methods: {
     ...mapActions('Movies', ['sendComment', 'getStream']),
     validComment() {
-      // console.log('this.ref_', this.ref)
-      // console.log('this.comment_', this.comment)
-      // this.$v.$touch()
       if (!this.$v.$invalid) {
         this.sendComment({ ref: this.ref, text: this.comment })
       }

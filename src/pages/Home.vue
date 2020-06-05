@@ -1,11 +1,5 @@
 <template>
-  <div>
-    <v-container>
-      <v-img src="../assets/Dreamland_Cinema_Title.jpg">
-        test
-      </v-img>
-    </v-container>
-  </div>
+  <v-container fluid class="background"> </v-container>
 </template>
 
 <script>
@@ -19,16 +13,7 @@ export default {
 }
 </script>
 
-<style scoped>
-#custom .custom {
-  /* background-image: ; */
-  background-color: green;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-}
-</style>
+<style scoped></style>
 
 <i18n>
 {

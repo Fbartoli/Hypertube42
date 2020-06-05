@@ -18,7 +18,6 @@ const routes = [
         let info = code.split('.')
         let userInfo = JSON.parse(atob(info[1]))
         let exp = userInfo.exp
-        console.log('Home router_userInfo.data_ ', userInfo.data)
         // store.commit('App/PUT_USERNAME', userInfo.data.username)
         localStorage.setItem('hypertube', JSON.stringify({ code, exp }))
         store.commit(
@@ -30,7 +29,11 @@ const routes = [
         // store.dispatch('App/getUserAuth')
         store.dispatch('App/getUser', '')
       }
-      next()
+      if (routeFrom.name === 'home') {
+        next(false)
+      } else {
+        next()
+      }
     },
   },
   {
@@ -59,7 +62,6 @@ const routes = [
       requiresAuth: true,
     },
     // beforeEnter(routeTo, routeFrom, next) {
-    //   console.log('TEST_username: ', routeTo.params.username)
     //   store
     //     .dispatch('App/getUser', routeTo.params.username)
     //     .then(data => {
@@ -116,6 +118,7 @@ const routes = [
           routeTo.params.movie = movie
           routeTo.params.language = store.getters['App/storeLanguage']
           store.dispatch('Movies/getComments', routeTo.params.id)
+
           store.dispatch('Movies/sendView', routeTo.params.id)
           store.dispatch('Movies/getSubtitles', {
             imdbid: movie.imdb_code,
@@ -133,6 +136,9 @@ const routes = [
               indice: i,
             })
           }
+
+          // store.dispatch('Movies/sendView', routeTo.params.id)
+
           next()
         })
         .catch(error => {
@@ -151,11 +157,20 @@ const routes = [
     path: '/signup/:signup',
     name: 'signup',
     component: () => import('../pages/Signup.vue'),
-    props: true,
     beforeEnter(routeTo, routeFrom, next) {
       store.dispatch('Email/setActivationToken', routeTo.params.signup)
       store.dispatch('Email/getActivationToken')
       next()
+    },
+  },
+
+  // Choose a profile picture on your first login (or until change):
+  {
+    path: '/setpicture',
+    name: 'setpicture',
+    component: () => import('../pages/SetPicture.vue'),
+    meta: {
+      requiresAuth: true,
     },
   },
 
@@ -233,13 +248,19 @@ router.beforeEach((routeTo, routeFrom, next) => {
     store.dispatch('Email/resetChecker')
   }
   if (routeTo.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters['App/isAuth']) next()
-    else next({ name: 'login' })
+    if (store.getters['App/isAuth']) {
+      next()
+    } else next({ name: 'login' })
   } else next()
 })
 
 router.afterEach(() => {
   nprogress.done()
+})
+
+// in test
+router.onError(error => {
+  store.dispatch('App/setError', error)
 })
 
 export default router

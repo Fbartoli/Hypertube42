@@ -1,8 +1,9 @@
 <template>
-  <v-container>
+  <v-container fluid class="background">
     <v-card width="80%" class="mx-auto mt-5">
+      <br />
       <v-card-title class="pb-0">
-        <h1>Login</h1>
+        <h1>{{ $t('title') }}</h1>
       </v-card-title>
       <v-card-text class="mt-5">
         <v-form>
@@ -52,27 +53,31 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn
-          @click="submit(username, password)"
-          x-large
-          color="blue"
-          :disabled="$v.$invalid"
-        >
-          {{ $t('login') }}
-        </v-btn>
-        <v-btn :href="links.qd" x-large color="blue">
-          <v-icon x-large>mdi-numeric-4-box</v-icon
-          ><v-icon x-large>mdi-numeric-2-box</v-icon>
-        </v-btn>
-        <v-btn :href="links.github" x-large color="blue">
-          <i class="fab fa-github fa-2x" />
-        </v-btn>
-        <v-btn :href="links.facebook" x-large color="blue">
-          <i class="fab fa-facebook fa-2x" />
-        </v-btn>
+        <v-container fluid>
+          <v-btn
+            @click="submit(username, password)"
+            x-large
+            color="blue"
+            :disabled="$v.$invalid"
+          >
+            {{ $t('login') }} </v-btn
+          >&nbsp;
+
+          <v-btn :href="links.qd" x-large color="blue">
+            <v-icon x-large>mdi-numeric-4-box</v-icon
+            ><v-icon x-large>mdi-numeric-2-box</v-icon> </v-btn
+          >&nbsp;
+
+          <v-btn :href="links.github" x-large color="blue">
+            <i class="fab fa-github fa-2x" /> </v-btn
+          >&nbsp;
+
+          <v-btn :href="links.facebook" x-large color="blue">
+            <i class="fab fa-facebook fa-2x" />
+          </v-btn>
+        </v-container>
       </v-card-actions>
     </v-card>
-    <!-- <duoquadra /> -->
   </v-container>
 </template>
 
@@ -84,7 +89,6 @@ import {
   maxLength,
 } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
-// import duoquadra from '../components/duoquadra.vue'
 
 export default {
   data() {
@@ -99,9 +103,6 @@ export default {
       },
     }
   },
-  // components: {
-  //   duoquadra,
-  // },
   methods: {
     ...mapActions('App', ['login']),
     submit(username, password) {
@@ -151,6 +152,8 @@ export default {
 <i18n>
 {
   "en": {
+    "title": "Login",
+
     "alphaNumRule": "Must be alphanumeric characters [Abc123...]",
 
     "username": "Username",
@@ -168,6 +171,8 @@ export default {
     "login":"Log in"
   },
   "fr": {
+    "title": "Connexion",
+
     "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
 
     "username": "Nom d'utilisateur",

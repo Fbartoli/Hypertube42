@@ -1,5 +1,4 @@
 import axios from 'axios'
-// console.log('window_ ', window.__VUE_DEVTOOLS_GLOBAL_HOOK__.store.getters.App/storeToken);
 
 const apiClientEmail = axios.create({
   baseURL: `${process.env.VUE_APP_BACKEND_URL}users`,
@@ -29,7 +28,6 @@ export default {
   },
   // A-2-b) Resend an activation link to confirm account creation
   putactivationtoken(activationEmail) {
-    console.log('TEST_putactivationtoken ', activationEmail)
     return apiClientEmail.put('/activation', {
       email: activationEmail,
     })

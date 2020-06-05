@@ -78,7 +78,7 @@
               </v-icon>
             </v-btn>
             <v-btn
-              @click="resetState"
+              @click="logout()"
               class="mx-5"
               color="primary"
               v-show="userApp.auth === true"
@@ -165,7 +165,7 @@
                   </v-list-item>
                   <v-list-item v-show="userApp.auth === true">
                     <v-btn
-                      @click="resetState"
+                      @click="logout()"
                       class="mx-5"
                       color="primary"
                       :label="$t('sign out')"
@@ -207,7 +207,7 @@
       </v-container>
     </v-content>
 
-    <v-footer absolute app>
+    <v-footer app max-height="60px">
       <div>
         <v-select v-model="$root.$i18n.locale" :items="langs" />
       </div>
@@ -230,17 +230,17 @@ export default {
   methods: {
     ...mapActions('Social', ['putSearchProfile', 'getSearchProfile']),
     ...mapActions('App', ['resetState']),
-    // logout() {
-    //   localStorage.removeItem('hypertube')
-    // },
+    logout() {
+      if (this.storeDefaultPicture && this.isAuth) {
+        this.resetState()
+        this.$router.push({ name: 'home' })
+      } else {
+        this.resetState()
+      }
+    },
     keySearchUser() {
-      console.log('this.searchUsername_ ', this.searchProfile)
-      // console.log('searchUsername_ ', searchProfile)
-      // console.log('this.searchBox_ ', this.searchBox)
-      // this.putSearchProfile(this.searchBox)
       this.putSearchProfile(this.searchProfile)
       this.getSearchProfile()
-      // this.$router.push('/profile/' + `${this.searchBox}`)
     },
   },
   computed: {
@@ -263,8 +263,8 @@ export default {
       userApp: 'App/storeUser',
       langs: 'App/storeLangs',
       appName: 'App/storeAppName',
-      // searchProfile: 'Social/searchProfile',
-      // currentUsername: 'App/storeUsername',
+      storeDefaultPicture: 'App/storeDefaultPicture',
+      isAuth: 'App/isAuth',
     }),
     fullName: {
       // getter

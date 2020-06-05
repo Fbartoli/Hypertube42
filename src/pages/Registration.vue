@@ -1,98 +1,105 @@
 <template>
-  <v-container>
-    <v-card width="1000">
+  <v-container fluid class="background">
+    <v-card width="80%" class="mx-auto mt-5">
       <br />
-      <v-form ref="signUpForm">
-        <v-text-field
-          v-model="$v.email.$model"
-          :error-messages="emailErrors"
-          :label="$t('email')"
-          @blur="$v.email.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="text"
-        />
+      <v-card-title class="pb-0">
+        <h1>{{ $t('title') }}</h1>
+      </v-card-title>
+      <v-card-text class="mt-5">
+        <v-form ref="signUpForm">
+          <br />
+          <v-text-field
+            v-model="$v.email.$model"
+            :error-messages="emailErrors"
+            :label="$t('email')"
+            @blur="$v.email.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="text"
+          />
 
-        <v-text-field
-          v-model="$v.username.$model"
-          :error-messages="usernameErrors"
-          :label="$t('username')"
-          @blur="$v.username.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="text"
-        />
+          <v-text-field
+            v-model="$v.username.$model"
+            :error-messages="usernameErrors"
+            :label="$t('username')"
+            @blur="$v.username.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="text"
+          />
 
-        <v-text-field
-          v-model="$v.firstName.$model"
-          :error-messages="firstNameErrors"
-          :label="$t('firstName')"
-          @blur="$v.firstName.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="text"
-        />
+          <v-text-field
+            v-model="$v.firstName.$model"
+            :error-messages="firstNameErrors"
+            :label="$t('firstName')"
+            @blur="$v.firstName.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="text"
+          />
 
-        <v-text-field
-          v-model="$v.lastName.$model"
-          :error-messages="lastNameErrors"
-          :label="$t('lastName')"
-          @blur="$v.lastName.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="text"
-        />
+          <v-text-field
+            v-model="$v.lastName.$model"
+            :error-messages="lastNameErrors"
+            :label="$t('lastName')"
+            @blur="$v.lastName.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="text"
+          />
 
-        <v-text-field
-          v-model="$v.password.$model"
-          :error-messages="passwordErrors"
-          :label="$t('password')"
-          :counter="15"
-          @blur="$v.password.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="Password"
-        />
+          <v-text-field
+            v-model="$v.password.$model"
+            :error-messages="passwordErrors"
+            :label="$t('password')"
+            :counter="15"
+            @blur="$v.password.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="Password"
+          />
 
-        <v-text-field
-          v-model="$v.repeatpassword.$model"
-          :error-messages="repeatpasswordErrors"
-          :label="$t('repeatpassword')"
-          :counter="15"
-          @blur="$v.repeatpassword.$touch()"
-          class="ma-5"
-          outlined
-          clearable
-          color="primary"
-          type="Password"
-        />
+          <v-text-field
+            v-model="$v.repeatpassword.$model"
+            :error-messages="repeatpasswordErrors"
+            :label="$t('repeatpassword')"
+            :counter="15"
+            @blur="$v.repeatpassword.$touch()"
+            class="ma-5"
+            outlined
+            clearable
+            color="primary"
+            type="Password"
+          />
 
-        <v-checkbox v-model="agreeToTerms" :label="$t('agree')" class="ma-5" />
+          <v-checkbox
+            v-model="agreeToTerms"
+            :label="$t('agree')"
+            class="ma-5"
+          />
 
-        <v-btn
-          class="ma-5"
-          @click="validRegister()"
-          :disabled="$v.$invalid || !agreeToTerms"
-          x-large
-          color="primary"
-        >
-          {{ $t('register') }}
-        </v-btn>
-
-        <v-btn class="ma-5" @click="autofill" x-large color="primary">
-          {{ $t('autofill') }}
-        </v-btn>
-      </v-form>
+          <v-btn
+            class="ma-5"
+            @click="validRegister()"
+            :disabled="$v.$invalid || !agreeToTerms"
+            x-large
+            color="primary"
+          >
+            {{ $t('register') }}
+          </v-btn>
+        </v-form>
+      </v-card-text>
+      <br />
     </v-card>
   </v-container>
 </template>
@@ -128,16 +135,16 @@ export default {
   },
   methods: {
     ...mapActions('Registration', ['register']),
-    autofill() {
-      ;(this.agreeToTerms = true),
-        (this.$v.email.$model = 'chroniclesofselene@gmail.com'),
-        (this.$v.username.$model = 'test9'),
-        (this.$v.lastName.$model = 'Duoquadra'),
-        (this.$v.password.$model = '1Qqwerty'),
-        (this.$v.repeatpassword.$model = '1Qqwerty')(
-          (this.$v.firstName.$model = 'Student')
-        )
-    },
+    // autofill() {
+    //   ;(this.agreeToTerms = true),
+    //     (this.$v.email.$model = 'chroniclesofselene@gmail.com'),
+    //     (this.$v.username.$model = 'test9'),
+    //     (this.$v.lastName.$model = 'Duoquadra'),
+    //     (this.$v.password.$model = '1Qqwerty'),
+    //     (this.$v.repeatpassword.$model = '1Qqwerty')(
+    //       (this.$v.firstName.$model = 'Student')
+    //     )
+    // },
     validRegister() {
       const object = {
         email: this.$v.email.$model,
@@ -147,6 +154,11 @@ export default {
         password: this.$v.password.$model,
       }
       this.register(object)
+      ;(this.$v.email.$model = ''),
+        (this.$v.username.$model = ''),
+        (this.$v.firstName.$model = ''),
+        (this.$v.lastName.$model = ''),
+        (this.$v.password.$model = '')
     },
   },
   computed: {
@@ -247,6 +259,8 @@ export default {
 <i18n>
 {
   "en": {
+    "title": "Registration",
+
     "alphaRule": "Must be alphabet characters [Abc...]",
     "alphaNumRule": "Must be alphanumeric characters [Abc123...]",
     
@@ -285,6 +299,8 @@ export default {
     "autofill": "Test_42_AUTOFILL"
   },
   "fr": {
+    "title": "Inscription",
+
     "alphaRule": "Caractères alphabétiques [Abc...] uniquement",
     "alphaNumRule": "Caractères alphanumérique [Abc123...] uniquement",
     

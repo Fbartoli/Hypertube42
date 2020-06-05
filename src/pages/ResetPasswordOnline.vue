@@ -1,76 +1,79 @@
 <template>
-  <v-card width="80%" class="mx-auto mt-5">
-    <v-card-title class="pb-0">
-      <h1>{{ $t('title') }}</h1>
-    </v-card-title>
-    <v-card-text class="mt-5">
-      <v-form>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="$v.password.$model"
-                :error-messages="passwordErrors"
-                :label="$t('password')"
-                :counter="15"
-                @blur="$v.password.$touch()"
-                class="ma-5"
-                outlined
-                clearable
-                color="primary"
-                type="Password"
-              />
-            </v-col>
-          </v-row>
+  <v-container fluid class="background">
+    <v-card width="80%" class="mx-auto mt-5">
+      <v-card-title class="pb-0">
+        <h1>{{ $t('title') }}</h1>
+      </v-card-title>
+      <v-card-text class="mt-5">
+        <v-form>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="$v.password.$model"
+                  :error-messages="passwordErrors"
+                  :label="$t('password')"
+                  :counter="15"
+                  @blur="$v.password.$touch()"
+                  class="ma-5"
+                  outlined
+                  clearable
+                  color="primary"
+                  type="Password"
+                />
+              </v-col>
+            </v-row>
 
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="$v.newpassword.$model"
-                :error-messages="newpasswordErrors"
-                :label="$t('newpassword')"
-                :counter="15"
-                @blur="$v.newpassword.$touch()"
-                class="ma-5"
-                outlined
-                clearable
-                color="primary"
-                type="Password"
-              />
-            </v-col>
-          </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="$v.newpassword.$model"
+                  :error-messages="newpasswordErrors"
+                  :label="$t('newpassword')"
+                  :counter="15"
+                  @blur="$v.newpassword.$touch()"
+                  class="ma-5"
+                  outlined
+                  clearable
+                  color="primary"
+                  type="Password"
+                />
+              </v-col>
+            </v-row>
 
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="$v.repeatpassword.$model"
-                :error-messages="repeatpasswordErrors"
-                :label="$t('repeatpassword')"
-                :counter="15"
-                @blur="$v.repeatpassword.$touch()"
-                class="ma-5"
-                outlined
-                clearable
-                color="primary"
-                type="Password"
-              />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-form>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-btn
-        @click="validOnlinenewpassword()"
-        x-large
-        color="blue"
-        :disabled="$v.$invalid"
-      >
-        {{ $t('changePassword') }}
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="$v.repeatpassword.$model"
+                  :error-messages="repeatpasswordErrors"
+                  :label="$t('repeatpassword')"
+                  :counter="15"
+                  @blur="$v.repeatpassword.$touch()"
+                  class="ma-5"
+                  outlined
+                  clearable
+                  color="primary"
+                  type="Password"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-btn
+          @click="validOnlinenewpassword()"
+          x-large
+          color="blue"
+          :disabled="$v.$invalid"
+        >
+          {{ $t('changePassword') }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    <br /><br /><br />
+  </v-container>
 </template>
 
 <script>
@@ -214,7 +217,9 @@ export default {
     "repeatpasswordRule": "Les mots de passe doivent être identiques",
     "lowerPasswordRule": "1 minuscule minimum [abc...]",
     "upperPasswordRule": "1 majuscule minimum [ABC...]",
-    "digitPasswordRule": "1 chiffre minimum [123...]"
+    "digitPasswordRule": "1 chiffre minimum [123...]",
+    "newpassword": "Nouveau mot de passe",
+    "changePassword": "Valider !"
   }
 }
 </i18n>

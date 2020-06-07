@@ -193,7 +193,6 @@ export default {
       }
 
       if (this.uploadPic.mypic.size > 1024 * 1024 * 10) {
-        console.log('* * * TOO BIG_display * * *')
         const notification = {
           type: 200,
           message: 'File is too big !',

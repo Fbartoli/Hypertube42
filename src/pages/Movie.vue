@@ -31,8 +31,8 @@
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
     <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
 
-    <div class="player" v-if="playerShow !== ''">
-      <video controls autoplay crossorigin="anonymous" width="320">
+    <div v-if="playerShow !== ''">
+      <video controls autoplay crossorigin="anonymous">
         <source :src="src" :type="playerFormat" />
         <track
           v-if="storeLanguage === 'english'"
@@ -52,7 +52,7 @@
       </video>
     </div>
 
-    <div>
+    <div v-if="playerShow !== 'OK'">
       <v-btn
         v-if="this.storeMovieMeta.torrents[0]"
         class="ma-5"
@@ -148,66 +148,29 @@
   </v-card>
 </template>
 
-//
 <script>
-// // Get all text tracks for the current player.
-// var tracks = player.textTracks();
-
-// for (var i = 0; i < tracks.length; i++) {
-//   var track = tracks[i];
-
-//   // Find the English captions track and mark it as "showing".
-//   if (track.kind === 'captions' && track.language === 'en') {
-//     track.mode = 'showing';
-//   }
-// }
-
 import {
   required,
   // alphaNum,
   minLength,
   maxLength,
 } from 'vuelidate/lib/validators'
-// import Vue from 'vue'
-// import VueCoreVideoPlayer from 'vue-core-video-player'
-// import VideoPlayer from "@/components/VideoPlayer.vue"
 
 import { mapGetters, mapActions } from 'vuex'
-// import subtitlestotest from src/assets/subtitlestotest.srt
 
 export default {
   name: 'VideoHypertube',
-  // components: {
-  //   VideoPlayer
-  // },
   data() {
     return {
       comment: '',
-      src: '',
+      // src: '',
       ref: this.$route.params.id,
       videoSource: undefined,
       trackSource: undefined,
       trackLanguage: 'en',
-      trackLanguageList: ['en', 'fr', 'es'],
       playerShow: '',
-      // componentKey: 0,
       playerHash: '',
       playerFormat: '',
-      // playerOptions: {
-      //   autoplay: true,
-      //   controls: true,
-      //   language: 'en',
-      //   playbackRates: [0.7, 1.0, 1.5, 2.0],
-      //   aspectRatio: '16:9',
-      //   sources: [{
-      //     type: 'video/webm',
-      //     // src: 'http://localhost:3000/torrent/OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V',
-      //     // src: this.videoSource
-      //     src: `http://localhost:3000/torrent/${this.playerHash}?id=${this.ref}`
-      //   }],
-      // },
-      // src: 'http://vjs.zencdn.net/v/oceans.mp4',
-      // src: this.getStream({ magnetHash: 'OZ6OLQISQ6DVUV54PDAYQTXKBWJMPF6V', id: this.ref })
     }
   },
   props: {
@@ -219,10 +182,6 @@ export default {
       type: Object,
       required: true,
     },
-    // comments: {
-    //   type: Object,
-    //   required: false,
-    // },
   },
   methods: {
     ...mapActions('Movies', ['sendComment', 'getStream']),
@@ -231,29 +190,22 @@ export default {
         this.sendComment({ ref: this.ref, text: this.comment })
       }
       this.$refs.formComment.reset()
-      // this.comment = ''
-      // this.componentKey += 1
     },
     zeroStream() {
       this.playerHash = this.storeMovieMeta.torrents[0].hash
       this.playerFormat = this.storeFormats[0]
       const startPlayer = this
-      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      // this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       this.$store.dispatch('Movies/sendView', this.ref)
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
       }, 1000)
-      // return this.getStream({
-      //   magnetHash: this.storeMovieMeta.torrents[0].hash,
-      //   id: this.ref,
-      // })
-      // this.playerOptions.sources[0].src = this.storeMovieMeta.torrents[0].url
     },
     oneStream() {
       this.playerHash = this.storeMovieMeta.torrents[1].hash
       this.playerFormat = this.storeFormats[1]
       const startPlayer = this
-      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      // this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       this.$store.dispatch('Movies/sendView', this.ref)
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
@@ -263,7 +215,7 @@ export default {
       this.playerHash = this.storeMovieMeta.torrents[2].hash
       this.playerFormat = this.storeFormats[2]
       const startPlayer = this
-      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      // this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       this.$store.dispatch('Movies/sendView', this.ref)
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
@@ -273,7 +225,7 @@ export default {
       this.playerHash = this.storeMovieMeta.torrents[3].hash
       this.playerFormat = this.storeFormats[3]
       const startPlayer = this
-      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+      // this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       this.$store.dispatch('Movies/sendView', this.ref)
       setTimeout(function() {
         startPlayer.playerShow = 'OK'
@@ -290,6 +242,9 @@ export default {
       storeSubtitles: 'Movies/storeSubtitles',
       storeLanguage: 'App/storeLanguage',
     }),
+    src() {
+      return `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
+    },
     player() {
       return this.$refs.videoPlayer.player
     },
@@ -332,7 +287,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+video {
+  /* override other styles to make responsive */
+  width: 100% !important;
+  height: auto !important;
+}
+</style>
 <i18n>
 {
   "en": {

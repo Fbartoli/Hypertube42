@@ -30,10 +30,9 @@
     <v-divider class="mx-4"></v-divider>
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
     <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
-    }}
 
     <div class="player" v-if="playerShow !== ''">
-      <video controls autoplay crossorigin="anonymous">
+      <video controls autoplay crossorigin="anonymous" width="320">
         <source :src="src" :type="playerFormat" />
         <track
           v-if="storeLanguage === 'english'"

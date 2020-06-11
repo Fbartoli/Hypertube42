@@ -1,14 +1,14 @@
 import movieService from '../../services/MovieService.js'
-import popcornService from '../../services/popcornService.js'
 import userService from '../../services/UserService'
 import streamService from '../../services/StreamService'
 import router from '../../router/index'
 import nProgress from 'nprogress'
+import ImdbService from '../../services/ImdbService.js'
 
 const state = {
   movies: [],
   movie: {},
-  perPage: 20,
+  perPage: 10,
   page: 1,
   movieTotal: 0,
   comments: {},
@@ -67,56 +67,68 @@ const mutations = {
 const actions = {
   // A) Movies API:
   // A.1.a) GET movies with standard search paramaters
-  fetchMovies({ commit, dispatch, state }, page) {
-    movieService
-
+  async fetchMovies({ commit, state }, page) {
+    await movieService
       .getMovies(state.perPage, page)
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
         commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
-        // const notification = {
-        //   type: 'success',
-        //   message: 'Movies fetched successfully',
-        // }
-        // dispatch('Notifications/add', notification, { root: true })
-        return response.data.data.movies
+        response.data.data.movies
       })
       .catch(error => {
-        if (error.message) {
-          // const notification = {
-          //   type: 'error',
-          //   message: 'There was a problem fetching movies: ' + error.message,
-          // }
-          // dispatch('Notifications/add', notification, { root: true })
+        if (error) {
+          //
         }
       })
-    return popcornService
-      .getMovies(state.perPage, page)
+    ImdbService.getMovies(page)
       .then(response => {
-        commit('FETCH_MOVIES')
-        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
-        const notification = {
-          type: 'success',
-          message: 'Movies fetched successfully',
+        let movies = response.data.results
+        for (const element of movies) {
+          element.source = 'imdb'
+          element.large_cover_image =
+            'https://image.tmdb.org/t/p/w300_and_h450_bestv2' +
+            element.poster_path
         }
-        dispatch('Notifications/add', notification, { root: true })
-        return response.data.data.movies
+        commit('ADD_MOVIES', movies.slice(5))
       })
       .catch(error => {
-        if (error.code) {
-          console.log(error)
+        if (error) {
+          //
         }
       })
   },
   // A.1.b) Follow up action of 'fetchMovies' (1.a) to GET the next page of movies
-  addMovies({ commit, state }, { page }) {
+  async addMovies({ commit, state }, { page }) {
     nProgress.start()
-    return movieService.getMovies(state.perPage, page).then(response => {
-      response.data.data.movies.shift()
-      commit('ADD_MOVIES', response.data.data.movies)
-      nProgress.done()
-      return response.data.data.movies
-    })
+    await movieService
+      .getMovies(state.perPage, page)
+      .then(response => {
+        response.data.data.movies.shift()
+        commit('ADD_MOVIES', response.data.data.movies)
+      })
+      .catch(error => {
+        if (error) {
+          //
+        }
+      })
+    await ImdbService.getMovies(page)
+      .then(response => {
+        let movies = response.data.results
+        for (const element of movies) {
+          element.source = 'imdb'
+          element.large_cover_image =
+            'https://image.tmdb.org/t/p/w300_and_h450_bestv2' +
+            element.poster_path
+        }
+        commit('ADD_MOVIES', movies.slice(5))
+      })
+      .catch(error => {
+        if (error) {
+          //
+        }
+      })
+    nProgress.done()
+    return
   },
   // A.1.c) GET the specific movie details from the api
   fetchMovie({ commit }, id) {
@@ -127,45 +139,17 @@ const actions = {
   },
 
   // A.2.a) get movies with standard search paramaters
-  filteredFetchMovies({ commit, dispatch, state }, { page, filter, order }) {
-    console.log('/// filteredFetchMovies ///')
+  filteredFetchMovies({ commit, state }, { page, filter, order }) {
     movieService
-
       .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
         commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
-        // const notification = {
-        //   type: 'success',
-        //   message: 'Movies fetched successfully',
-        // }
-        // dispatch('Notifications/add', notification, { root: true })
         return response.data.data.movies
       })
       .catch(error => {
         if (error.message) {
-          // const notification = {
-          //   type: 'error',
-          //   message: 'There was a problem fetching movies: ' + error.message,
-          // }
-          // dispatch('Notifications/add', notification, { root: true })
-        }
-      })
-    return popcornService
-      .getMoviesFilterBy({ perPage: state.perPage, page, filter, order })
-      .then(response => {
-        commit('FETCH_MOVIES', response.data.data.movies)
-        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
-        const notification = {
-          type: 'success',
-          message: 'Movies fetched successfully',
-        }
-        dispatch('Notifications/add', notification, { root: true })
-        return response.data.data.movies
-      })
-      .catch(error => {
-        if (error.code) {
-          console.log(error)
+          //
         }
       })
   },
@@ -183,45 +167,17 @@ const actions = {
   },
 
   // A.3.a) get movies with specific search paramaters
-  searchFetchMovies({ commit, dispatch }, { findMovieField }) {
-    console.log('/// searchFetchMovies ///')
+  searchFetchMovies({ commit }, { findMovieField }) {
     movieService
-
       .getMoviesSearch({ findMovieField })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
         commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
-        // const notification = {
-        //   type: 'success',
-        //   message: 'Movies fetched successfully',
-        // }
-        // dispatch('Notifications/add', notification, { root: true })
         return response.data.data.movies
       })
       .catch(error => {
         if (error.message) {
-          // const notification = {
-          //   type: 'error',
-          //   message: 'There was a problem fetching movies: ' + error.message,
-          // }
-          // dispatch('Notifications/add', notification, { root: true })
-        }
-      })
-    return popcornService
-      .getMoviesSearch({ findMovieField })
-      .then(response => {
-        commit('FETCH_MOVIES', response.data.data.movies)
-        commit('SET_MOVIES_TOTAL', parseInt(response.data.data.movie_count))
-        const notification = {
-          type: 'success',
-          message: 'Movies fetched successfully',
-        }
-        dispatch('Notifications/add', notification, { root: true })
-        return response.data.data.movies
-      })
-      .catch(error => {
-        if (error.code) {
-          console.log(error)
+          //
         }
       })
   },
@@ -397,8 +353,6 @@ const actions = {
     streamService
       .getstream({ magnetHash, id })
       .then(response => {
-        console.log(' *** Stream, response_', response)
-        console.log(' *** Stream, response_', response.data)
         commit('PUT_STREAM', response.data)
         const notification = {
           type: response.data.status,
@@ -431,14 +385,9 @@ const actions = {
   },
   // D.2) GET stream formats
   getStreamFormat: ({ dispatch, commit }, { magnetHash, id, indice }) => {
-    console.log('&& hash &&', magnetHash)
-    console.log('&& id &&', id)
-    console.log('&& indice &&', indice)
     streamService
       .getstreamformats({ magnetHash, id })
       .then(response => {
-        console.log(' *** Format, response_', response)
-        console.log(' *** Format, response_', response.data)
         commit('PUT_STREAM_FORMAT', {
           format: response.data.mimetype,
           indice: indice,
@@ -474,13 +423,9 @@ const actions = {
   },
   // D.3) GET subtitles
   getSubtitles: ({ dispatch, commit }, { imdbid, language }) => {
-    console.log(' * imdbid * ', imdbid)
-    console.log(' * language subtitles * ', language)
     userService
       .getsubs({ imdbid, language })
       .then(response => {
-        console.log(' *** Subtitles, response_', response)
-        console.log(' *** Stream, response_', response.data.file)
         commit('PUT_SUBTITLES', { url: response.data.file, language: language })
         const notification = {
           type: response.data.status,

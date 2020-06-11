@@ -72,7 +72,6 @@ export default {
 
   // GET subtitles on a specific movie
   getsubs({ imdbid, language }) {
-    console.log('UserService.js_GETview_OK')
     return apiClient.get(`films/subs/${imdbid}?language=${language}`)
   },
 }

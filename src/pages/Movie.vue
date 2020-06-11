@@ -21,7 +21,6 @@
 
       <div class="my-4 subtitle-1">
         {{ movie.year }} • {{ movie.genres[0] }} {{ movie.genres[1] }}
-        {{ movie.genres[2] }}
       </div>
 
       <div>{{ movie.description_full }}</div>
@@ -30,9 +29,6 @@
     <v-divider class="mx-4"></v-divider>
     <v-card-title>{{ $t('playerTitle') }}</v-card-title>
     <v-card-subtitle>{{ movie.runtime }} min</v-card-subtitle>
-    <br /><br />TEST_{{ storeLanguage }} <br /><br />TEST2_{{
-      this.storeLanguage
-    }}
 
     <div class="player" v-if="playerShow !== ''">
       <video controls autoplay crossorigin="anonymous">
@@ -70,34 +66,13 @@
       </video>
     </div>
 
-    <div>
+    <div v-for="(torrent, i) in movie.torrents" :key="torrent.hash">
       <v-btn
-        v-if="this.storeMovieMeta.torrents[0]"
+        v-if="movie.torrents[i]"
         class="ma-5"
-        @click="zeroStream()"
+        @click="Stream(i)"
         color="primary"
-        >{{ this.storeMovieMeta.torrents[0].quality }}</v-btn
-      >
-      <v-btn
-        v-if="this.storeMovieMeta.torrents[1]"
-        class="ma-5"
-        @click="oneStream()"
-        color="primary"
-        >{{ this.storeMovieMeta.torrents[1].quality }}</v-btn
-      >
-      <v-btn
-        v-if="this.storeMovieMeta.torrents[2]"
-        class="ma-5"
-        @click="twoStream()"
-        color="primary"
-        >{{ this.storeMovieMeta.torrents[2].quality }}</v-btn
-      >
-      <v-btn
-        v-if="this.storeMovieMeta.torrents[3]"
-        class="ma-5"
-        @click="threeStream()"
-        color="primary"
-        >{{ this.storeMovieMeta.torrents[3].quality }}</v-btn
+        >{{ movie.torrents[i].quality }}</v-btn
       >
     </div>
     <v-divider class="mx-4"></v-divider>
@@ -252,9 +227,9 @@ export default {
       // this.comment = ''
       // this.componentKey += 1
     },
-    zeroStream() {
-      this.playerHash = this.storeMovieMeta.torrents[0].hash
-      this.playerFormat = this.storeFormats[0]
+    Stream(i) {
+      this.playerHash = this.movie.torrents[i].hash
+      this.playerFormat = this.storeFormats[i]
       const startPlayer = this
       this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       this.$store.dispatch('Movies/sendView', this.ref)
@@ -262,40 +237,10 @@ export default {
         startPlayer.playerShow = 'OK'
       }, 1000)
       // return this.getStream({
-      //   magnetHash: this.storeMovieMeta.torrents[0].hash,
+      //   magnetHash: this.movie.torrents[0].hash,
       //   id: this.ref,
       // })
-      // this.playerOptions.sources[0].src = this.storeMovieMeta.torrents[0].url
-    },
-    oneStream() {
-      this.playerHash = this.storeMovieMeta.torrents[1].hash
-      this.playerFormat = this.storeFormats[1]
-      const startPlayer = this
-      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
-      this.$store.dispatch('Movies/sendView', this.ref)
-      setTimeout(function() {
-        startPlayer.playerShow = 'OK'
-      }, 1000)
-    },
-    twoStream() {
-      this.playerHash = this.storeMovieMeta.torrents[2].hash
-      this.playerFormat = this.storeFormats[2]
-      const startPlayer = this
-      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
-      this.$store.dispatch('Movies/sendView', this.ref)
-      setTimeout(function() {
-        startPlayer.playerShow = 'OK'
-      }, 1000)
-    },
-    threeStream() {
-      this.playerHash = this.storeMovieMeta.torrents[3].hash
-      this.playerFormat = this.storeFormats[3]
-      const startPlayer = this
-      this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
-      this.$store.dispatch('Movies/sendView', this.ref)
-      setTimeout(function() {
-        startPlayer.playerShow = 'OK'
-      }, 1000)
+      // this.playerOptions.sources[0].src = this.movie.torrents[0].url
     },
   },
   computed: {

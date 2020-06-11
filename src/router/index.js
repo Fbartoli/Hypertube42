@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import nprogress from 'nprogress'
 import store from '../store/index'
-import ImdbService from '../services/ImdbService.js'
 
 Vue.use(VueRouter)
 
@@ -133,7 +132,6 @@ const routes = [
     async beforeEnter(routeTo, routeFrom, next) {
       let movie = routeTo.params.movie
       if (routeTo.params.src === 'imdb') {
-        await ImdbService.getHash(movie.title)
         movie.rating = movie.vote_average
         movie.genres = []
         movie.year = movie.release_date.split('-')[0]

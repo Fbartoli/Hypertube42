@@ -104,9 +104,7 @@ export default {
       showPictures: {
         '0': null,
       },
-      mypicsRules: [
-        // value => value.size < 10000000 || 'Picture size should be less than 10 MB!'
-      ],
+      mypicsRules: [v => !v || v.size > 1024 || '1 KB < photo < 10 MB'],
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -125,9 +123,10 @@ export default {
     }),
   },
   methods: {
-    ...mapActions('App', ['getUser', 'putToken']),
+    ...mapActions('App', ['getUser', 'putToken', 'setError']),
 
     validateAvatar() {
+      const self = this
       function error(error) {
         this.$store.dispatch('App/setError', error)
       }
@@ -135,7 +134,7 @@ export default {
       if (this.$refs.AvatarForm.validate()) {
         const data = new FormData()
         const xhr = new XMLHttpRequest()
-        const self = this
+
         //> 10 mb
         if (this.uploadPic.mypic.size > 1024 * 1024 * 10) {
           error('The file is too large (more than 10 MB)')
@@ -187,9 +186,33 @@ export default {
       this.valid = false
     },
     displayImage(File) {
+      const self = this
+
       if (!File) {
         return
       }
+
+      if (this.uploadPic.mypic.size > 1024 * 1024 * 10) {
+        const notification = {
+          type: 200,
+          message: 'File is too big !',
+        }
+        self.$store.dispatch('Notifications/add', notification, {
+          root: true,
+        })
+        return
+      }
+      if (this.uploadPic.mypic.size < 1024) {
+        const notification = {
+          type: 200,
+          message: 'File is too small (1 KB minimum) !',
+        }
+        self.$store.dispatch('Notifications/add', notification, {
+          root: true,
+        })
+        return
+      }
+
       let renamed = ''
       const reader = new FileReader()
       reader.readAsDataURL(File)

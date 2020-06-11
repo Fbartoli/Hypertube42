@@ -163,7 +163,6 @@
                   :rules="mypicsRules"
                   v-model="uploadPic.mypic"
                   accept="image/*"
-                  counter
                   show-size
                   prepend-icon="mdi-camera"
                   :label="$t('profilePicture')"
@@ -244,9 +243,7 @@ export default {
           /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) ||
           'Must be a valid email [address@domain.com]',
       ],
-      mypicsRules: [
-        // value => value.size < 10000000 || 'Picture size should be less than 10 MB!'
-      ],
+      mypicsRules: [v => !v || v.size > 1024 || '1 KB < photo < 10 MB'],
     }
   },
   computed: {
@@ -261,7 +258,9 @@ export default {
       'updateUserInfo',
       'updateEmail',
       'putToken',
+      'setError',
     ]),
+    ...mapActions('Notifications', ['add']),
     validateEmail() {
       const payloadPutEmail = {
         username: this.currentUsername,
@@ -283,15 +282,24 @@ export default {
     },
 
     validateAvatar() {
+      const self = this
       function error(error) {
-        this.$store.dispatch('App/setError', error)
+        self.$store.dispatch('App/setError', error)
       }
 
       if (this.$refs.AvatarForm.validate()) {
         const data = new FormData()
         const xhr = new XMLHttpRequest()
-        const self = this
 
+        //> 10 mb
+        if (this.uploadPic.mypic.size > 1024 * 1024 * 10) {
+          error('The file is too large (more than 10 MB)')
+          return
+        }
+        if (this.uploadPic.mypic.size < 1024) {
+          error('The file is too small (more than 1 KB)')
+          return
+        }
         if (this.uploadPic.mypic) {
           data.append('avatar', this.uploadPic.mypic)
         }
@@ -333,10 +341,35 @@ export default {
       }
       this.valid = false
     },
+
     displayImage(File) {
+      const self = this
+
       if (!File) {
         return
       }
+
+      if (this.uploadPic.mypic.size > 1024 * 1024 * 10) {
+        const notification = {
+          type: 200,
+          message: 'File is too big !',
+        }
+        self.$store.dispatch('Notifications/add', notification, {
+          root: true,
+        })
+        return
+      }
+      if (this.uploadPic.mypic.size < 1024) {
+        const notification = {
+          type: 200,
+          message: 'File is too small (1 KB minimum) !',
+        }
+        self.$store.dispatch('Notifications/add', notification, {
+          root: true,
+        })
+        return
+      }
+
       let renamed = ''
       const reader = new FileReader()
       reader.readAsDataURL(File)

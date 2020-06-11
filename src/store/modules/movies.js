@@ -392,11 +392,11 @@ const actions = {
           format: response.data.mimetype,
           indice: indice,
         })
-        const notification = {
-          type: response.data.status,
-          message: 'Stream format received',
-        }
-        dispatch('Notifications/add', notification, { root: true })
+        // const notification = {
+        //   type: response.data.status,
+        //   message: 'Stream format received',
+        // }
+        // dispatch('Notifications/add', notification, { root: true })
       })
       .catch(error => {
         const notification = {
@@ -427,11 +427,11 @@ const actions = {
       .getsubs({ imdbid, language })
       .then(response => {
         commit('PUT_SUBTITLES', { url: response.data.file, language: language })
-        const notification = {
-          type: response.data.status,
-          message: 'Subtitles ready',
-        }
-        dispatch('Notifications/add', notification, { root: true })
+        // const notification = {
+        //   type: response.data.status,
+        //   message: 'Subtitles ready',
+        // }
+        // dispatch('Notifications/add', notification, { root: true })
       })
       .catch(error => {
         const notification = {

@@ -97,6 +97,7 @@ const actions = {
         }
       })
   },
+
   // A.1.b) Follow up action of 'fetchMovies' (1.a) to GET the next page of movies
   async addMovies({ commit, state }, { page }) {
     nProgress.start()
@@ -167,8 +168,8 @@ const actions = {
   },
 
   // A.3.a) get movies with specific search paramaters
-  searchFetchMovies({ commit }, { findMovieField }) {
-    movieService
+  async searchFetchMovies({ commit }, { findMovieField }) {
+    await movieService
       .getMoviesSearch({ findMovieField })
       .then(response => {
         commit('FETCH_MOVIES', response.data.data.movies)
@@ -177,6 +178,23 @@ const actions = {
       })
       .catch(error => {
         if (error.message) {
+          //
+        }
+      })
+    return await ImdbService.getMoviesSearch({ commit }, findMovieField)
+      .then(response => {
+        console.log(response.data)
+        let movies = response.data.results
+        for (const element of movies) {
+          element.source = 'imdb'
+          element.large_cover_image =
+            'https://image.tmdb.org/t/p/w300_and_h450_bestv2' +
+            element.poster_path
+        }
+        commit('ADD_MOVIES', movies.slice(5))
+      })
+      .catch(error => {
+        if (error) {
           //
         }
       })

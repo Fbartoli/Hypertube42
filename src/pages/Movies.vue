@@ -22,7 +22,8 @@
         </v-row>
       </v-col>
     </v-row>
-    <br /><br />
+    <br />
+    <br />
     <v-row>
       <v-col cols="1" />
       <v-col cols="4">
@@ -51,7 +52,7 @@
       <v-col cols="1" />
     </v-row>
     <v-row dense>
-      <v-col v-for="movie in Movies.movies" :key="movie.id">
+      <v-col v-for="movie in Movies.movies" :key="movie.id + Math.random()">
         <v-lazy
           v-model="isActive"
           :options="{

@@ -18,7 +18,7 @@ export default {
   getMovie(id) {
     return apiCLient.get(`/find/${id}?api_key=7c32ac8203dada86f001cea872371ba3`)
   },
-  getMoviesSearch({ findMovieField }) {
+  getMoviesSearch(findMovieField) {
     return apiCLient.get(
       `/search/movie?api_key=7c32ac8203dada86f001cea872371ba3&language=en-US&query=${findMovieField}&page=1`
     )

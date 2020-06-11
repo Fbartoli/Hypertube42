@@ -2,8 +2,31 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import nprogress from 'nprogress'
 import store from '../store/index'
+import ImdbService from '../services/ImdbService.js'
 
 Vue.use(VueRouter)
+
+let genres = {
+  28: 'Action',
+  12: 'Adventure',
+  16: 'Animation',
+  35: 'Comedy',
+  80: 'Crime',
+  99: 'Documentary',
+  18: 'Drama',
+  10751: 'Family',
+  14: 'Fantasy',
+  36: 'History',
+  27: 'Horror',
+  10402: 'Music',
+  9648: 'Mystery',
+  10749: 'Romance',
+  878: 'Science Fiction',
+  10770: 'TV Movie',
+  53: 'Thriller',
+  10752: 'War',
+  37: 'Western',
+}
 
 const routes = [
   {
@@ -107,48 +130,61 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
-    beforeEnter(routeTo, routeFrom, next) {
-      store
-        .dispatch('Movies/fetchMovie', routeTo.params.id)
-        .then(movie => {
-          console.log('*** ALLO ***', movie)
-          if (parseInt(movie.id) === 0) {
-            next({ name: '404', params: { resource: 'movie' } })
-          }
-          routeTo.params.movie = movie
-          routeTo.params.language = store.getters['App/storeLanguage']
-          store.dispatch('Movies/getComments', routeTo.params.id)
-
-          // store.dispatch('Movies/sendView', routeTo.params.id)
-          store.dispatch('Movies/getSubtitles', {
-            imdbid: movie.imdb_code,
-            language: 'en',
-          })
-          store.dispatch('Movies/getSubtitles', {
-            imdbid: movie.imdb_code,
-            language: 'fr',
-          })
-          console.log('T Y P E O F_ ', typeof movie.torrents.length)
-          for (let i = 0; i < parseInt(movie.torrents.length); i++) {
-            store.dispatch('Movies/getStreamFormat', {
-              magnetHash: movie.torrents[i].hash,
-              id: movie.id,
-              indice: i,
-            })
-          }
-
-          // store.dispatch('Movies/sendView', routeTo.params.id)
-
-          next()
+    async beforeEnter(routeTo, routeFrom, next) {
+      let movie = routeTo.params.movie
+      if (routeTo.params.src === 'imdb') {
+        await ImdbService.getHash(movie.title)
+        movie.rating = movie.vote_average
+        movie.genres = []
+        movie.year = movie.release_date.split('-')[0]
+        movie.description_full = movie.overview
+        movie.genre_ids.forEach(element => {
+          movie.genres.push(genres[element])
         })
-        .catch(error => {
-          if (error.response) {
-            if (error.response.status === 404) {
-              next({ name: '404', params: { resource: 'movie' } })
-            }
-            next({ name: 'network-issue' })
-          }
+        routeTo.params.language = store.getters['App/storeLanguage']
+        store.dispatch('Movies/getComments', routeTo.params.id)
+        next()
+      } else {
+        // store
+        //   .dispatch('Movies/fetchMovie', routeTo.params.id)
+        //   .then(movie => {
+        if (parseInt(movie.id) === 0) {
+          next({ name: '404', params: { resource: 'movie' } })
+        }
+        routeTo.params.movie = movie
+        routeTo.params.language = store.getters['App/storeLanguage']
+        store.dispatch('Movies/getComments', routeTo.params.id)
+
+        // store.dispatch('Movies/sendView', routeTo.params.id)
+        store.dispatch('Movies/getSubtitles', {
+          imdbid: movie.imdb_code,
+          language: 'en',
         })
+        store.dispatch('Movies/getSubtitles', {
+          imdbid: movie.imdb_code,
+          language: 'fr',
+        })
+        for (let i = 0; i < parseInt(movie.torrents.length); i++) {
+          store.dispatch('Movies/getStreamFormat', {
+            magnetHash: movie.torrents[i].hash,
+            id: movie.id,
+            indice: i,
+          })
+        }
+
+        // store.dispatch('Movies/sendView', routeTo.params.id)
+
+        next()
+        // })
+        // .catch(error => {
+        //   if (error.response) {
+        //     if (error.response.status === 404) {
+        //       next({ name: '404', params: { resource: 'movie' } })
+        //     }
+        //     next({ name: 'network-issue' })
+        //   }
+        // })
+      }
     },
   },
 

@@ -1,7 +1,10 @@
 <template>
   <router-link
     class="movie-link"
-    :to="{ name: 'movie', params: { id: movie.id } }"
+    :to="{
+      name: 'movie',
+      params: { id: movie.id, src: movie.source, movie },
+    }"
   >
     <v-card class="mx-auto" height="400px" width="300px">
       <v-img :src="movie.large_cover_image" height="400" contain>
@@ -12,9 +15,8 @@
             large
             right
             color="blue-grey lighten-1"
+            >mdi-check</v-icon
           >
-            mdi-check
-          </v-icon>
         </v-card-actions>
         <v-list-item three-line>
           <v-list-item-content>

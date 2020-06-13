@@ -4,6 +4,7 @@ import streamService from '../../services/StreamService'
 import router from '../../router/index'
 import nProgress from 'nprogress'
 import ImdbService from '../../services/ImdbService.js'
+import jacketService from '../../services/jacketService'
 
 const state = {
   movies: [],
@@ -136,6 +137,14 @@ const actions = {
     return movieService.getMovie(id).then(response => {
       commit('FETCH_MOVIE', response.data.data.movie)
       return response.data.data.movie
+    })
+  },
+
+  fetchMovieJacket(context, title) {
+    return jacketService.getMovie(title).then(response => {
+      console.log(response.data)
+      // commit('FETCH_MOVIE', response.data.data.movie)
+      // return response.data.data.movie
     })
   },
 

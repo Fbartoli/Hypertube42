@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import nprogress from 'nprogress'
 import store from '../store/index'
+import jacket from '../services/jacketService'
 
 Vue.use(VueRouter)
 
@@ -26,6 +27,8 @@ let genres = {
   10752: 'War',
   37: 'Western',
 }
+
+let quality = ['3D', '720P', '1080P', '2160P']
 
 const routes = [
   {
@@ -132,6 +135,20 @@ const routes = [
     async beforeEnter(routeTo, routeFrom, next) {
       let movie = routeTo.params.movie
       if (routeTo.params.src === 'imdb') {
+        movie.torrents = []
+        let torrents = await jacket
+          .getMovie(movie.title)
+          .then(data => data.data)
+          .catch(error => {
+            error
+          })
+        console.log(torrents)
+        torrents.Results.forEach((element, i) => {
+          movie.torrents.push({ hash: element.InfoHash, quality: quality[i] })
+        })
+        if (movie.torrents.length > 5) {
+          movie.torrents = movie.torrents.slice(5)
+        }
         movie.rating = movie.vote_average
         movie.genres = []
         movie.year = movie.release_date.split('-')[0]
@@ -141,6 +158,14 @@ const routes = [
         })
         routeTo.params.language = store.getters['App/storeLanguage']
         store.dispatch('Movies/getComments', routeTo.params.id)
+        store.dispatch('Movies/getSubtitles', {
+          imdbid: torrents.Results[0].Imdb,
+          language: 'en',
+        })
+        store.dispatch('Movies/getSubtitles', {
+          imdbid: torrents.Results[0].Imdb,
+          language: 'fr',
+        })
         next()
       } else {
         // store

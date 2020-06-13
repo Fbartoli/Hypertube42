@@ -170,8 +170,8 @@ export default {
       this.$refs.formComment.reset()
     },
     Stream(i) {
-      this.playerHash = this.movie.torrents[i].hash
-      this.playerFormat = this.storeFormats[i]
+      this.playerHash = this.movie.torrents[i - 1].hash
+      this.playerFormat = this.storeFormats[i - 1]
       const startPlayer = this
       // this.src = `${process.env.VUE_APP_BACKEND_URL}torrent/${this.playerHash}?id=${this.ref}`
       this.$store.dispatch('Movies/sendView', this.ref)
